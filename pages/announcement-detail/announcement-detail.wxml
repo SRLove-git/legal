@@ -10,7 +10,7 @@
   <view class="detail">
     <view class="ann-type">{{item.type}}</view>
     <view class="ann-headline">{{item.headline}}</view>
-    <view class="ann-date" wx:if="{{item.date}}">{{item.date}}</view>
+    <view class="ann-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
     <view class="ann-body" wx:if="{{item.descript}}">{{item.descript}}</view>
     <view class="ann-link" wx:if="{{item.url}}" bindtap="openUrl">Open link</view>
   </view>

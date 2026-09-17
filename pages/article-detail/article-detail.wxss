@@ -37,6 +37,11 @@
   color: #2d2d2d;
 }
 
+.detail-meta-line {
+  display: block;
+  margin-top: 6rpx;
+}
+
 .detail-body {
   font-size: 31rpx;
   color: #2d2d2d;

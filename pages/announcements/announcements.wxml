@@ -14,7 +14,7 @@
     <view class="ann-item" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
       <view class="ann-type">{{item.type}}</view>
       <view class="ann-headline">{{item.headline}}</view>
-      <view class="ann-date" wx:if="{{item.date}}">{{item.date}}</view>
+      <view class="ann-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
     </view>
     <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
   </view>

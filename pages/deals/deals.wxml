@@ -25,9 +25,15 @@
     <input class="list-search-input" type="text" placeholder="Search deals and cases" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
   </view>
   <view class="list">
-    <view class="list-page-item" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
-      <text>{{item.title}}</text>
-      <text class="list-page-meta">{{item.rank}} · {{item.date}}</text>
+    <view class="list-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+      <view class="entry-labels" wx:if="{{item.labels.length}}">
+        <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>
+      </view>
+      <view class="entry-title">{{item.title}}</view>
+      <view class="entry-by" wx:if="{{item.rank}}">{{item.rank}}</view>
+      <view class="entry-date" wx:if="{{item.date}}">Date: {{item.date}}</view>
+      <view class="entry-date" wx:if="{{item.jurisdictionText}}">Jurisdictions: {{item.jurisdictionText}}</view>
+      <view class="entry-date" wx:if="{{item.updated}}">Updated: {{item.updated}}</view>
     </view>
     <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
   </view>

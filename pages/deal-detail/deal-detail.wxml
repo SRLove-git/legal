@@ -15,7 +15,7 @@
     <view class="detail-title">{{item.title}}</view>
     <view class="detail-meta">
       <text class="detail-rank" wx:if="{{item.rank}}">LegalOne Merits: {{item.rank}}</text>
-      <text class="detail-date" wx:if="{{item.date}}">{{item.date}}</text>
+      <text class="detail-date" wx:if="{{item.updated}}">Updated: {{item.updated}}</text>
     </view>
     <image class="detail-banner" src="{{item.banner}}" mode="widthFix" wx:if="{{item.banner}}" />
     <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>

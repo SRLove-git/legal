@@ -13,7 +13,9 @@
     </view>
     <view class="detail-title">{{item.title}}</view>
     <view class="detail-meta">
-      <text wx:if="{{item.author}}">{{item.author}} · </text>{{item.date}}
+      <text wx:if="{{item.author}}">By {{item.author}}</text>
+      <text class="detail-meta-line" wx:if="{{item.publishedDate}}">Published: {{item.publishedDate}}</text>
+      <text class="detail-meta-line" wx:if="{{item.updatedDate}}">Updated: {{item.updatedDate}}</text>
     </view>
     <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
     <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>

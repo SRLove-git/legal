@@ -9,7 +9,8 @@
   <view class="list-hero">
     <image class="list-hero-bg" src="/assets/img/homepage-banner.png" mode="aspectFill" />
     <view class="list-hero-inner">
-      <view class="list-hero-title">LegalOne Awards</view>
+      <view class="list-hero-title">LEGALONE AWARDS</view>
+      <view class="list-hero-tagline">Recognising Excellence.</view>
       <view class="list-hero-desc">LegalOne awards recognise legal professionals across jurisdictions for their demonstrated expertise and experience. Evaluations are based on applicant submissions, while incorporating a range of other practice-oriented factors, in line with LegalOne’s philosophy of focusing on the practical skills and experience of legal practitioners and experts.</view>
       <view class="list-hero-actions">
         <view class="list-hero-btn">Apply award</view>
@@ -25,9 +26,14 @@
     <input class="list-search-input" type="text" placeholder="Search awards" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
   </view>
   <view class="list">
-    <view class="list-page-item" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
-      <text>{{item.title}}</text>
-      <text class="list-page-meta">{{item.author}} · {{item.date}}</text>
+    <view class="list-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+      <view class="entry-labels" wx:if="{{item.labels.length}}">
+        <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>
+      </view>
+      <image class="entry-image" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
+      <view class="entry-title">{{item.title}}</view>
+      <view class="entry-by" wx:if="{{item.author}}">By {{item.author}}</view>
+      <view class="entry-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
     </view>
     <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
   </view>

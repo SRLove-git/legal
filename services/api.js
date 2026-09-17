@@ -144,6 +144,16 @@ function dateOnly(iso) {
   return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
 }
 
+// The website prints list/detail dates as "September 11, 2026".
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+function fullDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
 const RANK_LABELS = { 3: 'Remarkable', 2: 'Highly Recommended', 1: 'Recommended' };
 
 function rankLabel(rank) {
@@ -151,11 +161,22 @@ function rankLabel(rank) {
 }
 
 function normalizeDeal(d) {
+  const jurisdictions = (d.relatedJurisdictions || []).map(function (x) {
+    return (x && (x.name || x.country)) || x;
+  }).filter(function (v, i, arr) { return v && arr.indexOf(v) === i; }).join('; ');
   return {
     id: d.id,
     title: d.headline || '',
     rank: rankLabel(d.rank),
-    date: 'Date of completion: ' + monthYear(d.completedDateTime),
+    // The API repeats industries; the website prints each label once, up to three.
+    labels: (d.relatedIndustries || []).map(function (x) { return (x && x.area) || ''; })
+      .filter(function (v, i, arr) { return v && arr.indexOf(v) === i; })
+      .slice(0, 3),
+    // The website's deal cards print "Date: December, 2025" and "Updated: <moddttm>".
+    date: d.completedDateTime ? monthYear(d.completedDateTime) : '',
+    completed: d.completedDateTime ? monthYear(d.completedDateTime) : '',
+    jurisdictionText: jurisdictions,
+    updated: d.moddttm ? fullDate(d.moddttm) : '',
     raw: d
   };
 }
@@ -199,25 +220,33 @@ function normalizeArticle(a) {
   const authors = (a.authors || []).map(function (x) {
     return [x.firstName, x.name].filter(Boolean).join(' ').trim();
   }).filter(Boolean);
+  // The website's cards print "Updated: <moddttm>" (not the publish date).
+  const updated = a.moddttm || a.publishDate;
   return {
     id: a.id,
     title: a.headline || '',
     image: imageUrl(a.image, 'l'),
     labels: (a.categories || []).map(function (c) { return c.id || c; }),
     author: authors.join(', '),
-    date: a.publishDate ? dateOnly(a.publishDate) : '',
+    date: fullDate(updated),
+    publishedDate: fullDate(a.publishDate),
+    updatedDate: fullDate(updated),
+    publishedISO: a.publishDate ? dateOnly(a.publishDate) : '',
     raw: a
   };
 }
 
 function normalizeAnnouncement(n) {
+  const updated = n.moddttm || n.publishDate;
   return {
     id: n.id,
     type: n.title || (n.type === 0 ? 'Deal Announcement' : 'Announcement'),
     headline: n.headline || '',
     image: imageUrl(n.image, 'x'),
     url: n.url || '',
-    date: n.publishDate ? dateOnly(n.publishDate) : '',
+    date: fullDate(updated),
+    publishedDate: fullDate(n.publishDate),
+    updatedDate: fullDate(updated),
     descript: stripHtml(n.descript),
     raw: n
   };
