@@ -131,6 +131,7 @@
 .simple-link {
   padding: 22rpx 0;
   font-size: 28rpx;
+  font-weight: 600;
   color: #2d2d2d;
   border-bottom: 1rpx solid #eeeeee;
 }

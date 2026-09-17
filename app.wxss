@@ -1,10 +1,12 @@
 page {
   background: #ffffff;
   color: #2d2d2d;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  /* Matches the website stack: Helvetica Neue for Latin, then CJK heiti fallbacks. */
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", sans-serif;
   font-size: 28rpx;
   line-height: 1.2;
   letter-spacing: 1.2rpx;
+  font-weight: 400;
 }
 
 view,
@@ -232,6 +234,7 @@ button::after {
   padding: 26rpx 36rpx;
   border-bottom: 1rpx solid #eeeeee;
   font-size: 29rpx;
+  font-weight: 600;
   color: #2d2d2d;
   line-height: 1.4;
 }

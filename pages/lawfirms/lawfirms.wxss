@@ -32,7 +32,7 @@
 
 .firm-row-name {
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
   color: #2d2d2d;
 }
 
