@@ -1,0 +1,16 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; Deals / Cases</view>
+  <view class="subpage-title">Deals / Cases</view>
+  <view class="list-search-wrap">
+    <input class="list-search-input" type="text" placeholder="Search deals and cases" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+  </view>
+  <view class="list">
+    <view class="list-page-item" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+      <text>{{item.title}}</text>
+      <text class="list-page-meta">{{item.rank}} · {{item.date}}</text>
+    </view>
+    <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+  </view>
+</view>
+<site-footer />

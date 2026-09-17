@@ -1,0 +1,69 @@
+.search-wrap {
+  padding: 0 36rpx 20rpx;
+}
+
+.search-input {
+  height: 76rpx;
+  border: 2rpx solid #0084ba;
+  border-radius: 38rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+}
+
+.list {
+  padding: 0 36rpx 40rpx;
+}
+
+.lawyer-row {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.lawyer-row-photo {
+  width: 150rpx;
+  height: 190rpx;
+  border-radius: 8rpx;
+  background: #edebeb;
+  flex-shrink: 0;
+}
+
+.lawyer-row-photo.placeholder {
+  background: #edebeb;
+}
+
+.lawyer-row-detail {
+  flex: 1;
+}
+
+.lawyer-row-name {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #0084ba;
+}
+
+.lawyer-row-pos {
+  font-size: 24rpx;
+  color: #2d2d2d;
+  margin-top: 6rpx;
+}
+
+.lawyer-row-firm {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin-top: 6rpx;
+}
+
+.lawyer-row-loc {
+  font-size: 24rpx;
+  color: #777777;
+  margin-top: 4rpx;
+}
+
+.empty {
+  text-align: center;
+  color: #999999;
+  padding: 60rpx 0;
+}

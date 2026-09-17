@@ -1,0 +1,17 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; Announcements</view>
+  <view class="subpage-title">Announcements</view>
+  <view class="list-search-wrap">
+    <input class="list-search-input" type="text" placeholder="Search announcements" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+  </view>
+  <view class="list">
+    <view class="ann-item" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="ann-type">{{item.type}}</view>
+      <view class="ann-headline">{{item.headline}}</view>
+      <view class="ann-date" wx:if="{{item.date}}">{{item.date}}</view>
+    </view>
+    <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+  </view>
+</view>
+<site-footer />

@@ -1,0 +1,16 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; Awards</view>
+  <view class="subpage-title">Awards</view>
+  <view class="list-search-wrap">
+    <input class="list-search-input" type="text" placeholder="Search awards" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+  </view>
+  <view class="list">
+    <view class="list-page-item" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+      <text>{{item.title}}</text>
+      <text class="list-page-meta">{{item.author}} · {{item.date}}</text>
+    </view>
+    <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+  </view>
+</view>
+<site-footer />

@@ -1,0 +1,65 @@
+.about-hero {
+  padding: 80rpx 36rpx;
+  background: linear-gradient(135deg, #00558d 0%, #0074b8 100%);
+  color: #ffffff;
+}
+
+.about-hero-title {
+  font-size: 52rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.about-hero-subtitle {
+  margin-top: 22rpx;
+  font-size: 32rpx;
+  color: #f1ffb9;
+}
+
+.about-hero-cta {
+  margin-top: 44rpx;
+  display: inline-block;
+  background: #ffffff;
+  color: #00558d;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 40rpx;
+  padding: 16rpx 40rpx;
+}
+
+.about-block {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.about-block-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-bottom: 10rpx;
+}
+
+.about-block-desc {
+  font-size: 27rpx;
+  color: #555555;
+  line-height: 1.5;
+}
+
+.about-bullet {
+  padding: 12rpx 0;
+  font-size: 27rpx;
+  color: #2d2d2d;
+  line-height: 1.45;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.contact {
+  background: #f7f7f7;
+}
+
+.contact-row {
+  font-size: 27rpx;
+  color: #2d2d2d;
+  line-height: 1.6;
+  padding: 6rpx 0;
+}

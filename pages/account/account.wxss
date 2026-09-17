@@ -1,0 +1,45 @@
+.account {
+  padding: 40rpx 36rpx 80rpx;
+}
+
+.account-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #00558d;
+  margin-bottom: 28rpx;
+}
+
+.account-loading {
+  color: #999999;
+  font-size: 28rpx;
+}
+
+.account-row {
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #eeeeee;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.account-label {
+  font-size: 24rpx;
+  color: #888888;
+}
+
+.account-value {
+  font-size: 29rpx;
+  color: #2d2d2d;
+}
+
+.logout-btn {
+  margin-top: 40rpx;
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #00558d;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+}

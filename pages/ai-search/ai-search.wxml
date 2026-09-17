@@ -1,0 +1,40 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; AI Search</view>
+  <view class="ai-hero">
+    <view class="ai-hero-title">Ask LegalOne</view>
+    <view class="ai-hero-sub">Find lawyers, law firms, legal insights and deals or cases.</view>
+    <view class="ai-input-wrap">
+      <input
+        class="ai-input"
+        type="text"
+        placeholder="Ask anything…"
+        value="{{keyword}}"
+        bindinput="onInput"
+        confirm-type="search"
+        bindconfirm="search"
+      />
+      <view class="ai-submit" bindtap="search">Search</view>
+    </view>
+    <view class="prompts">
+      <view class="prompt" wx:for="{{prompts}}" wx:key="*this" bindtap="usePrompt" data-text="{{item}}">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="results" wx:if="{{results.length}}">
+    <view
+      class="result-item"
+      wx:for="{{results}}"
+      wx:key="index"
+      bindtap="goResult"
+      data-page="{{item.page}}"
+      data-param="{{item.param}}"
+      data-value="{{item.title}}"
+    >
+      <view class="result-type">{{item.type}}</view>
+      <view class="result-title">{{item.title}}</view>
+      <view class="result-sub" wx:if="{{item.sub}}">{{item.sub}}</view>
+    </view>
+  </view>
+</view>
+<site-footer />

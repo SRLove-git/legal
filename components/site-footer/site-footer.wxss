@@ -1,0 +1,103 @@
+.footer {
+  background: #00558d;
+  padding: 50rpx 0 40rpx;
+  border-radius: 20rpx 20rpx 0 0;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28rpx;
+}
+
+.footer-logo {
+  width: 420rpx;
+  height: auto;
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.badge-img {
+  height: 56rpx;
+  width: auto;
+}
+
+.badge-text {
+  color: #ffffff;
+  font-size: 24rpx;
+}
+
+.footer-bottom {
+  margin-top: 44rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.35);
+  padding-top: 28rpx;
+}
+
+.copyright {
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.footer-link {
+  color: #f1ffb9;
+  text-decoration: underline;
+}
+
+.esg-link {
+  margin-top: 16rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  text-align: left;
+  text-decoration: underline;
+}
+
+.cookie-notice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  color: #000000;
+  padding: 24rpx 28rpx;
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+}
+
+.cookie-text {
+  flex: 1;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.cookie-bold {
+  font-weight: 700;
+}
+
+.cookie-ok {
+  background: #0084ba;
+  color: #ffffff;
+  border-radius: 8rpx;
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  flex-shrink: 0;
+}

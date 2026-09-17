@@ -1,0 +1,39 @@
+<view class="footer">
+  <view class="footer-inner container">
+    <view class="footer-top">
+      <image class="footer-logo" src="/assets/img/logo-white.png" mode="widthFix" />
+      <view class="badges">
+        <view class="badge">
+          <image class="badge-img" src="/assets/img/iso.png" mode="heightFix" />
+          <text class="badge-text">ISO 9001:2015</text>
+        </view>
+        <view class="badge">
+          <image class="badge-img" src="/assets/img/doi.png" mode="heightFix" />
+          <text class="badge-text">DOI: 10.62436</text>
+        </view>
+        <view class="badge">
+          <image class="badge-img" src="/assets/img/issn.png" mode="heightFix" />
+          <text class="badge-text">ISSN: 3006-2756</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="footer-bottom">
+      <view class="copyright">
+        © 2026 LegalOne Global Limited. All Rights Reserved |
+        <text class="footer-link" bindtap="goTerms">Terms and Conditions</text> |
+        <text class="footer-link" bindtap="goPrivacy">Privacy Policy</text>
+      </view>
+      <view class="esg-link" bindtap="goEsg">ESG Ratings and Data Products Code of Conduct</view>
+    </view>
+  </view>
+</view>
+
+<view class="cookie-notice" wx:if="{{cookieVisible}}">
+  <view class="cookie-text">
+    <text class="cookie-bold">Notice</text>. LegalOneGlobal.com uses cookies to provide necessary
+    website functionality, improve your experience and analyse our traffic. By using our website,
+    you agree to our Privacy Policy and our cookies usage.
+  </view>
+  <view class="cookie-ok" bindtap="okCookie">OK</view>
+</view>

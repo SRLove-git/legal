@@ -1,0 +1,79 @@
+Component({
+  data: {
+    menuOpen: false,
+    keyword: '',
+    loggedIn: false,
+    nav: [
+      { label: 'Home', path: '/pages/index/index' },
+      { label: 'Announcements', path: '/pages/announcements/announcements' },
+      { label: 'Deals / Cases', path: '/pages/deals/deals' },
+      { label: 'Awards', path: '/pages/awards/awards' },
+      { label: 'Articles', path: '/pages/articles/articles' },
+      { label: 'Lawyers', path: '/pages/lawyers/lawyers' },
+      { label: 'Law Firms', path: '/pages/lawfirms/lawfirms' },
+      { label: 'About', path: '/pages/about/about' }
+    ]
+  },
+  lifetimes: {
+    attached() {
+      this.refreshAuth();
+    }
+  },
+  pageLifetimes: {
+    show() {
+      this.refreshAuth();
+    }
+  },
+  methods: {
+    refreshAuth() {
+      const token = wx.getStorageSync('X-ACCESS-TOKEN');
+      this.setData({ loggedIn: !!token });
+    },
+    toggleMenu() {
+      this.setData({ menuOpen: !this.data.menuOpen });
+    },
+    closeMenu() {
+      this.setData({ menuOpen: false });
+    },
+    onNav(e) {
+      const path = e.currentTarget.dataset.path;
+      this.setData({ menuOpen: false });
+      if (!path) return;
+      wx.navigateTo({ url: path });
+    },
+    goHome() {
+      this.setData({ menuOpen: false });
+      wx.reLaunch({ url: '/pages/index/index' });
+    },
+    goAi() {
+      this.setData({ menuOpen: false });
+      wx.navigateTo({ url: '/pages/ai-search/ai-search' });
+    },
+    onKeyword(e) {
+      this.setData({ keyword: e.detail.value });
+    },
+    onSearch() {
+      const kw = (this.data.keyword || '').trim();
+      this.setData({ menuOpen: false });
+      if (kw) {
+        wx.navigateTo({ url: '/pages/ai-search/ai-search?keyword=' + encodeURIComponent(kw) });
+      }
+    },
+    goLogin() {
+      this.setData({ menuOpen: false });
+      wx.navigateTo({ url: '/pages/login/login' });
+    },
+    goAccount() {
+      this.setData({ menuOpen: false });
+      wx.navigateTo({ url: '/pages/account/account' });
+    },
+    goLogout() {
+      this.setData({ menuOpen: false });
+      wx.removeStorageSync('X-ACCESS-TOKEN');
+      wx.removeStorageSync('memberId');
+      this.refreshAuth();
+      wx.showToast({ title: 'Signed out', icon: 'none' });
+    },
+    noop() {}
+  }
+});

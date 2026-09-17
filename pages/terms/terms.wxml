@@ -1,0 +1,7 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; Terms and Conditions</view>
+  <view class="subpage-title">Terms &amp; Conditions of Service &amp; Information</view>
+  <view class="legal-content">{{body}}</view>
+</view>
+<site-footer />

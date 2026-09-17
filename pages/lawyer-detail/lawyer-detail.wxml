@@ -1,0 +1,16 @@
+<site-header />
+<view class="subpage" wx:if="{{item}}">
+  <view class="breadcrumb"> &gt; Lawyers</view>
+  <view class="detail">
+    <image class="photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+    <view class="photo placeholder" wx:else></view>
+    <view class="name">{{item.name}}</view>
+    <view class="positions">
+      <view class="pos" wx:for="{{item.positions}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="firm">{{item.firm}}</view>
+    <view class="loc">{{item.location}}</view>
+    <view class="bio" wx:if="{{item.biography}}">{{item.biography}}</view>
+  </view>
+</view>
+<site-footer />

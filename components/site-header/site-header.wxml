@@ -1,0 +1,56 @@
+<view class="header">
+  <view class="header-inner container">
+    <view class="logo-wrap" bindtap="goHome">
+      <image class="logo" src="/assets/img/logo.png" mode="widthFix" />
+    </view>
+
+    <view class="ai-pill" bindtap="goAi">
+      <view class="ai-pill-prompt">F</view>
+      <view class="ai-pill-action">
+        <view class="ai-pill-icon"></view>
+        <view class="ai-pill-text">AI Search</view>
+      </view>
+    </view>
+
+    <view class="menu-button" bindtap="toggleMenu">
+      <text class="menu-label">Menu</text>
+      <view class="menu-lines">
+        <view class="menu-line"></view>
+        <view class="menu-line"></view>
+        <view class="menu-line"></view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="drawer-mask {{menuOpen ? 'show' : ''}}" bindtap="closeMenu"></view>
+<view class="drawer {{menuOpen ? 'open' : ''}}">
+  <view class="drawer-head">
+    <text class="drawer-title">LegalOne</text>
+    <view class="drawer-close" bindtap="closeMenu">✕</view>
+  </view>
+  <view class="drawer-search">
+    <input
+      class="drawer-search-input"
+      type="text"
+      placeholder="Search LegalOne"
+      confirm-type="search"
+      value="{{keyword}}"
+      bindinput="onKeyword"
+      bindconfirm="onSearch"
+    />
+    <view class="drawer-search-btn" bindtap="onSearch">Search</view>
+  </view>
+  <view class="drawer-nav">
+    <view
+      class="drawer-nav-item"
+      wx:for="{{nav}}"
+      wx:key="label"
+      data-path="{{item.path}}"
+      bindtap="onNav"
+    >{{item.label}}</view>
+    <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goAccount">Account</view>
+    <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goLogout">Logout</view>
+    <view class="drawer-nav-item" wx:else bindtap="goLogin">Login</view>
+  </view>
+</view>

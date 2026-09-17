@@ -1,0 +1,46 @@
+.detail {
+  padding: 30rpx 36rpx 60rpx;
+}
+
+.firm-logo-box {
+  width: 100%;
+  height: 260rpx;
+  background: #f2f2f2;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30rpx;
+}
+
+.firm-logo {
+  width: 300rpx;
+  height: 180rpx;
+}
+
+.firm-name {
+  margin-top: 26rpx;
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #00558d;
+}
+
+.firm-stats {
+  margin-top: 16rpx;
+  font-size: 27rpx;
+  color: #555555;
+}
+
+.firm-loc {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #555555;
+}
+
+.firm-overview {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  color: #2d2d2d;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}

@@ -1,0 +1,155 @@
+<site-header />
+
+<view class="page">
+  <swiper
+    class="announcement-swiper"
+    indicator-dots="{{true}}"
+    indicator-color="rgba(255,255,255,0.35)"
+    indicator-active-color="#f1ffb9"
+    autoplay="{{true}}"
+    circular="{{true}}"
+    interval="5000"
+    duration="600"
+  >
+    <swiper-item wx:for="{{announcements}}" wx:key="id">
+      <view class="announcement-slide">
+        <image class="announcement-bg" src="/assets/img/banner.jpg" mode="aspectFill" />
+        <view class="announcement-inner container">
+          <view class="announcement-title">{{item.type}}</view>
+          <view class="announcement-headline">{{item.headline}}</view>
+          <view class="announcement-more" bindtap="goAnnouncement" data-id="{{item.id}}">More detail</view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="row-gradient">
+    <view class="container">
+      <view class="panel">
+        <view class="panel-heading">Latest evaluated deals/cases</view>
+        <view class="panel-body">
+          <view class="deal-item" wx:for="{{deals}}" wx:key="id" bindtap="goDealDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+            <view class="deal-title">{{item.title}}</view>
+            <view class="deal-rank">{{item.rank}}</view>
+            <view class="deal-date">{{item.date}}</view>
+          </view>
+          <view class="more-link" bindtap="goDeals">Other deals/cases</view>
+        </view>
+      </view>
+
+      <view class="panel">
+        <view class="panel-heading">Latest updated law firms</view>
+        <view class="panel-body">
+          <view class="simple-link" wx:for="{{latestLawfirms}}" wx:key="id" bindtap="goLawfirmDetail" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+          <view class="more-link" bindtap="goLawfirms">Other law firms</view>
+        </view>
+      </view>
+
+      <view class="panel">
+        <view class="panel-heading">Latest updated partners</view>
+        <view class="panel-body">
+          <view class="simple-link" wx:for="{{latestPartners}}" wx:key="id" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+          <view class="more-link" bindtap="goLawyers">Other lawyers</view>
+        </view>
+      </view>
+
+      <view class="panel">
+        <view class="panel-heading">Latest client testimonials</view>
+        <view class="panel-body">
+          <view class="testimonial-item" wx:for="{{testimonials}}" wx:key="id">
+            <view class="testimonial-name" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+            <view class="testimonial-comment">{{item.comment}}</view>
+            <view class="testimonial-author">{{item.author}}</view>
+            <view class="testimonial-company">{{item.company}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="row-border">
+    <view class="container">
+      <view class="section">
+        <view class="section-heading"><text class="heading-dot"></text>Latest</view>
+        <view class="article-card" wx:for="{{latest}}" wx:key="id" bindtap="goArticleDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+          <view class="labels">
+            <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
+          </view>
+          <image class="article-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <view class="article-title">{{item.title}}</view>
+          <view class="article-meta">
+            <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
+            <text class="article-date">{{item.date}}</text>
+          </view>
+        </view>
+        <view class="more-link" bindtap="goArticles">More articles</view>
+      </view>
+
+      <view class="section">
+        <view class="section-heading"><text class="heading-dot"></text>Awards</view>
+        <view class="article-card" wx:for="{{awards}}" wx:key="id" bindtap="goArticleDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+          <view class="labels">
+            <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
+          </view>
+          <image class="article-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <view class="article-title">{{item.title}}</view>
+          <view class="article-meta">
+            <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
+            <text class="article-date">{{item.date}}</text>
+          </view>
+        </view>
+        <view class="more-link" bindtap="goAwards">More awards</view>
+      </view>
+
+      <view class="section">
+        <view class="section-heading"><text class="heading-dot"></text>Highlights</view>
+        <view class="article-card" wx:for="{{highlights}}" wx:key="id" bindtap="goArticleDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+          <view class="labels">
+            <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
+          </view>
+          <image class="article-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <view class="article-title">{{item.title}}</view>
+          <view class="article-meta">
+            <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
+            <text class="article-date">{{item.date}}</text>
+          </view>
+        </view>
+        <view class="more-link" bindtap="goHighlights">More</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="row-gradient">
+    <view class="container">
+      <view class="section">
+        <view class="section-heading"><text class="heading-dot"></text>Lawyers</view>
+        <view class="lawyer-card" wx:for="{{lawyers}}" wx:key="id" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">
+          <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <view class="lawyer-photo placeholder" wx:else></view>
+          <view class="lawyer-detail">
+            <view class="lawyer-name">{{item.name}}</view>
+            <view class="position" wx:for="{{item.positions}}" wx:for-item="pos" wx:key="*this">{{pos}}</view>
+            <view class="lawyer-firm">{{item.firm}}</view>
+            <view class="lawyer-location">{{item.location}}</view>
+          </view>
+        </view>
+        <view class="more-link" bindtap="goLawyers">More</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="row-blue">
+    <view class="container">
+      <view class="section">
+        <view class="section-heading light"><text class="heading-dot"></text>Law firms</view>
+        <view class="firm-card" wx:for="{{lawfirms}}" wx:key="id" bindtap="goLawfirmDetail" data-id="{{item.id}}" data-name="{{item.name}}">
+          <image class="firm-logo" src="{{item.image}}" mode="aspectFit" />
+          <view class="firm-name">{{item.name}}</view>
+        </view>
+        <view class="more-link" bindtap="goLawfirms">More</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<site-footer />

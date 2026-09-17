@@ -1,0 +1,11 @@
+<site-header />
+<view class="subpage" wx:if="{{item}}">
+  <view class="breadcrumb"> &gt; Deals / Cases</view>
+  <view class="detail">
+    <view class="detail-title">{{item.title}}</view>
+    <view class="detail-badge">{{item.rank}}</view>
+    <view class="detail-meta">{{item.date}}</view>
+    <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
+  </view>
+</view>
+<site-footer />

@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/about/about",
+    "pages/deals/deals",
+    "pages/articles/articles",
+    "pages/awards/awards",
+    "pages/announcements/announcements",
+    "pages/lawyers/lawyers",
+    "pages/lawfirms/lawfirms",
+    "pages/highlights/highlights",
+    "pages/ai-search/ai-search",
+    "pages/login/login",
+    "pages/account/account",
+    "pages/announcement-detail/announcement-detail",
+    "pages/terms/terms",
+    "pages/privacy/privacy",
+    "pages/cookie/cookie",
+    "pages/esg/esg",
+    "pages/deal-detail/deal-detail",
+    "pages/article-detail/article-detail",
+    "pages/lawyer-detail/lawyer-detail",
+    "pages/lawfirm-detail/lawfirm-detail"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "LegalOne",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#ffffff"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,90 @@
+.ai-hero {
+  padding: 40rpx 36rpx;
+  background: linear-gradient(135deg, #00558d 0%, #0074b8 100%);
+  color: #ffffff;
+}
+
+.ai-hero-title {
+  font-size: 46rpx;
+  font-weight: 700;
+}
+
+.ai-hero-sub {
+  font-size: 27rpx;
+  color: #e6f7ff;
+  margin-top: 12rpx;
+  line-height: 1.5;
+}
+
+.ai-input-wrap {
+  display: flex;
+  align-items: center;
+  margin-top: 30rpx;
+}
+
+.ai-input {
+  flex: 1;
+  height: 84rpx;
+  background: #ffffff;
+  border-radius: 42rpx;
+  padding: 0 30rpx;
+  font-size: 29rpx;
+  color: #2d2d2d;
+}
+
+.ai-submit {
+  margin-left: 16rpx;
+  background: #f1ffb9;
+  color: #00558d;
+  font-weight: 700;
+  font-size: 28rpx;
+  border-radius: 42rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  padding: 0 32rpx;
+}
+
+.prompts {
+  margin-top: 26rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.prompt {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1rpx solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  padding: 10rpx 24rpx;
+}
+
+.results {
+  padding: 20rpx 36rpx 40rpx;
+}
+
+.result-item {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.result-type {
+  font-size: 22rpx;
+  color: #0084ba;
+  font-weight: 700;
+  margin-bottom: 6rpx;
+}
+
+.result-title {
+  font-size: 30rpx;
+  color: #2d2d2d;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.result-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #777777;
+}

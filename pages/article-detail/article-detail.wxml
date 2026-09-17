@@ -1,0 +1,16 @@
+<site-header />
+<view class="subpage" wx:if="{{item}}">
+  <view class="breadcrumb"> &gt; Articles</view>
+  <view class="detail">
+    <view class="labels">
+      <text class="label" wx:for="{{item.labels}}" wx:key="*this">{{item}}</text>
+    </view>
+    <image class="detail-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+    <view class="detail-title">{{item.title}}</view>
+    <view class="detail-meta">
+      <text wx:if="{{item.author}}">{{item.author}} · </text>{{item.date}}
+    </view>
+    <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
+  </view>
+</view>
+<site-footer />

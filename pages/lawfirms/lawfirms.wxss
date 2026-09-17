@@ -1,0 +1,43 @@
+.search-wrap {
+  padding: 0 36rpx 20rpx;
+}
+
+.search-input {
+  height: 76rpx;
+  border: 2rpx solid #0084ba;
+  border-radius: 38rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+}
+
+.list {
+  padding: 0 36rpx 40rpx;
+}
+
+.firm-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.firm-row-logo {
+  width: 120rpx;
+  height: 90rpx;
+  background: #f2f2f2;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+
+.firm-row-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.empty {
+  text-align: center;
+  color: #999999;
+  padding: 60rpx 0;
+}

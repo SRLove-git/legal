@@ -1,0 +1,44 @@
+{
+  "description": "LegalOne Global - WeChat Mini Program clone",
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1)" },
+      { "type": "file", "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1).zip" },
+      { "type": "file", "value": ".DS_Store" },
+      { "type": "file", "value": "README.md" },
+      { "type": "file", "value": "project.private.config.json" }
+    ],
+    "include": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.6.3",
+  "appid": "wx6cab923ea2af86c6",
+  "projectname": "legalone-global",
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "editorSetting": {}
+}

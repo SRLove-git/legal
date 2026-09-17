@@ -1,0 +1,140 @@
+page {
+  background: #ffffff;
+  color: #2d2d2d;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.2;
+  letter-spacing: 1.2rpx;
+}
+
+view,
+text,
+scroll-view,
+swiper,
+swiper-item,
+image,
+input,
+button {
+  box-sizing: border-box;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  line-height: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+.container {
+  padding-left: 36rpx;
+  padding-right: 36rpx;
+}
+
+.link-blue {
+  color: #0084ba;
+}
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.subpage {
+  padding-top: calc(108rpx + env(safe-area-inset-top));
+  min-height: 100vh;
+}
+
+.breadcrumb {
+  padding: 28rpx 36rpx;
+  font-size: 26rpx;
+  color: #555555;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.subpage-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #00558d;
+  padding: 36rpx 36rpx 20rpx;
+  line-height: 1.25;
+}
+
+.subpage-lead {
+  padding: 0 36rpx 36rpx;
+  font-size: 28rpx;
+  color: #2d2d2d;
+  line-height: 1.55;
+}
+
+.subpage-section {
+  padding: 28rpx 36rpx;
+}
+
+.subpage-section-heading {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #00558d;
+  margin-bottom: 20rpx;
+}
+
+.subpage-section-text {
+  font-size: 27rpx;
+  color: #2d2d2d;
+  line-height: 1.55;
+}
+
+.legal-content {
+  padding: 20rpx 36rpx 60rpx;
+  font-size: 27rpx;
+  color: #2d2d2d;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.list-page-item {
+  display: block;
+  padding: 26rpx 36rpx;
+  border-bottom: 1rpx solid #eeeeee;
+  font-size: 29rpx;
+  color: #2d2d2d;
+  line-height: 1.4;
+}
+
+.list-page-item.active {
+  color: #0084ba;
+  font-weight: 600;
+}
+
+.list-page-meta {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #777777;
+  font-weight: 400;
+}
+
+.list-search-wrap {
+  padding: 0 36rpx 20rpx;
+}
+
+.list-search-input {
+  height: 76rpx;
+  border: 2rpx solid #0084ba;
+  border-radius: 38rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+}
+
+.list-end {
+  text-align: center;
+  color: #999999;
+  font-size: 24rpx;
+  padding: 30rpx 0;
+}

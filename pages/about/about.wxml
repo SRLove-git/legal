@@ -1,0 +1,68 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; About</view>
+
+  <view class="about-hero">
+    <view class="about-hero-title">{{hero.title}}</view>
+    <view class="about-hero-subtitle">{{hero.subtitle}}</view>
+    <view class="about-hero-cta">{{hero.cta}}</view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">About LegalOne</view>
+    <view class="subpage-section-text">{{intro}}</view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">Standards &amp; Identifiers</view>
+    <view class="about-block" wx:for="{{standards}}" wx:key="title">
+      <view class="about-block-title">{{item.title}}</view>
+      <view class="about-block-desc">{{item.desc}}</view>
+    </view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">Signatories</view>
+    <view class="about-block" wx:for="{{signatories}}" wx:key="title">
+      <view class="about-block-title">{{item.title}}</view>
+      <view class="about-block-desc">{{item.desc}}</view>
+    </view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">Advisory Appointments &amp; Memberships</view>
+    <view class="about-block" wx:for="{{memberships}}" wx:key="title">
+      <view class="about-block-title">{{item.title}}</view>
+      <view class="about-block-desc">{{item.desc}}</view>
+    </view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">ESG Commitments</view>
+    <view class="about-bullet" wx:for="{{esg}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">Official Partnerships &amp; Strategic Affiliations</view>
+    <view class="about-block" wx:for="{{partnerships}}" wx:key="title">
+      <view class="about-block-title">{{item.title}}</view>
+      <view class="about-bullet" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">{{it}}</view>
+    </view>
+  </view>
+
+  <view class="subpage-section">
+    <view class="subpage-section-heading">LegalOne Deals of the Year in Libraries Worldwide</view>
+    <view class="subpage-section-text">{{libraries}}</view>
+  </view>
+
+  <view class="subpage-section contact">
+    <view class="subpage-section-heading">Contact Us</view>
+    <view class="contact-row">Address: {{contact.address}}</view>
+    <view class="contact-row">Phone / Whatsapp: {{contact.phone}}</view>
+    <view class="contact-row">General and sales: {{contact.general}}</view>
+    <view class="contact-row">Editorial and research: {{contact.editorial}}</view>
+    <view class="contact-row">LinkedIn: {{contact.linkedin}}</view>
+    <view class="contact-row">WeChat Account: {{contact.wechat}}</view>
+  </view>
+</view>
+<site-footer />

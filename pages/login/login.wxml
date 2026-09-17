@@ -1,0 +1,16 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; Login</view>
+  <view class="login">
+    <view class="login-title">Login</view>
+    <view class="field">
+      <input class="field-input" type="text" placeholder="Email address" value="{{email}}" bindinput="onEmail" />
+    </view>
+    <view class="field">
+      <input class="field-input" password="{{true}}" placeholder="Password" value="{{password}}" bindinput="onPassword" />
+    </view>
+    <view class="login-error" wx:if="{{error}}">{{error}}</view>
+    <button class="login-btn" bindtap="doLogin" loading="{{loading}}" disabled="{{loading}}">Login</button>
+  </view>
+</view>
+<site-footer />

@@ -1,0 +1,36 @@
+<site-header />
+<view class="subpage">
+  <view class="breadcrumb"> &gt; Account</view>
+  <view class="account">
+    <view class="account-title">Account</view>
+    <view wx:if="{{loading}}" class="account-loading">Loading…</view>
+    <block wx:else>
+      <view class="account-row" wx:if="{{member.salutation || member.firstName || member.lastName}}">
+        <text class="account-label">Name</text>
+        <text class="account-value">{{member.salutation}} {{member.firstName}} {{member.lastName}}</text>
+      </view>
+      <view class="account-row" wx:if="{{member.businessEmail}}">
+        <text class="account-label">Email</text>
+        <text class="account-value">{{member.businessEmail}}</text>
+      </view>
+      <view class="account-row" wx:if="{{member.firmName}}">
+        <text class="account-label">Organisation</text>
+        <text class="account-value">{{member.firmName}}</text>
+      </view>
+      <view class="account-row" wx:if="{{member.position}}">
+        <text class="account-label">Position</text>
+        <text class="account-value">{{member.position}}</text>
+      </view>
+      <view class="account-row" wx:if="{{member.country || member.city}}">
+        <text class="account-label">Location</text>
+        <text class="account-value">{{member.city}} {{member.country}}</text>
+      </view>
+      <view class="account-row" wx:if="{{member.mobile}}">
+        <text class="account-label">Mobile</text>
+        <text class="account-value">{{member.mobileCode}} {{member.mobile}}</text>
+      </view>
+      <button class="logout-btn" bindtap="doLogout">Sign out</button>
+    </block>
+  </view>
+</view>
+<site-footer />
