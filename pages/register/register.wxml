@@ -1,0 +1,43 @@
+<site-header />
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Register</text>
+  </view>
+
+  <view class="form">
+    <image class="form-logo" src="/assets/img/logo.png" mode="widthFix" />
+    <view class="form-title">Create your account</view>
+
+    <block wx:if="{{step === 1}}">
+      <view class="form-field">
+        <picker mode="selector" range="{{salutations}}" value="{{salutationIndex}}" bindchange="onSalutation">
+          <view class="form-picker">Salutation: {{salutations[salutationIndex]}}</view>
+        </picker>
+      </view>
+      <view class="form-field"><input class="form-input" placeholder="First name" value="{{firstName}}" bindinput="onField" data-key="firstName" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Last name" value="{{lastName}}" bindinput="onField" data-key="lastName" /></view>
+      <view class="form-field"><input class="form-input" type="text" placeholder="Business email" value="{{email}}" bindinput="onField" data-key="email" /></view>
+      <view class="form-field"><input class="form-input" password="{{true}}" placeholder="Password" value="{{password}}" bindinput="onField" data-key="password" /></view>
+      <view class="form-field"><input class="form-input" password="{{true}}" placeholder="Confirm password" value="{{confirm}}" bindinput="onField" data-key="confirm" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Promo code (optional)" value="{{promoCode}}" bindinput="onField" data-key="promoCode" /></view>
+      <view class="form-hint">Password must be at least 8 characters and include an uppercase letter, a lowercase letter and a digit.</view>
+      <view class="form-hint" wx:if="{{!captchaReady}}">Captcha is not configured yet — configure it in config.js before going live.</view>
+      <view class="form-error" wx:if="{{error}}">{{error}}</view>
+      <button class="form-btn" bindtap="sendOtp" loading="{{loading}}" disabled="{{loading}}">Send verification code</button>
+      <view class="form-links"><text class="form-link" bindtap="goLogin">Already have an account? Sign in</text></view>
+    </block>
+
+    <block wx:else>
+      <view class="form-hint">We have emailed a 6-digit code to {{email}}.</view>
+      <view class="form-field"><input class="form-input" type="number" placeholder="Verification code" value="{{otp}}" bindinput="onField" data-key="otp" /></view>
+      <view class="form-error" wx:if="{{error}}">{{error}}</view>
+      <button class="form-btn" bindtap="createAccount" loading="{{loading}}" disabled="{{loading}}">Create account</button>
+      <view class="form-links">
+        <text class="form-link" bindtap="resend">{{cooldown > 0 ? 'Resend in ' + cooldown + 's' : 'Resend code'}}</text>
+      </view>
+    </block>
+  </view>
+</view>
+<site-footer />

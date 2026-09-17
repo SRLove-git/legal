@@ -1,0 +1,22 @@
+<web-view wx:if="{{mode === 'h5' && h5Url}}" src="{{h5Url}}"></web-view>
+<view class="cap-page" wx:else>
+  <view class="cap-title">Verification</view>
+
+  <block wx:if="{{mode === 'plugin'}}">
+    <view class="cap-note">Aliyun captcha plugin mode is enabled for this build.</view>
+    <view class="cap-note small">SceneId: {{sceneId}} · Prefix: {{prefix}}</view>
+    <!--
+      Plugin path: declare the Aliyun captcha plugin in app.json and render it here, e.g.
+      <aliyun-captcha scene-id="{{sceneId}}" prefix="{{prefix}}" bind:success="onPluginSuccess" />
+      See README-CAPTCHA.md for the exact declaration and enablement steps.
+    -->
+    <view class="cap-btn" bindtap="onPluginSuccess">I have completed the verification</view>
+  </block>
+
+  <block wx:else>
+    <view class="cap-note">Aliyun Captcha 2.0 is required before registration, password recovery and email “Get Code” calls, but no SceneId / Prefix / H5 URL is configured yet.</view>
+    <view class="cap-note small">Add them in config.js — the Client provides the SceneId / Prefix and enables the WeChat plugin (Schedule 2 §1).</view>
+    <view class="cap-btn" bindtap="devContinue">Continue without captcha (DevTools only)</view>
+    <view class="cap-note small">The live API validates captchaVerifyParam server-side, so the request will be rejected until the captcha is configured.</view>
+  </block>
+</view>

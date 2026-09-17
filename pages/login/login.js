@@ -15,6 +15,12 @@ Page({
   onPassword(e) {
     this.setData({ password: e.detail.value });
   },
+  goForgot() {
+    wx.navigateTo({ url: '/pages/forgot-password/forgot-password' });
+  },
+  goRegister() {
+    wx.navigateTo({ url: '/pages/register/register' });
+  },
   doLogin() {
     const email = (this.data.email || '').trim();
     const password = this.data.password || '';
@@ -34,7 +40,7 @@ Page({
       if (res && res.token) {
         wx.setStorageSync('X-ACCESS-TOKEN', res.token);
         wx.setStorageSync('memberId', res.id || '');
-        wx.redirectTo({ url: '/pages/account/account' });
+        wx.redirectTo({ url: '/pages/dashboard/dashboard' });
       } else {
         self.setData({ error: 'System error. Please try again. If problem persists, please contact system administrator.' });
       }

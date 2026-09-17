@@ -1,0 +1,30 @@
+<site-header />
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Form download</text>
+  </view>
+  <view class="form">
+    <view class="form-title">Form download</view>
+    <view wx:if="{{loading}}" class="form-hint">Loading…</view>
+    <view wx:elif="{{error}}" class="form-error">{{error}}</view>
+    <block wx:else>
+      <view class="fd-group" wx:for="{{groups}}" wx:for-item="g" wx:key="jurisdiction">
+        <view class="fd-group-head">{{g.jurisdiction}}</view>
+        <view class="fd-item" wx:for="{{g.forms}}" wx:for-item="f" wx:key="id">
+          <view class="fd-name">{{f.name}}</view>
+          <view class="fd-meta" wx:if="{{f.applicationDeadline}}">Deadline: {{f.applicationDeadline}}</view>
+          <view class="fd-actions">
+            <view class="fd-btn" wx:if="{{f.pdfForm}}" bindtap="downloadPdf" data-path="{{f.pdfForm}}">PDF</view>
+            <view class="fd-btn ghost" wx:if="{{f.eFormAvailable}}" bindtap="openEform"
+              data-formid="{{f.id}}" data-name="{{f.name}}" data-type="{{f.type}}"
+              data-jurisdiction="{{f.jurisdiction}}">E-form</view>
+          </view>
+        </view>
+      </view>
+      <view class="form-hint" wx:if="{{!groups.length}}">No forms available for your account.</view>
+    </block>
+  </view>
+</view>
+<site-footer />

@@ -17,11 +17,25 @@ Page({
     const self = this;
     api.getMember(memberId).then(function (m) {
       self.setData({ member: m || {}, loading: false });
-      self.loadDashboard(memberId);
     }).catch(function () {
       self.setData({ loading: false });
       wx.showToast({ title: 'Failed to load profile', icon: 'none' });
     });
+  },
+  goAccess() {
+    wx.navigateTo({ url: '/pages/account-access/account-access' });
+  },
+  goPassword() {
+    wx.navigateTo({ url: '/pages/change-password/change-password' });
+  },
+  goSector() {
+    wx.navigateTo({ url: '/pages/change-sector/change-sector' });
+  },
+  goProfile() {
+    wx.navigateTo({ url: '/pages/profile-edit/profile-edit' });
+  },
+  goDashboard() {
+    wx.redirectTo({ url: '/pages/dashboard/dashboard' });
   },
   // Annex B §7 — dashboard lists, display at most 3 rows each
   loadDashboard(memberId) {

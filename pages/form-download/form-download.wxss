@@ -1,0 +1,51 @@
+@import "../register/register.wxss";
+
+.fd-group {
+  margin-top: 30rpx;
+}
+
+.fd-group-head {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #00558d;
+  padding-bottom: 10rpx;
+  border-bottom: 2rpx solid #00558d;
+}
+
+.fd-item {
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.fd-name {
+  font-size: 28rpx;
+  color: #2d2d2d;
+  line-height: 1.4;
+}
+
+.fd-meta {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #777777;
+}
+
+.fd-actions {
+  margin-top: 16rpx;
+  display: flex;
+  gap: 16rpx;
+}
+
+.fd-btn {
+  padding: 12rpx 32rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 25rpx;
+  border-radius: 30rpx;
+}
+
+.fd-btn.ghost {
+  background: #ffffff;
+  color: #0084ba;
+  border: 2rpx solid #0084ba;
+  box-sizing: border-box;
+}

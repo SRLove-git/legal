@@ -1,0 +1,30 @@
+<site-header />
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Account access</text>
+  </view>
+  <view class="form">
+    <view class="form-title">Account access</view>
+    <view class="form-row"><text class="form-row-label">Personal email</text><text class="form-row-value">{{member.personalEmail || 'No record'}}</text></view>
+    <view class="form-row"><text class="form-row-label">Business email</text><text class="form-row-value">{{member.businessEmail || 'No record'}}</text></view>
+
+    <block wx:if="{{done}}">
+      <view class="form-hint">Your email address has been updated.</view>
+      <button class="form-btn" bindtap="back">Back</button>
+    </block>
+    <block wx:else>
+      <view class="form-field" style="margin-top:30rpx"><input class="form-input" type="text" placeholder="New email address" value="{{newEmail}}" bindinput="onField" data-key="newEmail" /></view>
+      <view class="form-row"><text class="form-row-label">Business email</text><switch checked="{{isBusinessEmail}}" bindchange="onType" /></view>
+      <view class="form-field" wx:if="{{step === 2}}"><input class="form-input" type="number" placeholder="Verification code" value="{{otp}}" bindinput="onField" data-key="otp" /></view>
+      <view class="form-error" wx:if="{{error}}">{{error}}</view>
+      <button class="form-btn" wx:if="{{step === 1}}" bindtap="getCode" loading="{{loading}}" disabled="{{loading}}">Get code</button>
+      <button class="form-btn" wx:else bindtap="submit" loading="{{loading}}" disabled="{{loading}}">Submit</button>
+      <view class="form-links" wx:if="{{step === 2}}">
+        <text class="form-link">{{cooldown > 0 ? 'Resend in ' + cooldown + 's' : 'You can request a new code now'}}</text>
+      </view>
+    </block>
+  </view>
+</view>
+<site-footer />

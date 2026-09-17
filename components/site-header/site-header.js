@@ -73,7 +73,7 @@ Component({
     },
     goAccount() {
       this.setData({ menuOpen: false });
-      wx.navigateTo({ url: '/pages/account/account' });
+      wx.navigateTo({ url: '/pages/dashboard/dashboard' });
     },
     goLogout() {
       this.setData({ menuOpen: false });

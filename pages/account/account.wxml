@@ -6,7 +6,7 @@
     <text class="breadcrumb-text">Account</text>
   </view>
   <view class="account">
-    <view class="account-title">Account</view>
+    <view class="account-title">Account Settings</view>
     <view wx:if="{{loading}}" class="account-loading">Loading…</view>
     <block wx:else>
       <view class="account-row" wx:if="{{member.salutation || member.firstName || member.lastName}}">
@@ -33,29 +33,15 @@
         <text class="account-label">Mobile</text>
         <text class="account-value">{{member.mobileCode}} {{member.mobile}}</text>
       </view>
-      <button class="logout-btn" bindtap="doLogout">Sign out</button>
+      <view class="account-menu">
+        <view class="account-menu-item" bindtap="goAccess">Account access</view>
+        <view class="account-menu-item" bindtap="goPassword">Change password</view>
+        <view class="account-menu-item" bindtap="goSector">Change sector</view>
+        <view class="account-menu-item" bindtap="goProfile">Update profile</view>
+        <view class="account-menu-item" bindtap="goDashboard">Dashboard</view>
+      </view>
 
-      <view class="account-section" wx:if="{{verifications.length}}">
-        <view class="account-section-head">Verifications</view>
-        <view class="account-item" wx:for="{{verifications}}" wx:key="orderId">
-          <view class="account-item-title">{{item.number || item.orderId}}</view>
-          <view class="account-item-meta">{{item.status}}<text wx:if="{{item.submitted}}"> · {{item.submitted}}</text></view>
-        </view>
-      </view>
-      <view class="account-section" wx:if="{{dealSubs.length}}">
-        <view class="account-section-head">Deal submissions</view>
-        <view class="account-item" wx:for="{{dealSubs}}" wx:key="name">
-          <view class="account-item-title">{{item.name}}</view>
-          <view class="account-item-meta">{{item.status}}<text wx:if="{{item.date}}"> · {{item.date}}</text></view>
-        </view>
-      </view>
-      <view class="account-section" wx:if="{{awardSubs.length}}">
-        <view class="account-section-head">Award submissions</view>
-        <view class="account-item" wx:for="{{awardSubs}}" wx:key="name">
-          <view class="account-item-title">{{item.name}}</view>
-          <view class="account-item-meta">{{item.status}}<text wx:if="{{item.date}}"> · {{item.date}}</text></view>
-        </view>
-      </view>
+      <button class="logout-btn" bindtap="doLogout">Sign out</button>
     </block>
   </view>
 </view>

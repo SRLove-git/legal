@@ -12,9 +12,9 @@
     <view class="login-error" wx:if="{{error}}">{{error}}</view>
     <button class="login-btn" bindtap="doLogin" loading="{{loading}}" disabled="{{loading}}">Login</button>
     <view class="login-links">
-      <text class="login-link">Forgot password?</text>
+      <text class="login-link" bindtap="goForgot">Forgot password?</text>
       <text class="login-link-sep">or</text>
-      <text class="login-link">Sign up</text>
+      <text class="login-link" bindtap="goRegister">Sign up</text>
     </view>
     <view class="login-agreement">By clicking sign up, you agree to our privacy policy. For more information, please see our privacy policy.</view>
   </view>

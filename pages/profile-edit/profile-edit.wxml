@@ -1,0 +1,74 @@
+<site-header />
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">{{mode === 'complete' ? 'Complete profile' : 'Update profile'}}</text>
+  </view>
+
+  <view class="form">
+    <view class="form-title">{{mode === 'complete' ? 'Complete your profile' : 'Update profile'}}</view>
+    <view wx:if="{{loading}}" class="form-hint">Loading…</view>
+
+    <block wx:else>
+      <view class="form-field">
+        <picker mode="selector" range="{{salutations}}" value="{{salutationIndex}}" bindchange="onSalutation">
+          <view class="form-picker">Salutation: {{salutations[salutationIndex]}}</view>
+        </picker>
+      </view>
+      <view class="form-field"><input class="form-input" placeholder="First name *" value="{{form.firstName}}" bindinput="onField" data-key="firstName" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Last name *" value="{{form.lastName}}" bindinput="onField" data-key="lastName" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Name in local language" value="{{form.nameLocal}}" bindinput="onField" data-key="nameLocal" /></view>
+
+      <view class="form-field">
+        <picker mode="selector" range="{{sectors}}" range-key="value" value="{{sectorIndex}}" bindchange="onSector">
+          <view class="form-picker">Sector: {{form.sector}}</view>
+        </picker>
+      </view>
+
+      <view class="form-field">
+        <input class="form-input" placeholder="{{orgLabel}} *" value="{{form.firmName}}" bindinput="onFirmInput" />
+        <view class="suggest" wx:if="{{firmSuggestions.length}}">
+          <view class="suggest-item" wx:for="{{firmSuggestions}}" wx:key="id" bindtap="pickFirm" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+        </view>
+      </view>
+      <view class="form-field"><input class="form-input" placeholder="Organisation name in local language" value="{{form.firmNameLocal}}" bindinput="onField" data-key="firmNameLocal" /></view>
+
+      <view class="form-field" wx:if="{{showPositionList && positions.length}}">
+        <picker mode="selector" range="{{positions}}" value="{{0}}" bindchange="onField" data-key="position">
+          <view class="form-picker">Position: {{form.position || 'Select'}}</view>
+        </picker>
+      </view>
+      <view class="form-field" wx:if="{{!showPositionList}}">
+        <input class="form-input" placeholder="Position *" value="{{form.position}}" bindinput="onField" data-key="position" />
+      </view>
+      <view class="form-row" wx:if="{{showPartner}}">
+        <text class="form-row-label">Partner</text>
+        <switch checked="{{form.isPartner}}" bindchange="onPartner" />
+      </view>
+
+      <view class="form-field" wx:if="{{countries.length}}">
+        <picker mode="selector" range="{{countries}}" value="{{0}}" bindchange="onField" data-key="country">
+          <view class="form-picker">Country &amp; Region: {{form.country || 'Select'}}</view>
+        </picker>
+      </view>
+      <view class="form-field" wx:else><input class="form-input" placeholder="Country &amp; Region *" value="{{form.country}}" bindinput="onField" data-key="country" /></view>
+      <view class="form-field"><input class="form-input" placeholder="City *" value="{{form.city}}" bindinput="onField" data-key="city" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Address" value="{{form.address}}" bindinput="onField" data-key="address" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Local address" value="{{form.localAddress}}" bindinput="onField" data-key="localAddress" /></view>
+
+      <view class="form-field" wx:if="{{callingCodes.length}}">
+        <picker mode="selector" range="{{callingCodes}}" value="{{0}}" bindchange="onField" data-key="mobileCode">
+          <view class="form-picker">Mobile code: {{form.mobileCode || 'Select'}}</view>
+        </picker>
+      </view>
+      <view class="form-field" wx:else><input class="form-input" placeholder="Mobile code *" value="{{form.mobileCode}}" bindinput="onField" data-key="mobileCode" /></view>
+      <view class="form-field"><input class="form-input" type="number" placeholder="Mobile number *" value="{{form.mobile}}" bindinput="onField" data-key="mobile" /></view>
+      <view class="form-field"><input class="form-input" placeholder="Phone" value="{{form.phone}}" bindinput="onField" data-key="phone" /></view>
+
+      <view class="form-error" wx:if="{{error}}">{{error}}</view>
+      <button class="form-btn" bindtap="submit" loading="{{saving}}" disabled="{{saving}}">Save</button>
+    </block>
+  </view>
+</view>
+<site-footer />

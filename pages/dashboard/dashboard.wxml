@@ -1,0 +1,69 @@
+<site-header />
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Dashboard</text>
+  </view>
+
+  <view class="dash">
+    <view wx:if="{{loading}}" class="dash-note">Loading...</view>
+    <block wx:else>
+      <view class="dash-hello">Welcome, {{greeting}}</view>
+      <view class="dash-sub" wx:if="{{subline}}">{{subline}}</view>
+
+      <view class="dash-alert" wx:if="{{incomplete}}" bindtap="goCompleteProfile">
+        <text class="dash-alert-text">Your profile is incomplete. Complete it to unlock deal/case submissions.</text>
+        <text class="dash-alert-cta">Complete now</text>
+      </view>
+
+      <view class="dash-section">
+        <view class="dash-section-head">Account services</view>
+        <view class="dash-service" bindtap="goFormDownload">
+          <view class="dash-service-title">Award applications</view>
+          <view class="dash-service-sub">Download award PDF forms and start E-form submissions</view>
+        </view>
+        <view class="dash-service" bindtap="startDealSubmission">
+          <view class="dash-service-title">Deal/case submission for rating</view>
+          <view class="dash-service-sub">Start a submission and continue in the LegalOne form</view>
+        </view>
+        <view class="dash-service" bindtap="openVerification">
+          <view class="dash-service-title">LegalOne Verification</view>
+          <view class="dash-service-sub">Opens the LegalOne website. Applications and payment are handled there.</view>
+        </view>
+        <view class="dash-service" bindtap="goSettings">
+          <view class="dash-service-title">Account Settings</view>
+          <view class="dash-service-sub">Account access, password, sector and profile</view>
+        </view>
+      </view>
+
+      <view class="dash-section">
+        <view class="dash-section-head">My verifications</view>
+        <view class="dash-item" wx:for="{{verifications}}" wx:key="orderId" bindtap="openVerification">
+          <view class="dash-item-title">{{item.title}}</view>
+          <view class="dash-item-meta">{{item.meta}}</view>
+        </view>
+        <view class="dash-empty" wx:if="{{emptyVerifications}}">No verifications yet.</view>
+      </view>
+
+      <view class="dash-section">
+        <view class="dash-section-head">My deal submissions</view>
+        <view class="dash-item" wx:for="{{dealSubs}}" wx:key="id" bindtap="openDeal" data-id="{{item.id}}">
+          <view class="dash-item-title">{{item.title}}</view>
+          <view class="dash-item-meta">{{item.meta}}</view>
+        </view>
+        <view class="dash-empty" wx:if="{{emptyDeals}}">No deal submissions yet.</view>
+      </view>
+
+      <view class="dash-section">
+        <view class="dash-section-head">My award submissions</view>
+        <view class="dash-item" wx:for="{{awardSubs}}" wx:key="id" bindtap="openAward" data-id="{{item.id}}" data-sub="{{item.sub}}">
+          <view class="dash-item-title">{{item.title}}</view>
+          <view class="dash-item-meta">{{item.meta}}</view>
+        </view>
+        <view class="dash-empty" wx:if="{{emptyAwards}}">No award submissions yet.</view>
+      </view>
+    </block>
+  </view>
+</view>
+<site-footer />

@@ -73,3 +73,15 @@
   font-size: 24rpx;
   color: #777777;
 }
+
+.account-menu {
+  margin-top: 44rpx;
+  border-top: 1rpx solid #eeeeee;
+}
+
+.account-menu-item {
+  padding: 30rpx 0;
+  font-size: 29rpx;
+  color: #2d2d2d;
+  border-bottom: 1rpx solid #eeeeee;
+}

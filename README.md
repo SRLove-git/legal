@@ -51,3 +51,30 @@
 - 详情正文通过 `stripHtml` 转纯文本渲染（小程序无 innerHTML），登录/注册外的会员、验证、支付、问卷等 Phase 2 范围暂未实现。
 - 未实现注册 OTP/验证码（需阿里云验证码 SDK）；`Login` 目前使用邮箱/密码登录接口。
 - 自定义字体用系统字体近似原站的 Helvetica Neue / Montserrat。
+
+## 配置（config.js）
+
+`config.js` 是运行时配置入口：
+
+- `baseUrl` — 接口域名（默认 `https://www.legaloneglobal.com/`）
+- `h5Host` — E-form / 找回密码 / 网站跳转用的 H5 域名（需加入小程序「业务域名」）
+- `captcha` — 阿里云验证码 2.0 的 SceneId / Prefix / 插件版本 / H5 URL，见 `README-CAPTCHA.md`
+
+## Phase 2（会员）已实现页面
+
+- `pages/register/register` — 注册（邮箱 + 验证码 → OTP → 创建账号）
+- `pages/forgot-password/forgot-password` — 忘记密码（验证码 → 发送找回邮件）
+- `pages/reset-password/reset-password` — 重置密码（邮件链接 → 新密码）
+- `pages/login/login` — 登录（无验证码）
+- `pages/captcha/captcha` — 阿里云验证码页（插件 / H5 / 未配置三种状态）
+- `pages/dashboard/dashboard` — 会员仪表盘（欢迎语、账号服务、三张活动摘要）
+- `pages/account/account` — Account Settings 菜单
+- `pages/account-access/account-access` — 修改邮箱（captcha → Get Code → OTP → Submit）
+- `pages/change-password/change-password` — 修改密码
+- `pages/change-sector/change-sector` — 切换 sector（30 天冷却）
+- `pages/profile-edit/profile-edit` — 完善/更新资料（按 sector 矩阵，含律所联想）
+- `pages/form-download/form-download` — 奖项表单下载（PDF）+ E-form 入口
+- `pages/webview/webview` — H5 承载页（web-view + 复制链接兜底）
+
+接口层见 `services/api.js`（Annex A + Annex B 全覆盖），会话见 `services/auth.js`，
+验证码见 `services/captcha.js`，sector 矩阵见 `services/sector.js`。

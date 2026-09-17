@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "site-header": "/components/site-header/site-header",
+    "site-footer": "/components/site-footer/site-footer"
+  }
+}

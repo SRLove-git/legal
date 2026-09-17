@@ -1,0 +1,45 @@
+.wv-fallback {
+  padding: calc(88rpx + 100rpx) 48rpx 60rpx;
+}
+
+.wv-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #00558d;
+  margin-bottom: 20rpx;
+}
+
+.wv-note {
+  font-size: 27rpx;
+  color: #555555;
+  line-height: 1.6;
+}
+
+.wv-url {
+  margin-top: 28rpx;
+  font-size: 24rpx;
+  color: #0084ba;
+  word-break: break-all;
+  background: #f7f7f7;
+  border-radius: 8rpx;
+  padding: 20rpx;
+}
+
+.wv-btn {
+  margin-top: 32rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  background: #00558d;
+  color: #ffffff;
+  font-size: 29rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+}
+
+.wv-btn.ghost {
+  background: #ffffff;
+  color: #00558d;
+  border: 2rpx solid #00558d;
+  box-sizing: border-box;
+}

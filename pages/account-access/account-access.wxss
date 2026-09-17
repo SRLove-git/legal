@@ -1,0 +1,19 @@
+@import "../register/register.wxss";
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.form-row-label {
+  font-size: 28rpx;
+  color: #2d2d2d;
+}
+
+.form-row-value {
+  font-size: 27rpx;
+  color: #555555;
+}

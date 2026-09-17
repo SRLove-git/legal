@@ -1,0 +1,8 @@
+<web-view wx:if="{{url && !failed}}" src="{{url}}" binderror="onError"></web-view>
+<view class="wv-fallback" wx:if="{{!url || failed}}">
+  <view class="wv-title">{{title || 'LegalOne'}}</view>
+  <view class="wv-note">This page opens in a web view. If it does not load, copy the link and open it in your browser. The H5 host must be added to the mini program business domain before web-view can load it.</view>
+  <view class="wv-url" wx:if="{{url}}">{{url}}</view>
+  <view class="wv-btn" wx:if="{{url}}" bindtap="copy">Copy link</view>
+  <view class="wv-btn ghost" wx:if="{{url}}" bindtap="retry">Retry</view>
+</view>

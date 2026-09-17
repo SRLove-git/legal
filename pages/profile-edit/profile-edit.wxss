@@ -1,0 +1,27 @@
+@import "../register/register.wxss";
+
+.suggest {
+  background: #ffffff;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 12rpx;
+  margin-top: 8rpx;
+}
+
+.suggest-item {
+  padding: 22rpx 24rpx;
+  font-size: 27rpx;
+  color: #2d2d2d;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18rpx 0;
+}
+
+.form-row-label {
+  font-size: 28rpx;
+  color: #2d2d2d;
+}

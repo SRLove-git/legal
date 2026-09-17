@@ -1,6 +1,7 @@
 // LegalOne Global — mini program API service.
 // Reference: Technical Annex A (Phase 1 public browse) + Annex B (Phase 2 login).
-const BASE = 'https://www.legaloneglobal.com/';
+const config = require('../config.js');
+const BASE = config.baseUrl || 'https://www.legaloneglobal.com/';
 const CDN = 'https://legaloneglobal.azureedge.net/storelegaloneglobalpub/';
 
 function storageGet(key) {

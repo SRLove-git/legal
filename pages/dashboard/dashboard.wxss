@@ -1,0 +1,90 @@
+.dash {
+  padding: 40rpx 36rpx 80rpx;
+}
+
+.dash-note {
+  font-size: 27rpx;
+  color: #777777;
+}
+
+.dash-hello {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #00558d;
+}
+
+.dash-sub {
+  margin-top: 10rpx;
+  font-size: 27rpx;
+  color: #555555;
+}
+
+.dash-alert {
+  margin-top: 30rpx;
+  background: #fff8e1;
+  border: 2rpx solid #f0d58c;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 27rpx;
+  color: #7a5c00;
+  line-height: 1.5;
+}
+
+.dash-alert-cta {
+  color: #0084ba;
+  font-weight: 700;
+}
+
+.dash-section {
+  margin-top: 48rpx;
+}
+
+.dash-section-head {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #00558d;
+  padding-bottom: 12rpx;
+  border-bottom: 2rpx solid #00558d;
+  margin-bottom: 16rpx;
+}
+
+.dash-service {
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.dash-service-title {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.dash-service-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #777777;
+  line-height: 1.45;
+}
+
+.dash-item {
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.dash-item-title {
+  font-size: 28rpx;
+  color: #2d2d2d;
+  line-height: 1.4;
+}
+
+.dash-item-meta {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #777777;
+}
+
+.dash-empty {
+  font-size: 25rpx;
+  color: #999999;
+  padding: 12rpx 0;
+}

@@ -1,0 +1,23 @@
+<site-header />
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Change sector</text>
+  </view>
+  <view class="form">
+    <view class="form-title">Change sector</view>
+    <view wx:if="{{loading}}" class="form-hint">Loading…</view>
+    <block wx:else>
+      <view class="form-hint">Current sector: {{current || 'Not set'}}</view>
+      <view class="form-error" wx:if="{{blocked}}">You can change sector once every 30 days. Next allowed: {{nextAllowed}}.</view>
+      <view class="sector-item {{selected === item.value ? 'on' : ''}}" wx:for="{{sectors}}" wx:key="value" bindtap="pick" data-value="{{item.value}}">
+        <text>{{item.value}}</text>
+        <text class="sector-mark" wx:if="{{selected === item.value}}">✓</text>
+      </view>
+      <button class="form-btn" bindtap="next" disabled="{{blocked}}">Next</button>
+      <view class="form-hint">After changing sector, the organisation, position, partner and location fields are cleared and you continue in Update profile.</view>
+    </block>
+  </view>
+</view>
+<site-footer />
