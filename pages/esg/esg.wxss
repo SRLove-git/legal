@@ -1,1 +1,12 @@
-/* uses shared legal-content styles */
+/* Faithful markup of the website's ESG page; see data/esg.js */
+.esg-body {
+  padding: 36rpx 36rpx 80rpx;
+}
+
+.esg-rich {
+  display: block;
+  font-size: 28rpx;
+  line-height: 1.65;
+  color: #303030;
+  word-break: break-word;
+}

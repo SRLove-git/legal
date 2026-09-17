@@ -1,1 +1,12 @@
-/* uses shared legal-content styles */
+/* Faithful markup of the website's Cookies Policy; see data/cookie.js */
+.legal-body {
+  padding: 36rpx 36rpx 80rpx;
+}
+
+.legal-rich {
+  display: block;
+  font-size: 28rpx;
+  line-height: 1.5;
+  color: #303030;
+  word-break: break-word;
+}

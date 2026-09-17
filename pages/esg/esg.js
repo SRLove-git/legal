@@ -1,4 +1,6 @@
 const safeArea = require('../../services/safe-area.js');
-const data = require('../../data/content.js');
+const esg = require('../../data/esg.js');
 Page({
-  behaviors: [safeArea], data: { body: data.esg } });
+  behaviors: [safeArea],
+  data: { html: esg.html }
+});

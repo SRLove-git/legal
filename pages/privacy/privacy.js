@@ -1,4 +1,6 @@
 const safeArea = require('../../services/safe-area.js');
-const data = require('../../data/content.js');
+const privacy = require('../../data/privacy.js');
 Page({
-  behaviors: [safeArea], data: { body: data.privacy } });
+  behaviors: [safeArea],
+  data: { html: privacy.html }
+});

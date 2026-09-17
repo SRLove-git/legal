@@ -5,7 +5,8 @@
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">ESG Ratings and Data Products Code of Conduct</text>
   </view>
-  <view class="subpage-title">ESG Ratings and Data Products Code of Conduct</view>
-  <view class="legal-content">{{body}}</view>
+  <view class="esg-body">
+    <rich-text class="esg-rich" nodes="{{html}}"></rich-text>
+  </view>
 </view>
 <site-footer />

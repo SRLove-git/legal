@@ -5,7 +5,8 @@
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Terms and condition</text>
   </view>
-  <view class="subpage-title">Cookies Policy</view>
-  <view class="legal-content">{{body}}</view>
+  <view class="legal-body">
+    <rich-text class="legal-rich" nodes="{{html}}"></rich-text>
+  </view>
 </view>
 <site-footer />
