@@ -6,7 +6,14 @@ Page({
     hero: {
       title: 'ADVANCING LEGAL EXCELLENCE WORLDWIDE',
       subtitle: 'Recognition. Innovation. Impact.',
-      cta: 'Read company brochure'
+      brochureLabel: 'Read company brochure',
+      // The website opens the flipbook e-magazine in a new tab; each language is a
+      // separate file id on legaloneglobal.com/emagazine.
+      brochures: [
+        { label: 'English', url: '/emagazine/index.html?file=362da2c302&title=LegalOne%20Brochure' },
+        { label: '繁體中文', url: '/emagazine/index.html?file=73334ffbb1&title=LegalOne%20Brochure' },
+        { label: '简体中文', url: '/emagazine/index.html?file=1269112958&title=LegalOne%20Brochure' }
+      ]
     },
     awards: [
       { title: 'CAPITAL Service & Innovative Product Awards 2026', desc: 'Professional Rating Organisation Service Award' },
@@ -87,5 +94,9 @@ Page({
       return;
     }
     h5.open(link, title);
+  },
+  openBrochure(e) {
+    const url = e.currentTarget.dataset.url || '';
+    if (url) h5.open(url, 'LegalOne Brochure');
   }
 });

@@ -32,15 +32,38 @@
   color: #ffffff;
 }
 
-.about-hero-cta {
-  margin-top: 44rpx;
-  display: inline-block;
-  background: #ffffff;
-  color: #00558d;
-  font-size: 28rpx;
-  font-weight: 600;
-  border-radius: 40rpx;
-  padding: 16rpx 40rpx;
+/* Brochure block: cover art, label and the three language links of the site hero */
+.about-hero-brochures {
+  margin-top: 77rpx;
+}
+
+.about-hero-brochure-cover {
+  display: block;
+  width: 277rpx;
+  height: 392rpx;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.25);
+}
+
+.about-hero-brochure-label {
+  margin-top: 38rpx;
+  font-size: 36rpx;
+  color: #ffffff;
+}
+
+.about-hero-brochure-links {
+  margin-top: 19rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.about-hero-brochure-link {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.about-hero-brochure-sep {
+  color: #ffffff;
+  margin: 0 15rpx;
 }
 
 .about-block {

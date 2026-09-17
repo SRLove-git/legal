@@ -11,7 +11,16 @@
     <view class="about-hero-inner">
       <view class="about-hero-title">{{hero.title}}</view>
       <view class="about-hero-subtitle">{{hero.subtitle}}</view>
-      <view class="about-hero-cta">{{hero.cta}}</view>
+      <view class="about-hero-brochures">
+        <image class="about-hero-brochure-cover" src="/assets/img/brochure-cover.jpg" mode="aspectFill" />
+        <view class="about-hero-brochure-label">{{hero.brochureLabel}}</view>
+        <view class="about-hero-brochure-links">
+          <block wx:for="{{hero.brochures}}" wx:key="label">
+            <text class="about-hero-brochure-sep" wx:if="{{index > 0}}">|</text>
+            <text class="about-hero-brochure-link" bindtap="openBrochure" data-url="{{item.url}}">{{item.label}}</text>
+          </block>
+        </view>
+      </view>
     </view>
   </view>
 
