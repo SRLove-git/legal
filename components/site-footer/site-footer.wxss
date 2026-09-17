@@ -43,6 +43,14 @@
   font-size: 24rpx;
 }
 
+.badge-link .badge-text {
+  text-decoration: underline;
+}
+
+.badge-hover {
+  opacity: 0.7;
+}
+
 .footer-bottom {
   margin-top: 44rpx;
   border-top: 1rpx solid rgba(255, 255, 255, 0.35);

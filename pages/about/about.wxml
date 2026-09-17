@@ -25,6 +25,7 @@
     <view class="about-block" wx:for="{{awards}}" wx:key="desc">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
+      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
     </view>
   </view>
 
@@ -33,6 +34,7 @@
     <view class="about-block" wx:for="{{standards}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
+      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
     </view>
   </view>
 
@@ -41,6 +43,7 @@
     <view class="about-block" wx:for="{{signatories}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
+      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
     </view>
   </view>
 
@@ -49,12 +52,16 @@
     <view class="about-block" wx:for="{{memberships}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
+      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
     </view>
   </view>
 
   <view class="subpage-section">
     <view class="subpage-section-heading">ESG Commitments</view>
-    <view class="about-bullet" wx:for="{{esg}}" wx:key="*this">{{item}}</view>
+    <view class="about-block" wx:for="{{esg}}" wx:key="title">
+      <view class="about-block-title">{{item.title}}</view>
+      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
+    </view>
   </view>
 
   <view class="subpage-section">
@@ -62,6 +69,7 @@
     <view class="about-block" wx:for="{{partnerships}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-bullet" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">{{it}}</view>
+      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
     </view>
   </view>
 

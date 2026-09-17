@@ -69,6 +69,23 @@
   line-height: 1.5;
 }
 
+/* Matches the website's .about-explore-btn pill */
+.about-explore {
+  display: inline-block;
+  margin-top: 20rpx;
+  padding: 17rpx 42rpx;
+  border: 1rpx solid #000000;
+  border-radius: 42rpx;
+  background: #ffffff;
+  color: #000000;
+  font-size: 28rpx;
+  line-height: 1.3;
+}
+
+.about-explore-hover {
+  opacity: 0.7;
+}
+
 .about-bullet {
   padding: 12rpx 0;
   font-size: 27rpx;

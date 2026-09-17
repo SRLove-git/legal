@@ -1,0 +1,12 @@
+/* Faithful markup of the website's Japan FSA code page; see data/esg-jp.js */
+.esg-body {
+  padding: 36rpx 36rpx 80rpx;
+}
+
+.esg-rich {
+  display: block;
+  font-size: 28rpx;
+  line-height: 1.65;
+  color: #303030;
+  word-break: break-word;
+}
