@@ -1,4 +1,5 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 
@@ -17,7 +18,7 @@ const SECTIONS = [
 const PER_SECTION = 4;
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
 
   data: {
     sections: [],

@@ -1,6 +1,7 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: {
     methodology: [
       {

@@ -1,7 +1,8 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const h5 = require('../../services/h5.js');
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: {
     hero: {
       title: 'ADVANCING LEGAL EXCELLENCE WORLDWIDE',

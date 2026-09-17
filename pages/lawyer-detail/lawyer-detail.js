@@ -1,9 +1,10 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: { item: null, cases: [], articles: [] },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');

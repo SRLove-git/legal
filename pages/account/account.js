@@ -1,8 +1,9 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: { member: null, loading: true, verifications: [], dealSubs: [], awardSubs: [] },
   onLoad() {
     const token = wx.getStorageSync('X-ACCESS-TOKEN');

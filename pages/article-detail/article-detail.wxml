@@ -1,9 +1,9 @@
 <site-header />
 <view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text">Articles</text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/articles/articles">Articles</text>
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-current">{{item.title}}</text>
   </view>

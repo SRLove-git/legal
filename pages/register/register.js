@@ -1,4 +1,5 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const auth = require('../../services/auth.js');
 const captcha = require('../../services/captcha.js');
@@ -6,7 +7,7 @@ const captcha = require('../../services/captcha.js');
 const SALUTATIONS = ['Mr', 'Ms', 'Mrs', 'Dr', 'Prof'];
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: {
     step: 1,
     salutations: SALUTATIONS,

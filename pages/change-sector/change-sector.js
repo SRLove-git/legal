@@ -1,4 +1,5 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const auth = require('../../services/auth.js');
 const sector = require('../../services/sector.js');
@@ -6,7 +7,7 @@ const sector = require('../../services/sector.js');
 const COOLDOWN_DAYS = 30;
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: {
     sectors: sector.list(),
     current: '',

@@ -1,9 +1,10 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const captcha = require('../../services/captcha.js');
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: { email: '', error: '', loading: false, done: false, captchaReady: false },
   onLoad() {
     this.setData({ captchaReady: captcha.configured() });

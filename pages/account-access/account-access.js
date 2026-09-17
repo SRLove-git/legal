@@ -1,10 +1,11 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const auth = require('../../services/auth.js');
 const captcha = require('../../services/captcha.js');
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: {
     member: null,
     newEmail: '',

@@ -1,6 +1,7 @@
 const api = require('./api.js');
 const fb = require('./fallback.js');
 const safeArea = require('./safe-area.js');
+const breadcrumb = require('./breadcrumb.js');
 
 // Reusable list page controller: server-side pagination by default, or client-side
 // paging/filter for endpoints that return a full set (announcements, highlights).
@@ -9,7 +10,7 @@ function createListPage(cfg) {
   const clientPaging = !!cfg.clientPaging;
 
   return {
-    behaviors: [safeArea],
+    behaviors: [safeArea, breadcrumb],
 
     data: {
       items: [],

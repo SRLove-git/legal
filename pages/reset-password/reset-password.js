@@ -1,8 +1,9 @@
 const safeArea = require('../../services/safe-area.js');
+const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 
 Page({
-  behaviors: [safeArea],
+  behaviors: [safeArea, breadcrumb],
   data: { email: '', token: '', password: '', confirm: '', error: '', loading: false, linkOk: false, done: false },
   onLoad(options) {
     const email = decodeURIComponent(options.email || '');
