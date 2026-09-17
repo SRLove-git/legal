@@ -3,9 +3,19 @@ const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 
+// The website shows "Awards" in the crumb for award write-ups and "Articles" for
+// everything else; it decides this from the article's section.
+function crumbFor(item) {
+  const isAward = !!item && item.section === 'Awards';
+  return {
+    crumbLabel: isAward ? 'Awards' : 'Articles',
+    crumbUrl: isAward ? '/pages/awards/awards' : '/pages/articles/articles'
+  };
+}
+
 Page({
   behaviors: [safeArea, breadcrumb],
-  data: { item: null, related: [] },
+  data: { item: null, related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles' },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
     const title = decodeURIComponent(options.title || '');
@@ -18,11 +28,11 @@ Page({
       if (item) {
         item.body = 'This article is published by the LegalOne Editorial Team. The full piece is available on the LegalOne Global website.';
       }
-      self.setData({ item: item || null });
+      self.setData(Object.assign({ item: item || null }, crumbFor(item)));
     };
     if (id) {
       api.getArticleDetail(id).then(function (item) {
-        self.setData({ item: item || null });
+        self.setData(Object.assign({ item: item || null }, crumbFor(item)));
         api.getRelatedArticles(id).then(function (r) { self.setData({ related: (r || []).slice(0, 5) }); }).catch(function () {});
       }).catch(fallback);
     } else {

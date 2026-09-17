@@ -3,7 +3,7 @@
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/articles/articles">Articles</text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="{{crumbUrl}}">{{crumbLabel}}</text>
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-current">{{item.title}}</text>
   </view>

@@ -227,6 +227,8 @@ function normalizeArticle(a) {
     title: a.headline || '',
     image: imageUrl(a.image, 'l'),
     labels: (a.categories || []).map(function (c) { return c.id || c; }),
+    // The website picks the detail breadcrumb from this (Awards vs Articles).
+    section: a.section || '',
     author: authors.join(', '),
     date: fullDate(updated),
     publishedDate: fullDate(a.publishDate),

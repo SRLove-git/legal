@@ -47,7 +47,7 @@ module.exports = {
     const joined = ((x.labels || []).join(' ') + ' ' + x.title).toLowerCase();
     return joined.indexOf('award') >= 0 || joined.indexOf('blue ribbon') >= 0 || joined.indexOf('deals of the year') >= 0;
   }).map(function (x) {
-    return { id: lastSeg(x.link), title: x.title, image: img(x.image), labels: x.labels, author: bareAuthor(x.author), date: bareDate(x.date) };
+    return { id: lastSeg(x.link), title: x.title, image: img(x.image), labels: x.labels, section: 'Awards', author: bareAuthor(x.author), date: bareDate(x.date) };
   }),
   highlights: d.highlights.map(function (x) {
     return { id: lastSeg(x.link), title: x.title, image: img(x.image), labels: x.labels, author: bareAuthor(x.author), date: bareDate(x.date) };
