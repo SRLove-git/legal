@@ -43,3 +43,33 @@
   font-weight: 600;
   border-radius: 44rpx;
 }
+
+.account-section {
+  margin-top: 48rpx;
+}
+
+.account-section-head {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #00558d;
+  padding-bottom: 12rpx;
+  border-bottom: 2rpx solid #00558d;
+  margin-bottom: 16rpx;
+}
+
+.account-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.account-item-title {
+  font-size: 28rpx;
+  color: #2d2d2d;
+  line-height: 1.4;
+}
+
+.account-item-meta {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #777777;
+}

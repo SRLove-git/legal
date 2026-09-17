@@ -35,16 +35,20 @@ Page({
         wx.setStorageSync('X-ACCESS-TOKEN', res.token);
         wx.setStorageSync('memberId', res.id || '');
         wx.redirectTo({ url: '/pages/account/account' });
-      } else if (res && res.code === 0) {
-        self.setData({ error: 'Login failed. We cannot verify your account with the provided credentials.' });
-      } else if (res && res.description) {
-        self.setData({ error: res.description });
       } else {
         self.setData({ error: 'System error. Please try again. If problem persists, please contact system administrator.' });
       }
     }).catch(function (err) {
-      self.setData({ loading: false });
-      self.setData({ error: (err && err.message) || 'System error. Please try again.' });
+      // Annex B §2.1 — code == 0 means invalid credentials
+      let msg;
+      if (err && err.code === 0) {
+        msg = 'Login failed. We cannot verify your account with the provided credentials.';
+      } else if (err && err.description) {
+        msg = err.description;
+      } else {
+        msg = 'System error. Please try again. If problem persists, please contact system administrator.';
+      }
+      self.setData({ loading: false, error: msg });
     });
   }
 });

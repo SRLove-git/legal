@@ -43,3 +43,24 @@
   line-height: 46rpx;
   white-space: pre-wrap;
 }
+
+.detail-related-block {
+  margin-top: 56rpx;
+}
+
+.detail-related-head {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #00558d;
+  padding-bottom: 12rpx;
+  border-bottom: 2rpx solid #00558d;
+  margin-bottom: 20rpx;
+}
+
+.detail-related {
+  font-size: 28rpx;
+  color: #0084ba;
+  line-height: 1.45;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}

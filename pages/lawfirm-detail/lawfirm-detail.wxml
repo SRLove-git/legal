@@ -38,6 +38,19 @@
       <view class="firm-section-title">Contact</view>
       <view class="firm-list-item" wx:for="{{item.contacts}}" wx:key="*this">{{item}}</view>
     </view>
+
+    <view class="firm-section" wx:if="{{lawyers.length}}">
+      <view class="firm-section-title">Lawyers</view>
+      <view class="firm-list-item" wx:for="{{lawyers}}" wx:key="id" bindtap="goLawyer" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+    </view>
+    <view class="firm-section" wx:if="{{cases.length}}">
+      <view class="firm-section-title">Cases / deals</view>
+      <view class="firm-list-item" wx:for="{{cases}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+    </view>
+    <view class="firm-section" wx:if="{{honours.length}}">
+      <view class="firm-section-title">Honours</view>
+      <view class="firm-list-item" wx:for="{{honours}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+    </view>
   </view>
 </view>
 <site-footer />

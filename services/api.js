@@ -23,16 +23,38 @@ function request(method, path, options) {
       data: options.data,
       header: options.auth ? authHeaders(options.headers || {}) : (options.headers || {}),
       success: function (res) {
+        const body = res.data;
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data);
+          // Annex B §1.2: failed responses use { code: 0, description, captchaVerifyResult }
+          if (body && typeof body === 'object' && !Array.isArray(body) &&
+              Object.prototype.hasOwnProperty.call(body, 'code') && body.code === 0 && body.description) {
+            reject(toApiError(body.description, body, res.statusCode));
+            return;
+          }
+          resolve(body);
         } else {
-          const msg = (res.data && (res.data.description || res.data.message)) || ('HTTP ' + res.statusCode);
-          reject(new Error(msg));
+          const msg = (body && (body.description || body.message)) || ('HTTP ' + res.statusCode);
+          reject(toApiError(msg, body, res.statusCode));
         }
       },
-      fail: reject
+      fail: function (e) {
+        const err = new Error((e && e.errMsg) || 'Network error');
+        err.network = true;
+        reject(err);
+      }
     });
   });
+}
+
+function toApiError(message, body, statusCode) {
+  const err = new Error(message);
+  if (body && typeof body === 'object') {
+    err.code = body.code;
+    err.description = body.description;
+    err.captchaVerifyResult = body.captchaVerifyResult;
+  }
+  err.statusCode = statusCode;
+  return err;
 }
 
 function get(path, options) {
@@ -51,6 +73,18 @@ function encodePage(max, start) {
 
 function encodePageCapital(max, start) {
   return 'Page=' + encodeURIComponent('{Max:' + max + ',Start:' + start + '}');
+}
+
+// Shared loader for profile sub-lists (cases / articles / lawyers / partners / honours).
+// Defaults to the profile embed short size (5) per Annex A §1.2.
+function listSub(basePath, opts, mapFn) {
+  opts = opts || {};
+  let q = basePath;
+  q += (q.indexOf('?') >= 0 ? '&' : '?') + encodePage(opts.max || 5, opts.start || 1);
+  if (opts.search) q += '&search=' + encodeURIComponent(opts.search);
+  return get(q).then(function (r) {
+    return (r || []).map(mapFn);
+  });
 }
 
 function stripHtml(html) {
@@ -186,6 +220,43 @@ function normalizeAnnouncement(n) {
     descript: stripHtml(n.descript),
     raw: n
   };
+}
+
+// Annex B §8.1 — submission status label (deal & award)
+function submissionStatus(status) {
+  const s = Number(status);
+  if (s === 1) return 'Incomplete';
+  if (s === 2) return 'Submitted';
+  return 'Status unavailable';
+}
+
+// Annex B §8.2 — verification status label (display only, no payment in mini program)
+function verificationStatus(status, paymentStatus) {
+  const ps = (paymentStatus || '').toString().toUpperCase();
+  const st = (status || '').toString().toUpperCase();
+  if (!ps) return 'Payment incomplete';
+  if (ps === 'PENDING') return 'Payment pending';
+  if (ps === 'FAILED' || ps === 'REJECTED' || ps === 'EXPIRED') return 'Payment failed';
+  if (ps === 'SUCCEEDED') {
+    if (st === 'PENDING') return 'Processing';
+    if (st === 'VERIFIED') return 'Verified';
+    if (st === 'REJECTED') return 'Rejected';
+  }
+  return 'Status unavailable';
+}
+
+// Annex B §8.3 — verification number helper (website typo "Verificatio" preserved)
+function showVerificationNumber(status, id) {
+  return (status || '').toString().toUpperCase() === 'VERIFIED' ? (id || '') : '';
+}
+
+// Annex B §9.4 — H5 form URL for a created submission
+function formUrl(host, formType, formSubType, id) {
+  const base = (host || BASE).replace(/\/+$/, '');
+  if (formType === 'award-submission') {
+    return base + '/form/award-submission/' + formSubType + '/index.html?id=' + encodeURIComponent(id);
+  }
+  return base + '/form/deal-submission/index.html?id=' + encodeURIComponent(id);
 }
 
 const api = {
@@ -342,6 +413,94 @@ const api = {
     });
   },
 
+  // Phase 1 — law firm sub-lists (Annex A §4.1)
+  getLawfirmOffices: function (id) {
+    return get('api/legal/lawfirms/' + encodeURIComponent(id) + '/offices').then(function (r) { return r || []; });
+  },
+  getLawfirmLawyers: function (id, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/lawyers/?functionType=lawyer', opts, normalizeLawyer);
+  },
+  getLawfirmPartners: function (id, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/partners/?functionType=lawyer', opts, normalizeLawyer);
+  },
+  getLawfirmCases: function (id, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/cases/', opts, normalizeDeal);
+  },
+  getLawfirmHonours: function (id, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/honours/?orderby=latest', opts, normalizeArticle);
+  },
+
+  // Phase 1 — lawyer sub-lists (Annex A §4.3)
+  getLawyerCases: function (id, opts) {
+    return listSub('api/legal/lawyers/' + encodeURIComponent(id) + '/cases/', opts, normalizeDeal);
+  },
+  getLawyerArticles: function (id, opts) {
+    return listSub('api/legal/lawyers/' + encodeURIComponent(id) + '/articles/', opts, normalizeArticle);
+  },
+  getLawyerTestimonials: function (id, opts) {
+    return listSub('api/legal/lawyers/' + encodeURIComponent(id) + '/testimonials/', opts, normalizeTestimonial);
+  },
+
+  // Phase 1 — detail sidebars (Annex A §4.4 / §4.5)
+  getDealTopDeals: function (id) {
+    return get('api/legal/deals/' + encodeURIComponent(id) + '/tops/5/deals').then(function (r) {
+      return (r || []).map(normalizeDeal);
+    });
+  },
+  getDealTopArticles: function (id) {
+    return get('api/legal/deals/' + encodeURIComponent(id) + '/tops/5/articles').then(function (r) {
+      return (r || []).map(normalizeArticle);
+    });
+  },
+  getRelatedArticles: function (id) {
+    return get('api/crm/articles/' + encodeURIComponent(id) + '/related').then(function (r) {
+      return (r || []).map(normalizeArticle);
+    });
+  },
+  getRelatedAwards: function (id) {
+    return get('api/crm/awards/' + encodeURIComponent(id) + '/related').then(function (r) {
+      return (r || []).map(normalizeArticle);
+    });
+  },
+  getPromotedArticles: function (id) {
+    return get('api/crm/articles/' + encodeURIComponent(id) + '/promoted').then(function (r) {
+      return (r || []).map(normalizeArticle);
+    });
+  },
+  getArticleLawyers: function (id) {
+    return get('api/crm/articles/' + encodeURIComponent(id) + '/lawyers').then(function (r) {
+      return (r || []).map(normalizeLawyer);
+    });
+  },
+
+  // Phase 1 — code / lookup APIs (Annex A §6). All return { contents: [...] }.
+  getCodes: function (path) {
+    return get(path).then(function (r) {
+      const list = (r && r.contents) || [];
+      return list.map(function (x) { return x && x.code; }).filter(Boolean);
+    });
+  },
+  getCodeCountries: function () { return this.getCodes('api/legal/lawyers/codes/country'); },
+  getCodeAwardCountries: function () { return this.getCodes('api/legal/lawyers/codes/awardCountry'); },
+  getCodeCities: function () { return this.getCodes('api/legal/lawyers/codes/city'); },
+  getCodeAdmissions: function () { return this.getCodes('api/legal/lawyers/codes/admission'); },
+  getCodePositions: function () { return this.getCodes('api/legal/lawyers/codes/position'); },
+  getCodeLanguages: function () { return this.getCodes('api/legal/lawyers/codes/language'); },
+  getCodeJurisdictions: function () { return this.getCodes('api/legal/lawyers/codes/jurisdiction'); },
+  getCodeCallingCodes: function () {
+    return get('api/legal/lawyers/codes/callingCode').then(function (r) { return (r && r.contents) || []; });
+  },
+  getCodeAreas: function () { return this.getCodes('api/core/codes/areas'); },
+  getCitiesByCountry: function (country) {
+    return get('api/core/codelinks/countryAndCity/' + encodeURIComponent(country)).then(function (r) {
+      return ((r && r.contents) || []).map(function (x) { return x && x.city; }).filter(Boolean);
+    });
+  },
+  searchLawfirms: function (term) {
+    return get('api/legal/lawfirms/?orderby=' + encodeURIComponent('name asc') + '&search=' + encodeURIComponent(term))
+      .then(function (r) { return (r || []).map(normalizeLawfirm); });
+  },
+
   // Phase 2 — login / member
   login: function (email, password) {
     return post('api/crm/member/login/', { data: { email: email, password: password } });
@@ -354,6 +513,100 @@ const api = {
   },
   getMember: function (memberId) {
     return get('api/crm/member/' + encodeURIComponent(memberId), { auth: true });
+  },
+
+  // Phase 2 — registration (Annex B §3)
+  checkAvailableAndOTP: function (email, captchaVerifyParam) {
+    return post('api/crm/member/checkAvailableAndOTP/', {
+      data: { captchaVerifyParam: captchaVerifyParam, email: email }
+    });
+  },
+  // Body is the JSON-encoded email string; X-CAPTCHA-VERIFIED token comes from checkAvailableAndOTP.
+  checkAndResendOTP: function (email, captchaToken) {
+    return post('api/crm/member/checkAndResendOTP/', {
+      data: JSON.stringify(email),
+      headers: { 'X-CAPTCHA-VERIFIED': captchaToken || '' }
+    });
+  },
+  validateOTP: function (email, code) {
+    return post('api/crm/member/validateOTP/', { data: { code: code, email: email } });
+  },
+  createMember: function (payload, otpToken, otpCode) {
+    return post('api/crm/member/create', {
+      data: payload,
+      headers: { 'X-OTP-TOKEN': otpToken || '', 'X-OTP': otpCode || '' }
+    });
+  },
+
+  // Phase 2 — forget / reset password (Annex B §4)
+  passwordRecoveryRequest: function (email, captchaVerifyParam) {
+    return post('api/crm/member/passwordRecoveryRequest/', {
+      data: { captchaVerifyParam: captchaVerifyParam, email: email }
+    });
+  },
+  // Path spelling "Passowrd" matches production — do not "fix".
+  checkPasswordRecoveryLink: function (email, token) {
+    return post('api/crm/member/checkPassowrdRecoveryLink/', { data: { email: email, token: token } });
+  },
+  passwordRecovery: function (email, token, password) {
+    return post('api/crm/member/passwordRecovery/', { data: { email: email, token: token, password: password } });
+  },
+
+  // Phase 2 — member profile (Annex B §5)
+  updateMember: function (body) {
+    return post('api/crm/member/update/', { data: body, auth: true });
+  },
+  sectorChanged: function (memberId) {
+    return post('api/crm/member/sectorChanged/', { data: JSON.stringify(memberId), auth: true });
+  },
+  changePassword: function (memberId, originalPassword, newPassword) {
+    return post('api/crm/member/changePassword/', {
+      data: { id: memberId, originalPassword: originalPassword, newPassword: newPassword },
+      auth: true
+    });
+  },
+  // Field name is "opt" (not otp) per Annex B §5.5.
+  updateAccessEmail: function (memberId, email, opt, isBusinessEmail) {
+    return post('api/crm/member/updateAccessEmail/', {
+      data: { id: memberId, email: email, opt: opt, isBusinessEmail: !!isBusinessEmail },
+      auth: true
+    });
+  },
+
+  // Phase 2 — dashboard lists (Annex B §7)
+  getVerifications: function (memberId) {
+    return get('api/crm/member/' + encodeURIComponent(memberId) + '/verifications', { auth: true })
+      .then(function (r) { return r || []; });
+  },
+  getDealSubmissions: function (memberId) {
+    return get('api/crm/member/submissionHistory/' + encodeURIComponent(memberId) + '/deal-submission', { auth: true })
+      .then(function (r) { return r || []; });
+  },
+  getAwardSubmissions: function (memberId) {
+    return get('api/crm/member/submissionHistory/' + encodeURIComponent(memberId) + '/award-submission', { auth: true })
+      .then(function (r) { return r || []; });
+  },
+
+  // Phase 2 — forms & questionnaires (Annex B §9)
+  getApplicationForms: function () {
+    return get('api/crm/member/applicationForm', { auth: true }).then(function (r) { return r || []; });
+  },
+  getApplicationForm: function (formId) {
+    return get('api/crm/member/applicationForm/' + encodeURIComponent(formId), { auth: true })
+      .then(function (r) { return (r && r[0]) || null; });
+  },
+  createSubmission: function (body) {
+    return post('api/crm/questionnaires/', { data: body, auth: true });
+  },
+
+  // Annex B §8 — status helpers exposed for the member UI
+  submissionStatus: submissionStatus,
+  verificationStatus: verificationStatus,
+  showVerificationNumber: showVerificationNumber,
+  formUrl: formUrl,
+  // Phase 2 — member email/password rules (Annex B §3)
+  passwordValid: function (pw) {
+    return typeof pw === 'string' && pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw);
   }
 };
 

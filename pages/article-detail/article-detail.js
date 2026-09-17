@@ -4,7 +4,7 @@ const fb = require('../../services/fallback.js');
 
 Page({
   behaviors: [safeArea],
-  data: { item: null },
+  data: { item: null, related: [] },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
     const title = decodeURIComponent(options.title || '');
@@ -22,9 +22,14 @@ Page({
     if (id) {
       api.getArticleDetail(id).then(function (item) {
         self.setData({ item: item || null });
+        api.getRelatedArticles(id).then(function (r) { self.setData({ related: (r || []).slice(0, 5) }); }).catch(function () {});
       }).catch(fallback);
     } else {
       fallback();
     }
+  },
+  goArticle(e) {
+    const d = e.currentTarget.dataset;
+    wx.navigateTo({ url: '/pages/article-detail/article-detail?id=' + encodeURIComponent(d.id || '') + '&title=' + encodeURIComponent(d.title || '') });
   }
 });

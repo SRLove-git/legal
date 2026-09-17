@@ -32,6 +32,11 @@
       <view class="detail-block-head">Law firms</view>
       <view class="detail-block-value" wx:for="{{item.lawFirms}}" wx:key="id">{{item.name}}</view>
     </view>
+
+    <view class="detail-block" wx:if="{{related.length}}">
+      <view class="detail-block-head">Related deals/cases</view>
+      <view class="detail-related" wx:for="{{related}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+    </view>
   </view>
 </view>
 <site-footer />

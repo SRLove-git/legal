@@ -17,6 +17,11 @@
     </view>
     <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
     <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
+
+    <view class="detail-related-block" wx:if="{{related.length}}">
+      <view class="detail-related-head">Related articles</view>
+      <view class="detail-related" wx:for="{{related}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+    </view>
   </view>
 </view>
 <site-footer />

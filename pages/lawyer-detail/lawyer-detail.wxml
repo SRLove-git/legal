@@ -26,6 +26,14 @@
       <view class="lawyer-section-title">Biography</view>
       <view class="bio">{{item.biography}}</view>
     </view>
+    <view class="lawyer-section" wx:if="{{cases.length}}">
+      <view class="lawyer-section-title">Cases / deals</view>
+      <view class="lawyer-list-item" wx:for="{{cases}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{articles.length}}">
+      <view class="lawyer-section-title">Articles</view>
+      <view class="lawyer-list-item" wx:for="{{articles}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+    </view>
     <view class="lawyer-section" wx:if="{{item.practiceAreas.length}}">
       <view class="lawyer-section-title">Practice areas</view>
       <view class="lawyer-list-item" wx:for="{{item.practiceAreas}}" wx:key="*this">{{item}}</view>
