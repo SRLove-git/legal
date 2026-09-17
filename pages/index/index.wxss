@@ -81,6 +81,22 @@
   border-radius: 8rpx 8rpx 0 0;
 }
 
+.panel-heading-deals {
+  background: #00558d;
+}
+
+.panel-heading-firms {
+  background: #339dc8;
+}
+
+.panel-heading-partners {
+  background: #0084ba;
+}
+
+.panel-heading-testimonials {
+  background: #0264a6;
+}
+
 .panel-body {
   background: #ffffff;
   padding: 24rpx 36rpx;
@@ -173,9 +189,10 @@
 }
 
 .section-heading {
-  font-size: 44rpx;
+  font-size: 57rpx;
   font-weight: 700;
   color: #333333;
+  line-height: 68rpx;
   margin-bottom: 28rpx;
   display: flex;
   align-items: center;

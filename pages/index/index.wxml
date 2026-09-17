@@ -1,4 +1,4 @@
-<site-header />
+<site-header id="hdr" />
 
 <view class="page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <swiper
@@ -28,7 +28,7 @@
   <view class="row-gradient">
     <view class="container">
       <view class="panel">
-        <view class="panel-heading">Latest evaluated deals/cases</view>
+        <view class="panel-heading panel-heading-deals">Latest evaluated deals/cases</view>
         <view class="panel-body">
           <view class="deal-item" wx:for="{{deals}}" wx:key="id" bindtap="goDealDetail" data-id="{{item.id}}" data-title="{{item.title}}">
             <view class="deal-title">{{item.title}}</view>
@@ -40,7 +40,7 @@
       </view>
 
       <view class="panel">
-        <view class="panel-heading">Latest updated law firms</view>
+        <view class="panel-heading panel-heading-firms">Latest updated law firms</view>
         <view class="panel-body">
           <view class="simple-link" wx:for="{{latestLawfirms}}" wx:key="id" bindtap="goLawfirmDetail" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
           <view class="more-link" bindtap="goLawfirms">Other law firms</view>
@@ -48,7 +48,7 @@
       </view>
 
       <view class="panel">
-        <view class="panel-heading">Latest updated partners</view>
+        <view class="panel-heading panel-heading-partners">Latest updated partners</view>
         <view class="panel-body">
           <view class="simple-link" wx:for="{{latestPartners}}" wx:key="id" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
           <view class="more-link" bindtap="goLawyers">Other lawyers</view>
@@ -56,7 +56,7 @@
       </view>
 
       <view class="panel">
-        <view class="panel-heading">Latest client testimonials</view>
+        <view class="panel-heading panel-heading-testimonials">Latest client testimonials</view>
         <view class="panel-body">
           <view class="testimonial-item" wx:for="{{testimonials}}" wx:key="id">
             <view class="testimonial-name" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>

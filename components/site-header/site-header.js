@@ -4,6 +4,7 @@ Component({
     keyword: '',
     loggedIn: false,
     statusBarHeight: 20,
+    headerRightPadding: 16,
     nav: [
       { label: 'Home', path: '/pages/index/index' },
       { label: 'Announcements', path: '/pages/announcements/announcements' },
@@ -21,7 +22,8 @@ Component({
     attached() {
       const app = getApp();
       const statusBarHeight = (app && app.globalData && app.globalData.statusBarHeight) || 20;
-      this.setData({ statusBarHeight });
+      const headerRightPadding = (app && app.globalData && app.globalData.headerRightPadding) || 16;
+      this.setData({ statusBarHeight, headerRightPadding });
       this.refreshAuth();
     }
   },

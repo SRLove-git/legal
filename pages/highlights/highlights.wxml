@@ -1,7 +1,12 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb"> &gt; Highlights</view>
-  <view class="subpage-title">Highlights</view>
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Highlighted articles</text>
+  </view>
+  <view class="list-body">
+  <view class="list-heading"><view class="list-heading-dot"></view>Highlighted articles</view>
   <view class="list-search-wrap">
     <input class="list-search-input" type="text" placeholder="Search highlights" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
   </view>
@@ -11,6 +16,7 @@
       <text class="list-page-meta">{{item.author}} · {{item.date}}</text>
     </view>
     <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+  </view>
   </view>
 </view>
 <site-footer />

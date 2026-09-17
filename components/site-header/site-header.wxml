@@ -1,5 +1,5 @@
 <view class="header" style="padding-top:{{statusBarHeight}}px;">
-  <view class="header-inner container">
+  <view class="header-inner" style="padding-left:36rpx;padding-right:{{headerRightPadding}}px;">
     <view class="logo-wrap" bindtap="goHome">
       <image class="logo" src="/assets/img/logo.png" mode="widthFix" />
     </view>
@@ -24,7 +24,7 @@
 </view>
 
 <view class="drawer-mask {{menuOpen ? 'show' : ''}}" bindtap="closeMenu"></view>
-<view class="drawer {{menuOpen ? 'open' : ''}}">
+<view class="drawer {{menuOpen ? 'open' : ''}}" style="padding-top:calc(96rpx + {{statusBarHeight}}px);">
   <view class="drawer-head">
     <text class="drawer-title">LegalOne</text>
     <view class="drawer-close" bindtap="closeMenu">✕</view>

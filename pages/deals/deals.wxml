@@ -1,7 +1,26 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb"> &gt; Deals / Cases</view>
-  <view class="subpage-title">Deals / Cases</view>
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Deals/Cases</text>
+  </view>
+
+  <view class="list-hero">
+    <image class="list-hero-bg" src="/assets/img/homepage-banner.png" mode="aspectFill" />
+    <view class="list-hero-inner">
+      <view class="list-hero-title">Showcasing Outstanding\nDeals &amp; Cases</view>
+      <view class="list-hero-desc">Discover the LegalOne archive of corporate and commercial legal matters, a comprehensive collection of highly regarded transactions and cases submitted by lawyers and law firms, independently recognised with LegalOne Merits, a distinction that reflects excellence.</view>
+      <view class="list-hero-actions">
+        <view class="list-hero-btn">Submit deal/case</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-filters">SORT &amp; FILTER</view>
+
+  <view class="list-body">
+  <view class="list-heading"><view class="list-heading-dot"></view>Latest deals/cases</view>
   <view class="list-search-wrap">
     <input class="list-search-input" type="text" placeholder="Search deals and cases" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
   </view>
@@ -11,6 +30,7 @@
       <text class="list-page-meta">{{item.rank}} · {{item.date}}</text>
     </view>
     <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+  </view>
   </view>
 </view>
 <site-footer />

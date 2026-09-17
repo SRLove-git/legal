@@ -1,6 +1,12 @@
 <site-header />
-<view class="subpage" wx:if="{{item}}">
-  <view class="breadcrumb"> &gt; Lawyers</view>
+<view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Lawyers</text>
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-current">{{item.name}}</text>
+  </view>
   <view class="detail">
     <image class="photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
     <view class="photo placeholder" wx:else></view>

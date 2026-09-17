@@ -51,10 +51,135 @@ button::after {
 }
 
 .breadcrumb {
-  padding: 28rpx 36rpx;
-  font-size: 26rpx;
-  color: #555555;
-  border-bottom: 1rpx solid #eeeeee;
+  display: flex;
+  align-items: center;
+  height: 96rpx;
+  padding: 0 36rpx;
+  box-sizing: border-box;
+  background-color: #00558d;
+}
+
+.breadcrumb-icon {
+  width: 38rpx;
+  height: 38rpx;
+  flex-shrink: 0;
+}
+
+.breadcrumb-sep {
+  padding: 0 28rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.breadcrumb-text {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.breadcrumb-current {
+  flex: 1;
+  min-width: 0;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* List-page hero (deals / awards) */
+.list-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #2f5b86;
+  padding: 54rpx 36rpx 68rpx;
+  box-sizing: border-box;
+}
+
+.list-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.list-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.list-hero-title {
+  color: #ffffff;
+  font-size: 54rpx;
+  font-weight: 700;
+  line-height: 58rpx;
+  letter-spacing: 1rpx;
+  text-transform: uppercase;
+  margin-bottom: 26rpx;
+}
+
+.list-hero-desc {
+  color: #ffffff;
+  font-size: 31rpx;
+  line-height: 51rpx;
+  padding-right: 92rpx;
+}
+
+.list-hero-actions {
+  margin-top: 54rpx;
+}
+
+.list-hero-btn {
+  display: inline-block;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 27rpx;
+  font-weight: 600;
+  line-height: 40rpx;
+  padding: 23rpx 54rpx;
+  border-radius: 54rpx;
+}
+
+/* SORT & FILTER bar */
+.list-filters {
+  background-color: #edebeb;
+  color: #2d2d2d;
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 37rpx;
+  text-align: center;
+  padding: 23rpx 0;
+}
+
+/* Section heading inside list pages */
+.list-heading {
+  display: flex;
+  align-items: center;
+  padding: 0 36rpx;
+  color: #333333;
+  font-size: 57rpx;
+  font-weight: 700;
+  line-height: 68rpx;
+  margin-bottom: 28rpx;
+}
+
+.list-heading-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: #0084ba;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.list-body {
+  padding-top: 46rpx;
 }
 
 .subpage-title {
@@ -90,10 +215,10 @@ button::after {
 }
 
 .legal-content {
-  padding: 20rpx 36rpx 60rpx;
-  font-size: 27rpx;
-  color: #2d2d2d;
-  line-height: 1.6;
+  padding: 40rpx 36rpx 60rpx;
+  font-size: 31rpx;
+  color: #303030;
+  line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
 }

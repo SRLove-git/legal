@@ -1,7 +1,26 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb"> &gt; Awards</view>
-  <view class="subpage-title">Awards</view>
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Latest Awards</text>
+  </view>
+
+  <view class="list-hero">
+    <image class="list-hero-bg" src="/assets/img/homepage-banner.png" mode="aspectFill" />
+    <view class="list-hero-inner">
+      <view class="list-hero-title">LegalOne Awards</view>
+      <view class="list-hero-desc">LegalOne awards recognise legal professionals across jurisdictions for their demonstrated expertise and experience. Evaluations are based on applicant submissions, while incorporating a range of other practice-oriented factors, in line with LegalOne’s philosophy of focusing on the practical skills and experience of legal practitioners and experts.</view>
+      <view class="list-hero-actions">
+        <view class="list-hero-btn">Apply award</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-filters">SORT &amp; FILTER</view>
+
+  <view class="list-body">
+  <view class="list-heading"><view class="list-heading-dot"></view>Latest Awards</view>
   <view class="list-search-wrap">
     <input class="list-search-input" type="text" placeholder="Search awards" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
   </view>
@@ -11,6 +30,7 @@
       <text class="list-page-meta">{{item.author}} · {{item.date}}</text>
     </view>
     <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+  </view>
   </view>
 </view>
 <site-footer />

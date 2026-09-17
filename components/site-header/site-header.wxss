@@ -140,7 +140,9 @@
   z-index: 9992;
   transform: translateX(100%);
   transition: transform 0.28s ease;
-  padding: 32rpx 36rpx;
+  padding-left: 36rpx;
+  padding-right: 36rpx;
+  padding-bottom: 32rpx;
   overflow-y: auto;
 }
 

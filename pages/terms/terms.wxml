@@ -1,6 +1,10 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb"> &gt; Terms and Conditions</view>
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">Terms and condition</text>
+  </view>
   <view class="subpage-title">Terms &amp; Conditions of Service &amp; Information</view>
   <view class="legal-content">{{body}}</view>
 </view>

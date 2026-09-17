@@ -7,6 +7,17 @@ Page({
       subtitle: 'Recognition. Innovation. Impact.',
       cta: 'Read company brochure'
     },
+    awards: [
+      { title: 'CAPITAL Service & Innovative Product Awards 2026', desc: 'Professional Rating Organisation Service Award' },
+      { title: 'WatersTechnology Asia Awards 2026', desc: 'Best ESG data provider' },
+      { title: 'HKQAA Hong Kong Green and Sustainability Contribution Awards 2026', desc: 'Gold Pioneer for ESG Connect (Governance)' },
+      { title: 'Capital Finance International Awards 2025', desc: 'Outstanding Independent Global Ratings Agency' },
+      { title: 'Capital Finance International Awards 2025', desc: 'Global Business Intelligence Champion' },
+      { title: 'Hong Kong Economic Journal\u2019s Corporate Brand Awards of Excellence 2025', desc: 'Outstanding Rating Agency Award' },
+      { title: 'IJGlobal Investor Awards 2025', desc: 'Newcomer of The Year, APAC' },
+      { title: 'TVB ESG Awards 2025', desc: 'ESG Special Recognition Award' },
+      { title: 'Hainan International Intellectual Property Trade Conference (IPTC)', desc: 'Free Trade Port International Exhibition Contribution Award 2025' }
+    ],
     intro: 'LegalOne Global Limited, trading as "LegalOne", is an award winning, independent rating and research company recognised as a leader in empowering C-suite executives, general counsel, and decision-makers worldwide. We specialise in delivering authoritive analytic data and critical insights to corporate counsel and business leaders, supporting strategic decision-making at local, regional and global levels. Our work includes exclusive reviews of commercial deals, dispute cases, and intellectual property matters, complemented by direct ratings and client testimonials on legal advisors.',
     standards: [
       { title: 'ISO 9001:2015 Quality Management Certified', desc: 'LegalOne maintains ISO 9001:2015 quality management certification, demonstrating a commitment to consistent service excellence.' },

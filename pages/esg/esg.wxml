@@ -1,6 +1,10 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb"> &gt; ESG Ratings and Data Products Code of Conduct</view>
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
+    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-text">ESG Ratings and Data Products Code of Conduct</text>
+  </view>
   <view class="subpage-title">ESG Ratings and Data Products Code of Conduct</view>
   <view class="legal-content">{{body}}</view>
 </view>

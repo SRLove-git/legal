@@ -1,19 +1,35 @@
 .about-hero {
-  padding: 80rpx 36rpx;
-  background: linear-gradient(135deg, #00558d 0%, #0074b8 100%);
+  position: relative;
+  overflow: hidden;
+  background: #00558d;
+  padding: 69rpx 36rpx 77rpx;
+  box-sizing: border-box;
   color: #ffffff;
+}
+
+.about-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.about-hero-inner {
+  position: relative;
+  z-index: 2;
 }
 
 .about-hero-title {
   font-size: 52rpx;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 58rpx;
+  margin-bottom: 27rpx;
 }
 
 .about-hero-subtitle {
-  margin-top: 22rpx;
-  font-size: 32rpx;
-  color: #f1ffb9;
+  font-size: 38rpx;
+  color: #ffffff;
 }
 
 .about-hero-cta {
@@ -32,11 +48,19 @@
   border-bottom: 1rpx solid #eeeeee;
 }
 
+.subpage .subpage-section-heading {
+  font-size: 69rpx;
+  line-height: 1.2;
+  color: #0284c7;
+  margin-top: 60rpx;
+  margin-bottom: 30rpx;
+}
+
 .about-block-title {
-  font-size: 30rpx;
+  font-size: 31rpx;
   font-weight: 700;
-  color: #2d2d2d;
-  margin-bottom: 10rpx;
+  color: #303030;
+  margin-bottom: 18rpx;
 }
 
 .about-block-desc {
