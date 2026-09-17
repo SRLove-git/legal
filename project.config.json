@@ -6,6 +6,7 @@
       { "type": "file", "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1).zip" },
       { "type": "file", "value": ".DS_Store" },
       { "type": "file", "value": "README.md" },
+      { "type": "folder", "value": "tools" },
       { "type": "file", "value": "project.private.config.json" }
     ],
     "include": []
