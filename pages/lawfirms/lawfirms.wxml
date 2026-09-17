@@ -1,5 +1,5 @@
 <site-header />
-<view class="subpage">
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb"> &gt; Law Firms</view>
   <view class="subpage-title">Law Firms</view>
   <view class="list-search-wrap">

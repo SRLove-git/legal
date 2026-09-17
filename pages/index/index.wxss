@@ -1,58 +1,65 @@
 .page {
-  padding-top: calc(108rpx + env(safe-area-inset-top));
+  padding-top: calc(88rpx + 54px);
 }
 
 /* Announcement */
 .announcement-swiper {
-  height: 660rpx;
+  height: 635rpx;
   background-color: #00558c;
 }
 
 .announcement-slide {
   height: 100%;
   background-color: #00558c;
-  display: flex;
-  align-items: center;
   position: relative;
   overflow: hidden;
 }
 
-.announcement-bg {
+.announcement-banner {
   position: absolute;
   top: 0;
   right: 0;
-  width: 60%;
-  height: 100%;
-  opacity: 0.28;
+  width: 1753rpx;
+  height: 635rpx;
 }
 
 .announcement-inner {
-  width: 100%;
+  padding: 65rpx 75rpx 0;
+  box-sizing: border-box;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  height: 100%;
 }
 
 .announcement-title {
-  font-size: 34rpx;
-  color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 20rpx;
+  font-size: 33rpx;
+  line-height: 39rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.announcement-content {
+  margin: 37rpx 0 31rpx;
 }
 
 .announcement-headline {
-  font-size: 40rpx;
+  font-size: 35rpx;
   font-weight: 900;
-  line-height: 1.25;
+  line-height: 81rpx;
   color: #f1ffb9;
-  margin-bottom: 34rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .announcement-more {
   display: inline-block;
   background: #0084ba;
   color: #ffffff;
-  font-size: 26rpx;
+  font-size: 25rpx;
+  line-height: 37rpx;
   border-radius: 8rpx;
-  padding: 12rpx 24rpx;
+  padding: 11rpx 23rpx;
 }
 
 /* Panel sections */
@@ -213,7 +220,7 @@
 
 .article-image {
   width: 100%;
-  height: 290rpx;
+  height: auto;
   border-radius: 8rpx;
   background: #cccccc;
   margin: 18rpx 0;
@@ -320,8 +327,8 @@
 }
 
 .firm-logo {
-  width: 120rpx;
-  height: 90rpx;
+  width: 280rpx;
+  height: 80rpx;
   background: #ffffff;
   border-radius: 8rpx;
   flex-shrink: 0;

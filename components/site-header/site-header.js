@@ -3,10 +3,13 @@ Component({
     menuOpen: false,
     keyword: '',
     loggedIn: false,
+    statusBarHeight: 20,
     nav: [
       { label: 'Home', path: '/pages/index/index' },
       { label: 'Announcements', path: '/pages/announcements/announcements' },
       { label: 'Deals / Cases', path: '/pages/deals/deals' },
+      { label: 'Deals of the Year', path: '/pages/deal-case-intro/deal-case-intro' },
+      { label: 'FAQ', path: '/pages/deal-case-intro/deal-case-intro' },
       { label: 'Awards', path: '/pages/awards/awards' },
       { label: 'Articles', path: '/pages/articles/articles' },
       { label: 'Lawyers', path: '/pages/lawyers/lawyers' },
@@ -16,6 +19,9 @@ Component({
   },
   lifetimes: {
     attached() {
+      const app = getApp();
+      const statusBarHeight = (app && app.globalData && app.globalData.statusBarHeight) || 20;
+      this.setData({ statusBarHeight });
       this.refreshAuth();
     }
   },

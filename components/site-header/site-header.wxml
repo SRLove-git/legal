@@ -1,4 +1,4 @@
-<view class="header">
+<view class="header" style="padding-top:{{statusBarHeight}}px;">
   <view class="header-inner container">
     <view class="logo-wrap" bindtap="goHome">
       <image class="logo" src="/assets/img/logo.png" mode="widthFix" />

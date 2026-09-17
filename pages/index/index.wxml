@@ -1,6 +1,6 @@
 <site-header />
 
-<view class="page">
+<view class="page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <swiper
     class="announcement-swiper"
     indicator-dots="{{true}}"
@@ -13,10 +13,12 @@
   >
     <swiper-item wx:for="{{announcements}}" wx:key="id">
       <view class="announcement-slide">
-        <image class="announcement-bg" src="/assets/img/banner.jpg" mode="aspectFill" />
-        <view class="announcement-inner container">
+        <image class="announcement-banner" src="/assets/img/homepage-banner.png" mode="aspectFill" />
+        <view class="announcement-inner">
           <view class="announcement-title">{{item.type}}</view>
-          <view class="announcement-headline">{{item.headline}}</view>
+          <view class="announcement-content">
+            <text class="announcement-headline">{{item.headline}}</text>
+          </view>
           <view class="announcement-more" bindtap="goAnnouncement" data-id="{{item.id}}">More detail</view>
         </view>
       </view>
@@ -75,7 +77,7 @@
           <view class="labels">
             <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
           </view>
-          <image class="article-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <image class="article-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
           <view class="article-title">{{item.title}}</view>
           <view class="article-meta">
             <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
@@ -91,7 +93,7 @@
           <view class="labels">
             <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
           </view>
-          <image class="article-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <image class="article-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
           <view class="article-title">{{item.title}}</view>
           <view class="article-meta">
             <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
@@ -107,7 +109,7 @@
           <view class="labels">
             <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
           </view>
-          <image class="article-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <image class="article-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
           <view class="article-title">{{item.title}}</view>
           <view class="article-meta">
             <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>

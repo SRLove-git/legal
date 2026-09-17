@@ -46,7 +46,7 @@ button::after {
 }
 
 .subpage {
-  padding-top: calc(108rpx + env(safe-area-inset-top));
+  padding-top: calc(88rpx + 54px);
   min-height: 100vh;
 }
 

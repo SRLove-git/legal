@@ -1,2 +1,4 @@
+const safeArea = require('../../services/safe-area.js');
 const data = require('../../data/content.js');
-Page({ data: { body: data.terms } });
+Page({
+  behaviors: [safeArea], data: { body: data.terms } });

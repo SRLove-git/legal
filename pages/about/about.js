@@ -1,4 +1,6 @@
+const safeArea = require('../../services/safe-area.js');
 Page({
+  behaviors: [safeArea],
   data: {
     hero: {
       title: 'ADVANCING LEGAL EXCELLENCE WORLDWIDE',

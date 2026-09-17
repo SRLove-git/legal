@@ -1,5 +1,7 @@
+const safeArea = require('../../services/safe-area.js');
 const data = require('../../data/content.js');
 Page({
+  behaviors: [safeArea],
   data: {
     keyword: '',
     prompts: ['Find a lawyer', 'Find a law firm', 'Find legal insights', 'Find a deal or case'],

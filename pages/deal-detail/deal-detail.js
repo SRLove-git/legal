@@ -1,7 +1,9 @@
+const safeArea = require('../../services/safe-area.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 
 Page({
+  behaviors: [safeArea],
   data: { item: null },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');

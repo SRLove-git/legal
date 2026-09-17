@@ -9,6 +9,7 @@ function use(promise, fallback) {
 
 Page({
   data: {
+    statusBarHeight: 20,
     announcements: [],
     deals: [],
     latestLawfirms: [],
@@ -22,6 +23,8 @@ Page({
   },
 
   onLoad() {
+    const app = getApp();
+    this.setData({ statusBarHeight: (app && app.globalData && app.globalData.statusBarHeight) || 20 });
     this.loadAll();
   },
 

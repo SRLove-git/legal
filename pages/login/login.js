@@ -1,6 +1,8 @@
+const safeArea = require('../../services/safe-area.js');
 const api = require('../../services/api.js');
 
 Page({
+  behaviors: [safeArea],
   data: {
     email: '',
     password: '',

@@ -180,7 +180,7 @@ function normalizeAnnouncement(n) {
     id: n.id,
     type: n.title || (n.type === 0 ? 'Deal Announcement' : 'Announcement'),
     headline: n.headline || '',
-    image: imageUrl(n.image, 'raw'),
+    image: imageUrl(n.image, 'x'),
     url: n.url || '',
     date: n.publishDate ? dateOnly(n.publishDate) : '',
     descript: stripHtml(n.descript),

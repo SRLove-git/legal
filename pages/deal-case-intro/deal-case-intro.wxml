@@ -1,0 +1,56 @@
+<site-header />
+
+<view class="dci-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">Deals/Cases &gt; Introduction</view>
+
+  <!-- Methodology -->
+  <view class="dci-section" id="methodology">
+    <view class="container">
+      <view class="dci-section-title">Methodology</view>
+      <view class="dci-cards">
+        <view class="dci-card" wx:for="{{methodology}}" wx:key="title">
+          <view class="dci-card-title">{{item.title}}</view>
+          <view class="dci-card-text">{{item.text}}</view>
+        </view>
+      </view>
+      <view class="dci-merits">
+        <view class="dci-merits-title">LegalOne Merits</view>
+        <view class="dci-merits-text">{{merits}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Deals of the Year -->
+  <view class="dci-section dci-doty" id="doty">
+    <view class="container">
+      <view class="dci-section-title">Deals of the Year</view>
+      <view class="dci-feature-card" wx:for="{{doty}}" wx:key="title" bindtap="goArticle" data-url="{{item.link}}">
+        <image class="dci-feature-img" src="{{item.image}}" mode="aspectFill" />
+        <view class="dci-feature-body">
+          <view class="dci-feature-title">{{item.title}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- FAQ -->
+  <view class="dci-section" id="faq">
+    <view class="container">
+      <view class="dci-section-title">Frequently Asked Questions</view>
+      <view class="dci-faq-group" wx:for="{{faq}}" wx:for-item="group" wx:key="group">
+        <view class="dci-faq-group-head" bindtap="toggleGroup" data-group="{{group.group}}">
+          <text>{{group.group}}</text>
+          <text class="dci-faq-toggle">{{openGroups[group.group] ? '−' : '+'}}</text>
+        </view>
+        <view class="dci-faq-items" wx:if="{{openGroups[group.group]}}">
+          <view class="dci-faq-item" wx:for="{{group.items}}" wx:for-item="it" wx:key="q">
+            <view class="dci-faq-q">{{it.q}}</view>
+            <view class="dci-faq-a">{{it.a}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<site-footer />

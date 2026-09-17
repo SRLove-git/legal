@@ -1,5 +1,5 @@
 <site-header />
-<view class="subpage">
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb"> &gt; Awards</view>
   <view class="subpage-title">Awards</view>
   <view class="list-search-wrap">
