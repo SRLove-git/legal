@@ -5,7 +5,8 @@
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Terms and condition</text>
   </view>
-  <view class="subpage-title">Terms & Conditions of Service & Information</view>
+  <!-- The content below starts with the page heading ("Terms & Conditions of
+       Service & Information"), like the website, so no second title here. -->
   <view class="legal-content">{{body}}</view>
 </view>
 <site-footer />

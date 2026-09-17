@@ -3,7 +3,7 @@
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text">Account access</text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/account/account">Account</text>
   </view>
   <view class="form">
     <view class="form-title">Account access</view>

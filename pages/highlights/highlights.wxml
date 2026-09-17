@@ -3,7 +3,7 @@
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text">Highlighted articles</text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/articles/articles">Articles</text>
   </view>
   <view class="list-body">
   <view class="list-heading"><view class="list-heading-dot"></view>Highlighted articles</view>
