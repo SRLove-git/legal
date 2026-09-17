@@ -124,6 +124,10 @@ button::after {
   margin-bottom: 26rpx;
 }
 
+.list-hero-title-line {
+  display: block;
+}
+
 .list-hero-desc {
   color: #ffffff;
   font-size: 31rpx;

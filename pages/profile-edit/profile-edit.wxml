@@ -2,7 +2,7 @@
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
-    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">{{mode === 'complete' ? 'Complete profile' : 'Update profile'}}</text>
   </view>
 
@@ -49,10 +49,10 @@
 
       <view class="form-field" wx:if="{{countries.length}}">
         <picker mode="selector" range="{{countries}}" value="{{0}}" bindchange="onField" data-key="country">
-          <view class="form-picker">Country &amp; Region: {{form.country || 'Select'}}</view>
+          <view class="form-picker">Country & Region: {{form.country || 'Select'}}</view>
         </picker>
       </view>
-      <view class="form-field" wx:else><input class="form-input" placeholder="Country &amp; Region *" value="{{form.country}}" bindinput="onField" data-key="country" /></view>
+      <view class="form-field" wx:else><input class="form-input" placeholder="Country & Region *" value="{{form.country}}" bindinput="onField" data-key="country" /></view>
       <view class="form-field"><input class="form-input" placeholder="City *" value="{{form.city}}" bindinput="onField" data-key="city" /></view>
       <view class="form-field"><input class="form-input" placeholder="Address" value="{{form.address}}" bindinput="onField" data-key="address" /></view>
       <view class="form-field"><input class="form-input" placeholder="Local address" value="{{form.localAddress}}" bindinput="onField" data-key="localAddress" /></view>

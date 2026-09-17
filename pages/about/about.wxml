@@ -2,7 +2,7 @@
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" />
-    <text class="breadcrumb-sep">&gt;</text>
+    <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">About</text>
   </view>
 
@@ -21,7 +21,7 @@
   </view>
 
   <view class="subpage-section">
-    <view class="subpage-section-heading">Awards &amp; Recognitions</view>
+    <view class="subpage-section-heading">Awards & Recognitions</view>
     <view class="about-block" wx:for="{{awards}}" wx:key="desc">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
@@ -29,7 +29,7 @@
   </view>
 
   <view class="subpage-section">
-    <view class="subpage-section-heading">Standards &amp; Identifiers</view>
+    <view class="subpage-section-heading">Standards & Identifiers</view>
     <view class="about-block" wx:for="{{standards}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
@@ -45,7 +45,7 @@
   </view>
 
   <view class="subpage-section">
-    <view class="subpage-section-heading">Advisory Appointments &amp; Memberships</view>
+    <view class="subpage-section-heading">Advisory Appointments & Memberships</view>
     <view class="about-block" wx:for="{{memberships}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
@@ -58,7 +58,7 @@
   </view>
 
   <view class="subpage-section">
-    <view class="subpage-section-heading">Official Partnerships &amp; Strategic Affiliations</view>
+    <view class="subpage-section-heading">Official Partnerships & Strategic Affiliations</view>
     <view class="about-block" wx:for="{{partnerships}}" wx:key="title">
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-bullet" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">{{it}}</view>
