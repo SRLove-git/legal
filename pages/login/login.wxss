@@ -2,6 +2,11 @@
   padding: 40rpx 36rpx 80rpx;
 }
 
+.login-logo {
+  width: 260rpx;
+  margin: 20rpx auto 40rpx;
+}
+
 .login-title {
   font-size: 44rpx;
   font-weight: 700;
@@ -43,4 +48,27 @@
 .login-btn[disabled] {
   opacity: 0.7;
   color: #ffffff;
+}
+
+.login-links {
+  margin-top: 26rpx;
+  text-align: center;
+  font-size: 25rpx;
+  color: #555555;
+}
+
+.login-link {
+  color: #0084ba;
+}
+
+.login-link-sep {
+  margin: 0 12rpx;
+  color: #999999;
+}
+
+.login-agreement {
+  margin-top: 40rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
+  color: #999999;
 }

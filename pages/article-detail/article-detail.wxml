@@ -8,14 +8,14 @@
     <text class="breadcrumb-current">{{item.title}}</text>
   </view>
   <view class="detail">
-    <view class="labels">
-      <text class="label" wx:for="{{item.labels}}" wx:key="*this">{{item}}</text>
+    <view class="detail-labels" wx:if="{{item.labels.length}}">
+      <text class="detail-label" wx:for="{{item.labels}}" wx:key="*this">{{item}}</text>
     </view>
-    <image class="detail-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
     <view class="detail-title">{{item.title}}</view>
     <view class="detail-meta">
       <text wx:if="{{item.author}}">{{item.author}} · </text>{{item.date}}
     </view>
+    <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
     <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
   </view>
 </view>

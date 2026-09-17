@@ -8,17 +8,36 @@
     <text class="breadcrumb-current">{{item.name}}</text>
   </view>
   <view class="detail">
+    <view class="firm-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
     <view class="firm-logo-box">
       <image class="firm-logo" src="{{item.image}}" mode="aspectFit" />
     </view>
     <view class="firm-name">{{item.name}}</view>
+    <view class="firm-established" wx:if="{{item.established}}">Established in {{item.established}}</view>
+    <view class="firm-website" wx:if="{{item.website}}">{{item.website}}</view>
     <view class="firm-stats" wx:if="{{item.numOfLawyer || item.numOfPartner || item.numOfOffice}}">
       <text wx:if="{{item.numOfLawyer}}">Lawyers: {{item.numOfLawyer}}</text>
       <text wx:if="{{item.numOfPartner}}"> · Partners: {{item.numOfPartner}}</text>
       <text wx:if="{{item.numOfOffice}}"> · Offices: {{item.numOfOffice}}</text>
     </view>
     <view class="firm-loc" wx:if="{{item.location}}">{{item.location}}</view>
-    <view class="firm-overview" wx:if="{{item.overview}}">{{item.overview}}</view>
+
+    <view class="firm-section" wx:if="{{item.overview}}">
+      <view class="firm-section-title">Overview</view>
+      <view class="firm-overview">{{item.overview}}</view>
+    </view>
+    <view class="firm-section" wx:if="{{item.offices.length}}">
+      <view class="firm-section-title">Offices</view>
+      <view class="firm-list-item" wx:for="{{item.offices}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="firm-section" wx:if="{{item.industries.length}}">
+      <view class="firm-section-title">Practice areas</view>
+      <view class="firm-list-item" wx:for="{{item.industries}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="firm-section" wx:if="{{item.contacts.length}}">
+      <view class="firm-section-title">Contact</view>
+      <view class="firm-list-item" wx:for="{{item.contacts}}" wx:key="*this">{{item}}</view>
+    </view>
   </view>
 </view>
 <site-footer />

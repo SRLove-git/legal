@@ -8,15 +8,58 @@
     <text class="breadcrumb-current">{{item.name}}</text>
   </view>
   <view class="detail">
-    <image class="photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
-    <view class="photo placeholder" wx:else></view>
-    <view class="name">{{item.name}}</view>
-    <view class="positions">
-      <view class="pos" wx:for="{{item.positions}}" wx:key="*this">{{item}}</view>
+    <view class="lawyer-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
+    <view class="lawyer-brief">
+      <image class="photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+      <view class="photo placeholder" wx:else></view>
+      <view class="lawyer-brief-info">
+        <view class="name">{{item.name}}</view>
+        <view class="positions">
+          <view class="pos" wx:for="{{item.positions}}" wx:key="*this">{{item}}</view>
+        </view>
+        <view class="firm">{{item.firm}}</view>
+        <view class="loc" wx:if="{{item.location}}">{{item.location}}</view>
+      </view>
     </view>
-    <view class="firm">{{item.firm}}</view>
-    <view class="loc">{{item.location}}</view>
-    <view class="bio" wx:if="{{item.biography}}">{{item.biography}}</view>
+
+    <view class="lawyer-section" wx:if="{{item.biography}}">
+      <view class="lawyer-section-title">Biography</view>
+      <view class="bio">{{item.biography}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.practiceAreas.length}}">
+      <view class="lawyer-section-title">Practice areas</view>
+      <view class="lawyer-list-item" wx:for="{{item.practiceAreas}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.awards.length}}">
+      <view class="lawyer-section-title">Awards</view>
+      <view class="lawyer-list-item" wx:for="{{item.awards}}" wx:key="title">
+        <text wx:if="{{item.year}}">{{item.year}} · </text>{{item.title}}<text wx:if="{{item.org}}"> — {{item.org}}</text>
+      </view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.legalOneAwards.length}}">
+      <view class="lawyer-section-title">LegalOne Awards</view>
+      <view class="lawyer-list-item" wx:for="{{item.legalOneAwards}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.admissions.length}}">
+      <view class="lawyer-section-title">Admissions</view>
+      <view class="lawyer-list-item" wx:for="{{item.admissions}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.languages.length}}">
+      <view class="lawyer-section-title">Language</view>
+      <view class="lawyer-list-item" wx:for="{{item.languages}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.educations.length}}">
+      <view class="lawyer-section-title">Education</view>
+      <view class="lawyer-list-item" wx:for="{{item.educations}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.memberships.length}}">
+      <view class="lawyer-section-title">Professional memberships</view>
+      <view class="lawyer-list-item" wx:for="{{item.memberships}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="lawyer-section" wx:if="{{item.contacts.length}}">
+      <view class="lawyer-section-title">Contact</view>
+      <view class="lawyer-list-item" wx:for="{{item.contacts}}" wx:key="detail">{{item.type}}: {{item.detail}}</view>
+    </view>
   </view>
 </view>
 <site-footer />

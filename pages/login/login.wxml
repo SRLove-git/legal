@@ -1,7 +1,7 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb"> &gt; Login</view>
   <view class="login">
+    <image class="login-logo" src="/assets/img/logo.png" mode="widthFix" />
     <view class="login-title">Login</view>
     <view class="field">
       <input class="field-input" type="text" placeholder="Email address" value="{{email}}" bindinput="onEmail" />
@@ -11,6 +11,12 @@
     </view>
     <view class="login-error" wx:if="{{error}}">{{error}}</view>
     <button class="login-btn" bindtap="doLogin" loading="{{loading}}" disabled="{{loading}}">Login</button>
+    <view class="login-links">
+      <text class="login-link">Forgot password?</text>
+      <text class="login-link-sep">or</text>
+      <text class="login-link">Sign up</text>
+    </view>
+    <view class="login-agreement">By clicking sign up, you agree to our privacy policy. For more information, please see our privacy policy.</view>
   </view>
 </view>
 <site-footer />

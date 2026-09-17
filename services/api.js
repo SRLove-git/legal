@@ -269,6 +269,13 @@ const api = {
       if (!d) return null;
       const norm = normalizeDeal(d);
       norm.body = stripHtml(d.descript || d.descript2);
+      norm.refNo = d.refNo || '';
+      const industries = (d.relatedIndustries || []).map(function (x) { return x && x.area; }).filter(Boolean);
+      norm.category = industries[0] || '';
+      norm.banner = imageUrl(d.dealBannerMobile || d.dealBanner);
+      norm.completed = d.completedDateTime ? monthYear(d.completedDateTime) : '';
+      norm.jurisdictions = d.relatedJurisdictions || [];
+      norm.lawFirms = (d.lawFirms || []).map(function (f) { return { id: f.id, name: f.name }; }).filter(function (f) { return f.name; });
       return norm;
     });
   },
@@ -298,6 +305,14 @@ const api = {
       norm.numOfOffice = f.numOfOffice;
       const office = (f.lawFirmOffices && f.lawFirmOffices[0]) || {};
       norm.location = [office.city, office.country].filter(Boolean).join(', ');
+      norm.refNo = f.refNo || '';
+      norm.updated = f.moddttm ? monthYear(f.moddttm) : '';
+      norm.established = f.establishedIn || '';
+      norm.website = f.webSite || '';
+      norm.offices = (f.lawFirmOffices || []).map(function (o) { return o.name; }).filter(Boolean);
+      norm.industries = (f.industries || []).map(function (x) { return x && x.area; }).filter(Boolean);
+      norm.contacts = (f.contacts || []).filter(function (c) { return c && c.published !== false; })
+        .map(function (c) { return [c.type, c.detail].filter(Boolean).join(': '); }).filter(Boolean);
       return norm;
     });
   },
@@ -308,6 +323,21 @@ const api = {
       const norm = normalizeLawyer(l);
       norm.biography = stripHtml(l.biography);
       norm.contacts = l.contacts || [];
+      norm.refNo = l.refNo || '';
+      norm.updated = l.moddttm ? monthYear(l.moddttm) : '';
+      norm.awards = (l.awards || []).map(function (a) {
+        return { title: a.title, year: a.year, org: a.organization };
+      }).filter(function (a) { return a.title; });
+      norm.legalOneAwards = (l.legalOneAwards || []).map(function (a) { return a.name; }).filter(Boolean);
+      norm.practiceAreas = (l.industries || []).map(function (x) { return x && x.area; }).filter(Boolean);
+      norm.admissions = (l.admissions || []).map(function (a) {
+        return [a.year, a.country].filter(Boolean).join(' · ');
+      }).filter(Boolean);
+      norm.languages = l.languages || [];
+      norm.educations = (l.educations || []).map(function (e) {
+        return [e.year, e.qualification, e.institution].filter(Boolean).join(' · ');
+      }).filter(Boolean);
+      norm.memberships = (l.professionalMemberships || []).map(function (m) { return m.title; }).filter(Boolean);
       return norm;
     });
   },

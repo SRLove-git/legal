@@ -8,10 +8,30 @@
     <text class="breadcrumb-current">{{item.title}}</text>
   </view>
   <view class="detail">
+    <view class="detail-labels">
+      <text class="detail-reference" wx:if="{{item.refNo}}">{{item.refNo}}</text>
+      <text class="detail-label" wx:if="{{item.category}}">{{item.category}}</text>
+    </view>
     <view class="detail-title">{{item.title}}</view>
-    <view class="detail-badge">{{item.rank}}</view>
-    <view class="detail-meta">{{item.date}}</view>
+    <view class="detail-meta">
+      <text class="detail-rank" wx:if="{{item.rank}}">LegalOne Merits: {{item.rank}}</text>
+      <text class="detail-date" wx:if="{{item.date}}">{{item.date}}</text>
+    </view>
+    <image class="detail-banner" src="{{item.banner}}" mode="widthFix" wx:if="{{item.banner}}" />
     <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
+
+    <view class="detail-block" wx:if="{{item.completed}}">
+      <view class="detail-block-head">Date of completion</view>
+      <view class="detail-block-value">{{item.completed}}</view>
+    </view>
+    <view class="detail-block" wx:if="{{item.jurisdictions.length}}">
+      <view class="detail-block-head">Related jurisdictions</view>
+      <view class="detail-block-value" wx:for="{{item.jurisdictions}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="detail-block" wx:if="{{item.lawFirms.length}}">
+      <view class="detail-block-head">Law firms</view>
+      <view class="detail-block-value" wx:for="{{item.lawFirms}}" wx:key="id">{{item.name}}</view>
+    </view>
   </view>
 </view>
 <site-footer />
