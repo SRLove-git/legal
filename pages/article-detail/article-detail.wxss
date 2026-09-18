@@ -6,6 +6,14 @@
   margin-bottom: 15rpx;
 }
 
+.detail-reference {
+  display: inline-block;
+  color: #303030;
+  font-size: 24rpx;
+  padding: 6rpx 12rpx 6rpx 0;
+  margin-right: 12rpx;
+}
+
 .detail-label {
   display: inline-block;
   background: #f2f2f2;
@@ -42,9 +50,22 @@
   margin-top: 6rpx;
 }
 
+.detail-doi {
+  color: #0084ba;
+  word-break: break-all;
+}
+
+.detail-rich {
+  display: block;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
 .detail-body {
   font-size: 31rpx;
-  color: #2d2d2d;
+  color: #303030;
   line-height: 46rpx;
   white-space: pre-wrap;
 }

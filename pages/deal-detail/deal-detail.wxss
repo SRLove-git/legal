@@ -51,9 +51,17 @@
 
 .detail-body {
   font-size: 31rpx;
-  color: #2d2d2d;
+  color: #303030;
   line-height: 46rpx;
   white-space: pre-wrap;
+}
+
+.detail-rich {
+  display: block;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.5;
+  overflow: hidden;
 }
 
 .detail-block {

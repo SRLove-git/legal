@@ -72,6 +72,14 @@
   white-space: pre-wrap;
 }
 
+.bio-rich {
+  display: block;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
 .lawyer-section {
   margin-top: 44rpx;
 }

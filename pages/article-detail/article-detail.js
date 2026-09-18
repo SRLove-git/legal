@@ -9,13 +9,14 @@ function crumbFor(item) {
   const isAward = !!item && item.section === 'Awards';
   return {
     crumbLabel: isAward ? 'Awards' : 'Articles',
-    crumbUrl: isAward ? '/pages/awards/awards' : '/pages/articles/articles'
+    crumbUrl: isAward ? '/pages/awards/awards' : '/pages/articles/articles',
+    relatedHeading: isAward ? 'Related awards' : 'Related articles'
   };
 }
 
 Page({
   behaviors: [safeArea, breadcrumb],
-  data: { item: null, related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles' },
+  data: { item: null, related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles', relatedHeading: 'Related articles' },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
     const title = decodeURIComponent(options.title || '');
@@ -33,7 +34,8 @@ Page({
     if (id) {
       api.getArticleDetail(id).then(function (item) {
         self.setData(Object.assign({ item: item || null }, crumbFor(item)));
-        api.getRelatedArticles(id).then(function (r) { self.setData({ related: (r || []).slice(0, 5) }); }).catch(function () {});
+        const relatedRequest = item && item.section === 'Awards' ? api.getRelatedAwards(id) : api.getRelatedArticles(id);
+        relatedRequest.then(function (r) { self.setData({ related: (r || []).slice(0, 5) }); }).catch(function () {});
       }).catch(fallback);
     } else {
       fallback();
@@ -42,5 +44,13 @@ Page({
   goArticle(e) {
     const d = e.currentTarget.dataset;
     wx.navigateTo({ url: '/pages/article-detail/article-detail?id=' + encodeURIComponent(d.id || '') + '&title=' + encodeURIComponent(d.title || '') });
+  },
+  copyDoi() {
+    const url = this.data.item && this.data.item.doiUrl;
+    if (!url) return;
+    wx.setClipboardData({
+      data: url,
+      success: function () { wx.showToast({ title: 'DOI link copied', icon: 'none' }); }
+    });
   }
 });

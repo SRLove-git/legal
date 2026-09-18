@@ -18,7 +18,8 @@
       <text class="detail-date" wx:if="{{item.updated}}">Updated: {{item.updated}}</text>
     </view>
     <image class="detail-banner" src="{{item.banner}}" mode="widthFix" wx:if="{{item.banner}}" />
-    <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
+    <rich-text class="detail-rich" wx:if="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
+    <view class="detail-body" wx:elif="{{item.body}}">{{item.body}}</view>
 
     <view class="detail-block" wx:if="{{item.completed}}">
       <view class="detail-block-head">Date of completion</view>

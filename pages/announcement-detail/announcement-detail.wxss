@@ -29,6 +29,15 @@
   white-space: pre-wrap;
 }
 
+.ann-rich {
+  display: block;
+  margin-top: 28rpx;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
 .ann-link {
   display: inline-block;
   margin-top: 28rpx;

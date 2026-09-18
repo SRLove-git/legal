@@ -24,7 +24,8 @@
 
     <view class="firm-section" wx:if="{{item.overview}}">
       <view class="firm-section-title">Overview</view>
-      <view class="firm-overview">{{item.overview}}</view>
+      <rich-text class="firm-rich" wx:if="{{item.overviewHtml}}" nodes="{{item.overviewHtml}}"></rich-text>
+      <view class="firm-overview" wx:else>{{item.overview}}</view>
     </view>
     <view class="firm-section" wx:if="{{item.offices.length}}">
       <view class="firm-section-title">Offices</view>

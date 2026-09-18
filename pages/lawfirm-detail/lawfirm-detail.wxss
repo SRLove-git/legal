@@ -78,3 +78,12 @@
   line-height: 1.6;
   white-space: pre-wrap;
 }
+
+.firm-rich {
+  display: block;
+  margin-top: 18rpx;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.5;
+  overflow: hidden;
+}

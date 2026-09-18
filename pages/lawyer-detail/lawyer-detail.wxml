@@ -24,7 +24,8 @@
 
     <view class="lawyer-section" wx:if="{{item.biography}}">
       <view class="lawyer-section-title">Biography</view>
-      <view class="bio">{{item.biography}}</view>
+      <rich-text class="bio-rich" wx:if="{{item.biographyHtml}}" nodes="{{item.biographyHtml}}"></rich-text>
+      <view class="bio" wx:else>{{item.biography}}</view>
     </view>
     <view class="lawyer-section" wx:if="{{cases.length}}">
       <view class="lawyer-section-title">Cases / deals</view>

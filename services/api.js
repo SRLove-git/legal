@@ -1,6 +1,7 @@
 // LegalOne Global — mini program API service.
 // Reference: Technical Annex A (Phase 1 public browse) + Annex B (Phase 2 login).
 const config = require('../config.js');
+const richText = require('./rich-text.js');
 const BASE = config.baseUrl || 'https://www.legaloneglobal.com/';
 const CDN = 'https://legaloneglobal.azureedge.net/storelegaloneglobalpub/';
 
@@ -224,6 +225,7 @@ function normalizeArticle(a) {
   const updated = a.moddttm || a.publishDate;
   return {
     id: a.id,
+    refNo: a.refNo || '',
     title: a.headline || '',
     image: imageUrl(a.image, 'l'),
     labels: (a.categories || []).map(function (c) { return c.id || c; }),
@@ -234,6 +236,8 @@ function normalizeArticle(a) {
     publishedDate: fullDate(a.publishDate),
     updatedDate: fullDate(updated),
     publishedISO: a.publishDate ? dateOnly(a.publishDate) : '',
+    doi: a.doi || '',
+    doiUrl: a.doi ? 'https://doi.org/10.62436/' + a.doi : '',
     raw: a
   };
 }
@@ -371,7 +375,9 @@ const api = {
       const d = Array.isArray(r) ? r[0] : r;
       if (!d) return null;
       const norm = normalizeDeal(d);
+      delete norm.raw;
       norm.body = stripHtml(d.descript || d.descript2);
+      norm.bodyHtml = richText.toRichHtml(d.descript || d.descript2);
       norm.refNo = d.refNo || '';
       const industries = (d.relatedIndustries || []).map(function (x) { return x && x.area; }).filter(Boolean);
       norm.category = industries[0] || '';
@@ -387,14 +393,23 @@ const api = {
       const o = Array.isArray(a) ? a[0] : a;
       if (!o) return null;
       const norm = normalizeArticle(o);
-      norm.body = stripHtml(o.content || o.descript);
+      // Detail content can contain large embedded images. Avoid duplicating the
+      // original CMS payload in Page.data, which has a 1 MB setData limit.
+      delete norm.raw;
+      const articleContent = o.content || o.descript;
+      norm.bodyHtml = richText.toRichHtml(articleContent);
+      norm.body = norm.bodyHtml ? '' : stripHtml(articleContent);
       return norm;
     });
   },
   getAnnouncementDetail: function (id) {
     return get('api/crm/announcements/' + encodeURIComponent(id)).then(function (r) {
       const n = Array.isArray(r) ? r[0] : r;
-      return n ? normalizeAnnouncement(n) : null;
+      if (!n) return null;
+      const norm = normalizeAnnouncement(n);
+      delete norm.raw;
+      norm.descriptHtml = richText.toRichHtml(n.descript);
+      return norm;
     });
   },
   getLawfirmDetail: function (id) {
@@ -402,7 +417,9 @@ const api = {
       const f = Array.isArray(r) ? r[0] : r;
       if (!f) return null;
       const norm = normalizeLawfirm(f);
+      delete norm.raw;
       norm.overview = stripHtml(f.overview);
+      norm.overviewHtml = richText.toRichHtml(f.overview);
       norm.numOfLawyer = f.numOfLawyer;
       norm.numOfPartner = f.numOfPartner;
       norm.numOfOffice = f.numOfOffice;
@@ -424,7 +441,9 @@ const api = {
       const l = Array.isArray(r) ? r[0] : r;
       if (!l) return null;
       const norm = normalizeLawyer(l);
+      delete norm.raw;
       norm.biography = stripHtml(l.biography);
+      norm.biographyHtml = richText.toRichHtml(l.biography);
       norm.contacts = l.contacts || [];
       norm.refNo = l.refNo || '';
       norm.updated = l.moddttm ? monthYear(l.moddttm) : '';

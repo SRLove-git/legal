@@ -8,20 +8,23 @@
     <text class="breadcrumb-current">{{item.title}}</text>
   </view>
   <view class="detail">
-    <view class="detail-labels" wx:if="{{item.labels.length}}">
+    <view class="detail-labels" wx:if="{{item.refNo || item.labels.length}}">
+      <text class="detail-reference" wx:if="{{item.refNo}}">{{item.refNo}}</text>
       <text class="detail-label" wx:for="{{item.labels}}" wx:key="*this">{{item}}</text>
     </view>
     <view class="detail-title">{{item.title}}</view>
     <view class="detail-meta">
       <text wx:if="{{item.author}}">By {{item.author}}</text>
+      <text class="detail-meta-line detail-doi" wx:if="{{item.doi}}" bindtap="copyDoi">DOI: {{item.doiUrl}}</text>
       <text class="detail-meta-line" wx:if="{{item.publishedDate}}">Published: {{item.publishedDate}}</text>
       <text class="detail-meta-line" wx:if="{{item.updatedDate}}">Updated: {{item.updatedDate}}</text>
     </view>
     <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
-    <view class="detail-body" wx:if="{{item.body}}">{{item.body}}</view>
+    <rich-text class="detail-rich" wx:if="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
+    <view class="detail-body" wx:elif="{{item.body}}">{{item.body}}</view>
 
     <view class="detail-related-block" wx:if="{{related.length}}">
-      <view class="detail-related-head">Related articles</view>
+      <view class="detail-related-head">{{relatedHeading}}</view>
       <view class="detail-related" wx:for="{{related}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
     </view>
   </view>
