@@ -5,3 +5,6 @@ project.private.config.json
 # Preview QR codes are written into the project folder by the DevTools CLI
 *-qr.png
 preview-qr.png
+
+# Local UV/Python cache used by document tooling; never package it with the mini program.
+.uv-cache-docs/

@@ -2,13 +2,38 @@
   "description": "LegalOne Global - WeChat Mini Program clone",
   "packOptions": {
     "ignore": [
-      { "type": "folder", "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1)" },
-      { "type": "file", "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1).zip" },
-      { "type": "file", "value": ".DS_Store" },
-      { "type": "file", "value": "README.md" },
-      { "type": "folder", "value": "tools" },
-      { "type": "folder", "value": "deliverables" },
-      { "type": "file", "value": "project.private.config.json" }
+      {
+        "type": "folder",
+        "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1)"
+      },
+      {
+        "type": "file",
+        "value": "LegalOne-WeChat-MiniProgram-Phase1_2(1).zip"
+      },
+      {
+        "type": "file",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "folder",
+        "value": "tools"
+      },
+      {
+        "type": "folder",
+        "value": "deliverables"
+      },
+      {
+        "type": "folder",
+        "value": ".uv-cache-docs"
+      },
+      {
+        "type": "file",
+        "value": "project.private.config.json"
+      }
     ],
     "include": []
   },
