@@ -69,6 +69,10 @@ function post(path, options) {
   return request('POST', path, options);
 }
 
+function remove(path, options) {
+  return request('DELETE', path, options);
+}
+
 function encodePage(max, start) {
   return 'page=' + encodeURIComponent('{max:' + max + ',start:' + start + '}');
 }
@@ -89,28 +93,53 @@ function listSub(basePath, opts, mapFn) {
   });
 }
 
+// The website's profile embeds read their page size from the path
+// (".../cases/5"). The query-string form answers with a different payload for
+// some collections, so profile pages use the same shape the website does.
+function embedSub(basePath, opts, mapFn) {
+  opts = opts || {};
+  return get(basePath + '/' + (opts.max || 5)).then(function (r) {
+    return (r || []).map(mapFn);
+  });
+}
+
+// Some CMS fields are HTML-encoded even though the clients render them as
+// plain text. Decode named, decimal and hexadecimal entities before WXML sees
+// them, including the occasional double-encoded value.
+function decodeEntities(value) {
+  if (value === null || value === undefined) return '';
+  const named = {
+    amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
+    ndash: '–', mdash: '—', lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', hellip: '…'
+  };
+  let text = String(value);
+  for (let pass = 0; pass < 3 && /&(?:#\d+|#x[\da-f]+|[a-z]+);/i.test(text); pass += 1) {
+    text = text.replace(/&#(\d+);/g, function (whole, code) {
+      const point = Number(code);
+      return point > 0 && point <= 0x10ffff ? String.fromCodePoint(point) : whole;
+    }).replace(/&#x([\da-f]+);/gi, function (whole, code) {
+      const point = parseInt(code, 16);
+      return point > 0 && point <= 0x10ffff ? String.fromCodePoint(point) : whole;
+    }).replace(/&([a-z]+);/gi, function (whole, name) {
+      const key = name.toLowerCase();
+      return Object.prototype.hasOwnProperty.call(named, key) ? named[key] : whole;
+    });
+  }
+  return text;
+}
+
 function stripHtml(html) {
   if (!html) return '';
-  return String(html)
+  const text = String(html)
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/(p|div|li|h[1-6])>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'")
-    .replace(/&rsquo;/gi, "'")
-    .replace(/&ldquo;/gi, '"')
-    .replace(/&rdquo;/gi, '"')
-    .replace(/&ndash;/gi, '-')
-    .replace(/&mdash;/gi, '-')
     .replace(/[ \t]+/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+  return decodeEntities(text);
 }
 
 function imageUrl(relative, size) {
@@ -155,7 +184,8 @@ function fullDate(iso) {
   return MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
 }
 
-const RANK_LABELS = { 3: 'Remarkable', 2: 'Highly Recommended', 1: 'Recommended' };
+// Website window.distinguished / exemplary / remarkable (app.js showRankingLabel).
+const RANK_LABELS = { 3: 'Remarkable', 2: 'Exemplary', 1: 'Distinguished' };
 
 function rankLabel(rank) {
   return RANK_LABELS[rank] || ('Rank ' + rank);
@@ -163,14 +193,16 @@ function rankLabel(rank) {
 
 function normalizeDeal(d) {
   const jurisdictions = (d.relatedJurisdictions || []).map(function (x) {
-    return (x && (x.name || x.country)) || x;
+    return decodeEntities((x && (x.name || x.country)) || x);
   }).filter(function (v, i, arr) { return v && arr.indexOf(v) === i; }).join('; ');
   return {
     id: d.id,
-    title: d.headline || '',
+    title: decodeEntities(d.headline),
     rank: rankLabel(d.rank),
+    // Numeric rank kept so callers can pick the matching merits badge.
+    rankNo: Number(d.rank) || 0,
     // The API repeats industries; the website prints each label once, up to three.
-    labels: (d.relatedIndustries || []).map(function (x) { return (x && x.area) || ''; })
+    labels: (d.relatedIndustries || []).map(function (x) { return decodeEntities((x && x.area) || ''); })
       .filter(function (v, i, arr) { return v && arr.indexOf(v) === i; })
       .slice(0, 3),
     // The website's deal cards print "Date: December, 2025" and "Updated: <moddttm>".
@@ -185,7 +217,7 @@ function normalizeDeal(d) {
 function normalizeLawfirm(f) {
   return {
     id: f.id,
-    name: f.name || '',
+    name: decodeEntities(f.name),
     image: imageUrl(f.profileIcon, 'm'),
     raw: f
   };
@@ -193,44 +225,97 @@ function normalizeLawfirm(f) {
 
 function normalizeLawyer(l) {
   const office = (l.lawFirm && l.lawFirm.lawFirmOffices && l.lawFirm.lawFirmOffices[0]) || {};
-  const location = [office.city, office.country].filter(Boolean).join(', ');
+  const location = [office.city, office.country].filter(Boolean).map(decodeEntities).join(', ');
+  const contacts = (l.contacts || []).filter(function (contact) {
+    return contact && contact.published !== false && ['Phone', 'Mobile', 'Email'].indexOf(contact.type) >= 0;
+  }).map(function (contact) {
+    return { type: decodeEntities(contact.type), detail: decodeEntities(contact.detail) };
+  });
+  const verified = !!(l.isVerified || (l.verifications || []).some(function (verification) {
+    return verification && (verification.status || '').toUpperCase() === 'VERIFIED';
+  }));
   return {
     id: l.id,
-    name: [l.firstName, l.name].filter(Boolean).join(' '),
+    name: [l.firstName, l.name].filter(Boolean).map(decodeEntities).join(' '),
+    firstName: decodeEntities(l.firstName),
+    surname: decodeEntities(l.name),
+    nameLocal: decodeEntities(l.nameLocal),
     image: imageUrl(l.profileIcon, 'm'),
-    positions: [l.primaryTitle, l.secondaryTitle].filter(Boolean),
-    firm: (l.lawFirm && l.lawFirm.name) || '',
+    positions: [l.primaryTitle, l.secondaryTitle].filter(Boolean).map(decodeEntities),
+    firm: decodeEntities((l.lawFirm && l.lawFirm.name) || l.functionInstitute || ''),
+    firmId: (l.lawFirm && l.lawFirm.id) || '',
     location: location,
+    contacts: contacts,
+    verified: verified,
+    numOfDeal: Number(l.numOfDeal) || 0,
+    distinguished: Number(l.rank1Total) || 0,
+    exemplary: Number(l.rank2Total) || 0,
+    remarkable: Number(l.rank3Total) || 0,
+    testimonials: Number(l.numRating) || 0,
     raw: l
   };
 }
 
+function normalizeCodeList(response) {
+  const groups = Array.isArray(response) ? response : [response];
+  const values = [];
+  groups.forEach(function (group) {
+    (group && group.contents || []).forEach(function (item) {
+      const value = decodeEntities(item && item.code);
+      if (value && values.indexOf(value) < 0) values.push(value);
+    });
+  });
+  return values;
+}
+
 function normalizeTestimonial(t) {
-  const author = [t.clientName, t.clientTitle].filter(Boolean).join(', ');
+  const author = [t.clientName, t.clientTitle].filter(Boolean).map(decodeEntities).join(', ');
   return {
     id: t.id,
-    name: t.lawyerName || '',
-    comment: t.comment || '',
+    name: decodeEntities(t.lawyerName),
+    comment: decodeEntities(t.comment),
     author: author,
-    company: t.clientCompanyName || '',
+    company: decodeEntities(t.clientCompanyName),
+    date: fullDate(t.adddttm),
     raw: t
+  };
+}
+
+// The website prints a firm's honours as "<lawyer> - <award>" linking to the
+// award write-up. The endpoint returns one row per lawyer/award pair.
+function normalizeHonour(h) {
+  const lawyers = (h.lawyers || []).map(function (l) { return decodeEntities(l && l.name); }).filter(Boolean);
+  return {
+    id: h.articleId || '',
+    articleId: h.articleId || '',
+    name: decodeEntities(h.name) || lawyers.join(', '),
+    awardName: decodeEntities(h.awardName),
+    date: h.publishDate ? monthYear(h.publishDate) : ''
+  };
+}
+
+function normalizeAdvertisement(ad) {
+  return {
+    id: ad.id || '',
+    image: imageUrl(ad.advImage),
+    link: ad.link || ''
   };
 }
 
 function normalizeArticle(a) {
   const authors = (a.authors || []).map(function (x) {
-    return [x.firstName, x.name].filter(Boolean).join(' ').trim();
+    return [x.firstName, x.name].filter(Boolean).map(decodeEntities).join(' ').trim();
   }).filter(Boolean);
   // The website's cards print "Updated: <moddttm>" (not the publish date).
   const updated = a.moddttm || a.publishDate;
   return {
     id: a.id,
-    refNo: a.refNo || '',
-    title: a.headline || '',
+    refNo: decodeEntities(a.refNo),
+    title: decodeEntities(a.headline),
     image: imageUrl(a.image, 'l'),
-    labels: (a.categories || []).map(function (c) { return c.id || c; }),
+    labels: (a.categories || []).map(function (c) { return decodeEntities(c.id || c); }),
     // The website picks the detail breadcrumb from this (Awards vs Articles).
-    section: a.section || '',
+    section: decodeEntities(a.section),
     author: authors.join(', '),
     date: fullDate(updated),
     publishedDate: fullDate(a.publishDate),
@@ -299,6 +384,7 @@ const api = {
   BASE: BASE,
   CDN: CDN,
   imageUrl: imageUrl,
+  decodeEntities: decodeEntities,
   stripHtml: stripHtml,
 
   // Phase 1 — home
@@ -364,9 +450,29 @@ const api = {
   getLawyers: function (opts) {
     opts = opts || {};
     const pageParam = (opts.start > 1) ? encodePage(opts.max || 12, opts.start) : encodePageCapital(opts.max || 12, 1);
-    let q = 'api/legal/lawyers/?' + pageParam + '&functionType=lawyer&orderby=latest';
+    let q = 'api/legal/lawyers/?' + pageParam + '&functionType=lawyer';
     if (opts.search) q += '&search=' + encodeURIComponent(opts.search);
+    if (opts.admission) q += '&admission=' + encodeURIComponent(opts.admission);
+    if (opts.position) q += '&position=' + encodeURIComponent(opts.position);
+    if (opts.language) q += '&language=' + encodeURIComponent(opts.language);
+    if (opts.areas) q += '&areas=' + encodeURIComponent(opts.areas);
+    q += '&orderby=' + encodeURIComponent(opts.orderby || 'latest');
     return get(q).then(function (r) { return (r || []).map(normalizeLawyer); });
+  },
+  getLawyerFilters: function () {
+    return Promise.all([
+      get('api/legal/lawyers/codes/admission'),
+      get('api/legal/lawyers/codes/position'),
+      get('api/legal/lawyers/codes/language'),
+      get('api/core/codes/areas')
+    ]).then(function (responses) {
+      return {
+        admissions: normalizeCodeList(responses[0]),
+        positions: normalizeCodeList(responses[1]),
+        languages: normalizeCodeList(responses[2]),
+        areas: normalizeCodeList(responses[3]).filter(function (value) { return value !== 'News'; })
+      };
+    });
   },
 
   // Phase 1 — details
@@ -415,22 +521,50 @@ const api = {
   getLawfirmDetail: function (id) {
     return get('api/legal/lawfirms/' + encodeURIComponent(id)).then(function (r) {
       const f = Array.isArray(r) ? r[0] : r;
-      if (!f) return null;
+      // A bare numeric id answers with a stub ({id, isLoaded:false}); the
+      // profile id is the website slug, so treat a nameless row as "not found"
+      // and let the caller fall back.
+      if (!f || !f.name) return null;
       const norm = normalizeLawfirm(f);
       delete norm.raw;
+      norm.nameLocal = decodeEntities(f.nameLocal);
       norm.overview = stripHtml(f.overview);
       norm.overviewHtml = richText.toRichHtml(f.overview);
-      norm.numOfLawyer = f.numOfLawyer;
-      norm.numOfPartner = f.numOfPartner;
-      norm.numOfOffice = f.numOfOffice;
+      norm.numOfLawyer = Number(f.numOfLawyer) || 0;
+      norm.numOfPartner = Number(f.numOfPartner) || 0;
+      norm.numOfOffice = Number(f.numOfOffice) || 0;
+      norm.numOfDeal = Number(f.numOfDeal) || 0;
+      // LegalOne Merits counters (rank1 Distinguished / 2 Exemplary / 3 Remarkable).
+      norm.distinguished = Number(f.rank1Total) || 0;
+      norm.exemplary = Number(f.rank2Total) || 0;
+      norm.remarkable = Number(f.rank3Total) || 0;
       const office = (f.lawFirmOffices && f.lawFirmOffices[0]) || {};
-      norm.location = [office.city, office.country].filter(Boolean).join(', ');
+      norm.location = [office.city, office.country].filter(Boolean).map(decodeEntities).join(', ');
       norm.refNo = f.refNo || '';
-      norm.updated = f.moddttm ? monthYear(f.moddttm) : '';
-      norm.established = f.establishedIn || '';
-      norm.website = f.webSite || '';
-      norm.offices = (f.lawFirmOffices || []).map(function (o) { return o.name; }).filter(Boolean);
-      norm.industries = (f.industries || []).map(function (x) { return x && x.area; }).filter(Boolean);
+      // Website prints the full "Last updated" date on the profile.
+      norm.updated = f.moddttm ? fullDate(f.moddttm) : '';
+      norm.established = decodeEntities(f.establishedIn);
+      norm.website = decodeEntities(f.webSite);
+      norm.industries = (f.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean);
+      // The website closes the profile with the client-supplied practice list.
+      norm.industriesProvidedByClient = decodeEntities(f.industriesProvidedByClient);
+      // Offices carry their own practice lists on the website (city + areas).
+      norm.offices = (f.lawFirmOffices || []).map(function (o) {
+        return {
+          id: o.id || '',
+          refNo: o.refNo || '',
+          name: decodeEntities(o.name),
+          city: decodeEntities(o.city) || decodeEntities(o.name),
+          industries: (o.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean)
+        };
+      });
+      norm.honours = (f.lawyerHonoursList || []).map(function (h) {
+        return {
+          articleId: h.articleId || '',
+          name: (h.lawyers || []).map(function (l) { return decodeEntities(l && l.name); }).filter(Boolean).join(', '),
+          awardName: decodeEntities(h.awardName)
+        };
+      }).filter(function (h) { return h.articleId; });
       norm.contacts = (f.contacts || []).filter(function (c) { return c && c.published !== false; })
         .map(function (c) { return [c.type, c.detail].filter(Boolean).join(': '); }).filter(Boolean);
       return norm;
@@ -444,24 +578,61 @@ const api = {
       delete norm.raw;
       norm.biography = stripHtml(l.biography);
       norm.biographyHtml = richText.toRichHtml(l.biography);
-      norm.contacts = l.contacts || [];
-      norm.refNo = l.refNo || '';
-      norm.updated = l.moddttm ? monthYear(l.moddttm) : '';
+      norm.refNo = decodeEntities(l.refNo);
+      norm.updated = l.moddttm ? fullDate(l.moddttm) : '';
+      const verification = (l.verifications || []).find(function (v) {
+        return v && (v.status || '').toUpperCase() === 'VERIFIED';
+      });
+      norm.verificationId = (verification && verification.id) || '';
       norm.awards = (l.awards || []).map(function (a) {
-        return { title: a.title, year: a.year, org: a.organization };
+        return { title: decodeEntities(a.title), year: decodeEntities(a.year), org: decodeEntities(a.organization) };
       }).filter(function (a) { return a.title; });
-      norm.legalOneAwards = (l.legalOneAwards || []).map(function (a) { return a.name; }).filter(Boolean);
-      norm.practiceAreas = (l.industries || []).map(function (x) { return x && x.area; }).filter(Boolean);
+      norm.careerPaths = (l.careerPaths || []).map(function (career) {
+        return {
+          title: decodeEntities(career.title),
+          company: decodeEntities(career.company),
+          start: decodeEntities(career.start),
+          end: decodeEntities(career.end) || 'now',
+          location: [career.city, career.country].filter(Boolean).map(decodeEntities).join(', ')
+        };
+      }).filter(function (career) { return career.title || career.company; });
+      norm.legalOneAwards = (l.legalOneAwards || []).map(function (a) {
+        return {
+          id: a.id || a.articleId || '',
+          articleId: a.articleId || '',
+          name: decodeEntities(a.name),
+          year: decodeEntities(a.year),
+          image: imageUrl(a.imageIcon, 'm')
+        };
+      }).filter(function (a) { return a.name; });
+      norm.practiceAreas = (l.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean);
       norm.admissions = (l.admissions || []).map(function (a) {
-        return [a.year, a.country].filter(Boolean).join(' · ');
-      }).filter(Boolean);
-      norm.languages = l.languages || [];
+        return { country: decodeEntities(a.country), year: decodeEntities(a.year), licenseNumber: decodeEntities(a.licenseNumber) };
+      }).filter(function (a) { return a.country; });
+      norm.languages = (l.languages || []).map(decodeEntities);
       norm.educations = (l.educations || []).map(function (e) {
-        return [e.year, e.qualification, e.institution].filter(Boolean).join(' · ');
-      }).filter(Boolean);
-      norm.memberships = (l.professionalMemberships || []).map(function (m) { return m.title; }).filter(Boolean);
+        return { year: decodeEntities(e.year), qualification: decodeEntities(e.qualification), institution: decodeEntities(e.institution) };
+      }).filter(function (e) { return e.qualification || e.institution; });
+      norm.memberships = (l.professionalMemberships || []).map(function (m) {
+        return { title: decodeEntities(m.title), organization: decodeEntities(m.organization) };
+      }).filter(function (m) { return m.title || m.organization; });
       return norm;
     });
+  },
+
+  getSavedStatus: function (memberId, contentType, contentId) {
+    return get('api/crm/member/' + encodeURIComponent(memberId) + '/saved-items/status?contentType=' +
+      encodeURIComponent(contentType) + '&contentId=' + encodeURIComponent(contentId), { auth: true });
+  },
+  saveItem: function (memberId, contentType, contentId, url) {
+    return post('api/crm/member/' + encodeURIComponent(memberId) + '/saved-items', {
+      auth: true,
+      data: { contentType: contentType, contentId: contentId, url: url }
+    });
+  },
+  unsaveItem: function (memberId, savedItemId) {
+    return remove('api/crm/member/' + encodeURIComponent(memberId) + '/saved-items/' +
+      encodeURIComponent(savedItemId), { auth: true });
   },
 
   // Phase 1 — law firm sub-lists (Annex A §4.1)
@@ -475,10 +646,16 @@ const api = {
     return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/partners/?functionType=lawyer', opts, normalizeLawyer);
   },
   getLawfirmCases: function (id, opts) {
-    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/cases/', opts, normalizeDeal);
+    return embedSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/cases', opts, normalizeDeal);
+  },
+  getLawfirmArticles: function (id, opts) {
+    return embedSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/articles', opts, normalizeArticle);
   },
   getLawfirmHonours: function (id, opts) {
-    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/honours/?orderby=latest', opts, normalizeArticle);
+    return embedSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/honours', opts, normalizeHonour)
+      .then(function (rows) {
+        return rows.filter(function (row) { return row.articleId; });
+      });
   },
 
   // Phase 1 — lawyer sub-lists (Annex A §4.3)
@@ -490,6 +667,32 @@ const api = {
   },
   getLawyerTestimonials: function (id, opts) {
     return listSub('api/legal/lawyers/' + encodeURIComponent(id) + '/testimonials/', opts, normalizeTestimonial);
+  },
+  getLawyerAdvertisements: function () {
+    return Promise.all([
+      get('api/Advertisement?pageName=LawyerProfile&adType=MPU&adPosition=Top'),
+      get('api/Advertisement?pageName=LawyerProfile&adType=MPU&adPosition=Down')
+    ]).then(function (responses) {
+      const top = Array.isArray(responses[0]) ? responses[0] : (responses[0] ? [responses[0]] : []);
+      const down = Array.isArray(responses[1]) ? responses[1] : (responses[1] ? [responses[1]] : []);
+      return {
+        top: top.map(normalizeAdvertisement).filter(function (ad) { return ad.image; }),
+        down: down.map(normalizeAdvertisement).filter(function (ad) { return ad.image; })
+      };
+    });
+  },
+  getLawfirmAdvertisements: function () {
+    return Promise.all([
+      get('api/Advertisement?pageName=LawfirmProfile&adType=MPU&adPosition=Top'),
+      get('api/Advertisement?pageName=LawfirmProfile&adType=MPU&adPosition=Down')
+    ]).then(function (responses) {
+      const top = Array.isArray(responses[0]) ? responses[0] : (responses[0] ? [responses[0]] : []);
+      const down = Array.isArray(responses[1]) ? responses[1] : (responses[1] ? [responses[1]] : []);
+      return {
+        top: top.map(normalizeAdvertisement).filter(function (ad) { return ad.image; }),
+        down: down.map(normalizeAdvertisement).filter(function (ad) { return ad.image; })
+      };
+    });
   },
 
   // Phase 1 — detail sidebars (Annex A §4.4 / §4.5)
