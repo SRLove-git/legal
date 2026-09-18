@@ -3,27 +3,27 @@
 <view class="dci-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
-    <text class="breadcrumb-sep">></text>
+    <text class="breadcrumb-sep">{{breadcrumbSeparator}}</text>
     <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/deals/deals">Deals/Cases</text>
-    <text class="breadcrumb-sep">></text>
+    <text class="breadcrumb-sep">{{breadcrumbSeparator}}</text>
     <text class="breadcrumb-current">Deal/Case Introduction</text>
   </view>
 
   <view class="list-hero">
     <image class="list-hero-bg" src="/assets/img/homepage-banner.png" mode="aspectFill" />
     <view class="list-hero-inner">
-      <view class="list-hero-title"><text class="list-hero-title-line">Showcasing Outstanding</text><text class="list-hero-title-line">Deals & Cases</text></view>
-      <view class="list-hero-desc">Discover the LegalOne archive of corporate and commercial legal matters, a comprehensive collection of highly regarded transactions and cases submitted by lawyers and law firms, independently recognised with LegalOne Merits, a distinction that reflects excellence.</view>
-      <view class="list-hero-actions">
-        <view class="list-hero-btn">Submit deal/case</view>
+      <view class="list-hero-title">
+        <text class="list-hero-title-line">Showcasing Outstanding</text>
+        <text class="list-hero-title-line">{{heroTitleLine2}}</text>
       </view>
+      <view class="list-hero-desc">Discover the LegalOne archive of corporate and commercial legal matters, a comprehensive collection of highly regarded transactions and cases submitted by lawyers and law firms, independently recognised with LegalOne Merits, a distinction that reflects excellence.</view>
+      <view class="list-hero-actions"><view class="list-hero-btn" bindtap="startSubmission">Submit deal/case</view></view>
     </view>
   </view>
 
-  <!-- Methodology -->
-  <view class="dci-section" id="methodology">
-    <view class="container">
-      <view class="dci-section-title">Methodology</view>
+  <view class="dci-section dci-methodology" id="methodology">
+    <view class="dci-container">
+      <view class="dci-heading"><view class="dci-heading-bar"></view><text>Methodology</text></view>
       <view class="dci-cards">
         <view class="dci-card" wx:for="{{methodology}}" wx:key="title">
           <view class="dci-card-title">{{item.title}}</view>
@@ -31,41 +31,56 @@
         </view>
       </view>
       <view class="dci-merits">
-        <view class="dci-merits-title">LegalOne Merits</view>
-        <view class="dci-merits-text">{{merits}}</view>
+        <view class="dci-merits-copy">
+          <view class="dci-card-title">{{merits.title}}</view>
+          <view class="dci-card-text">{{merits.text}}</view>
+        </view>
+        <image class="dci-merits-image" src="/assets/img/deal-case/LegalOneMerits.jpg" mode="widthFix" />
       </view>
     </view>
   </view>
 
-  <!-- Deals of the Year -->
   <view class="dci-section dci-doty" id="doty">
-    <view class="container">
-      <view class="dci-section-title">Deals of the Year</view>
-      <view class="dci-feature-card" wx:for="{{doty}}" wx:key="title" bindtap="goArticle" data-url="{{item.link}}">
-        <image class="dci-feature-img" src="{{item.image}}" mode="aspectFill" />
+    <view class="dci-container">
+      <view class="dci-heading"><view class="dci-heading-bar"></view><text>Deals of the Year</text></view>
+      <view class="dci-intro">{{doty.intro}}</view>
+      <view class="dci-feature-card" wx:for="{{doty.features}}" wx:key="title">
+        <image class="dci-feature-img" src="{{item.image}}" mode="widthFix" />
         <view class="dci-feature-body">
           <view class="dci-feature-title">{{item.title}}</view>
+          <view class="dci-explore" bindtap="goArticle" data-url="{{item.webUrl}}">Explore more</view>
         </view>
       </view>
+
+      <view class="dci-archive-title">{{doty.archive.title}}</view>
+      <view class="dci-archive-card">
+        <view class="dci-archive-copy">{{doty.archive.description}}</view>
+        <image class="dci-archive-image" src="{{doty.archive.image}}" mode="widthFix" />
+      </view>
+      <image class="dci-archive-map" src="{{doty.archive.map}}" mode="widthFix" />
     </view>
   </view>
 
-  <!-- FAQ -->
-  <view class="dci-section" id="faq">
-    <view class="container">
-      <view class="dci-section-title">Frequently Asked Questions</view>
-      <view class="dci-faq-group" wx:for="{{faq}}" wx:for-item="group" wx:key="group">
-        <view class="dci-faq-group-head" bindtap="toggleGroup" data-group="{{group.group}}">
-          <text>{{group.group}}</text>
-          <text class="dci-faq-toggle">{{openGroups[group.group] ? '−' : '+'}}</text>
-        </view>
-        <view class="dci-faq-items" wx:if="{{openGroups[group.group]}}">
-          <view class="dci-faq-item" wx:for="{{group.items}}" wx:for-item="it" wx:key="q">
-            <view class="dci-faq-q">{{it.q}}</view>
-            <view class="dci-faq-a">{{it.a}}</view>
+  <view class="dci-section dci-faq" id="faq">
+    <view class="dci-container">
+      <view class="dci-heading"><view class="dci-heading-bar"></view><text>Frequently Asked Questions</text></view>
+      <view class="dci-faq-group" wx:for="{{faq}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="title">
+        <view class="dci-faq-group-head">
+          <text class="dci-faq-group-title">{{group.title}}</text>
+          <view class="dci-show-all" bindtap="toggleFaqGroup" data-index="{{groupIndex}}">
+            <text>{{openFaqGroups[groupIndex] ? 'Hide All' : 'Show All'}}</text>
+            <text class="dci-show-all-arrow">{{openFaqGroups[groupIndex] ? '‹' : '›'}}</text>
           </view>
         </view>
+        <view class="dci-faq-item" wx:for="{{group.items}}" wx:for-item="faqItem" wx:key="id">
+          <view class="dci-faq-question" bindtap="toggleFaq" data-id="{{faqItem.id}}">
+            <view class="dci-faq-question-text"><text class="dci-faq-number">{{faqItem.number}}</text> {{faqItem.question}}</view>
+            <view class="dci-faq-chevron {{openFaq[faqItem.id] ? 'is-open' : ''}}"></view>
+          </view>
+          <view class="dci-faq-answer" wx:if="{{openFaq[faqItem.id]}}">{{faqItem.answer}}</view>
+        </view>
       </view>
+      <view class="dci-faq-contact">{{faqContact}}</view>
     </view>
   </view>
 </view>

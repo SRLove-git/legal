@@ -1,125 +1,243 @@
 .dci-page {
-  padding-top: calc(88rpx + 54px);
+  min-height: 100vh;
+  background: #ffffff;
+  color: #303030;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", sans-serif;
 }
 
-.breadcrumb {
-  padding: 28rpx 36rpx;
-  font-size: 26rpx;
-  color: #555;
-  border-bottom: 1rpx solid #eee;
+.dci-container {
+  width: 90%;
+  margin: 0 auto;
 }
 
 .dci-section {
-  padding: 48rpx 0;
+  padding: 80rpx 0 0;
 }
 
-.dci-section-title {
+.dci-heading {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 48rpx;
+  color: #0284c7;
   font-size: 48rpx;
+  line-height: 1.2;
   font-weight: 700;
-  color: #00558d;
-  margin-bottom: 32rpx;
+}
+
+.dci-heading-bar {
+  width: 16rpx;
+  height: 58rpx;
+  flex: 0 0 16rpx;
+  background: #0284c7;
 }
 
 .dci-cards {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20rpx;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.dci-card,
+.dci-merits {
+  overflow: hidden;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, 0.1);
 }
 
 .dci-card {
-  width: 100%;
-  background: #f7f7f7;
-  border-radius: 12rpx;
-  padding: 28rpx;
+  padding: 40rpx 36rpx;
 }
 
 .dci-card-title {
-  font-size: 32rpx;
+  margin-bottom: 20rpx;
+  color: #303030;
+  font-size: 40rpx;
+  line-height: 1.25;
   font-weight: 700;
-  color: #0084ba;
-  margin-bottom: 12rpx;
 }
 
-.dci-card-text {
-  font-size: 28rpx;
+.dci-card-text,
+.dci-intro,
+.dci-archive-copy {
+  color: #303030;
+  font-size: 32rpx;
   line-height: 1.6;
-  color: #2d2d2d;
 }
 
 .dci-merits {
-  margin-top: 32rpx;
-  background: #00558d;
-  color: #fff;
-  border-radius: 12rpx;
-  padding: 32rpx;
+  margin-top: 28rpx;
 }
 
-.dci-merits-title {
-  font-size: 34rpx;
-  font-weight: 700;
-  margin-bottom: 16rpx;
+.dci-merits-copy {
+  padding: 40rpx 36rpx;
 }
 
-.dci-merits-text {
-  font-size: 28rpx;
-  line-height: 1.6;
+.dci-merits-image,
+.dci-feature-img,
+.dci-archive-image,
+.dci-archive-map {
+  display: block;
+  width: 100%;
 }
 
 .dci-doty {
-  background: #f2f2f2;
+  margin-top: 80rpx;
+  padding-bottom: 80rpx;
+  background: #f7f7f7;
+}
+
+.dci-intro {
+  margin: -8rpx 0 40rpx;
 }
 
 .dci-feature-card {
-  background: #fff;
-  border-radius: 12rpx;
   overflow: hidden;
-  margin-bottom: 24rpx;
+  margin-bottom: 32rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, 0.1);
 }
 
-.dci-feature-img {
-  width: 100%;
-  height: 320rpx;
+.dci-feature-body {
+  padding: 40rpx 36rpx 44rpx;
 }
 
-.dci-feature-title {
-  padding: 24rpx;
-  font-size: 32rpx;
+.dci-feature-title,
+.dci-archive-title {
+  color: #303030;
+  font-size: 40rpx;
+  line-height: 1.3;
   font-weight: 700;
-  color: #00558d;
+}
+
+.dci-explore {
+  display: inline-block;
+  margin-top: 30rpx;
+  padding: 18rpx 42rpx;
+  border: 2rpx solid #303030;
+  border-radius: 48rpx;
+  color: #303030;
+  font-size: 30rpx;
+  line-height: 1.3;
+}
+
+.dci-archive-title {
+  margin: 96rpx 0 34rpx;
+}
+
+.dci-archive-card {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: hidden;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, 0.1);
+}
+
+.dci-archive-copy {
+  padding: 40rpx 36rpx;
+}
+
+.dci-archive-map {
+  margin-top: 48rpx;
+}
+
+.dci-faq {
+  padding-bottom: 128rpx;
+}
+
+.dci-faq .dci-heading {
+  margin-bottom: 64rpx;
 }
 
 .dci-faq-group {
-  border-bottom: 1rpx solid #eee;
+  margin-bottom: 80rpx;
 }
 
 .dci-faq-group-head {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  padding: 28rpx 0;
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #00558d;
+  gap: 24rpx;
+  margin-bottom: 14rpx;
 }
 
-.dci-faq-toggle {
+.dci-faq-group-title {
+  flex: 1;
+  color: #303030;
   font-size: 40rpx;
-  color: #0084ba;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.dci-show-all {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 4rpx;
+  color: #303030;
+  font-size: 30rpx;
+  line-height: 1.3;
+}
+
+.dci-show-all-arrow {
+  margin-left: 10rpx;
+  font-size: 40rpx;
+  line-height: 28rpx;
 }
 
 .dci-faq-item {
-  padding: 8rpx 0 28rpx;
+  border-bottom: 2rpx solid #e5e7eb;
 }
 
-.dci-faq-q {
-  font-size: 28rpx;
+.dci-faq-question {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30rpx;
+  padding: 36rpx 0;
+}
+
+.dci-faq-question-text {
+  flex: 1;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.dci-faq-number {
   font-weight: 700;
-  color: #2d2d2d;
-  margin-bottom: 10rpx;
 }
 
-.dci-faq-a {
-  font-size: 27rpx;
+.dci-faq-chevron {
+  width: 22rpx;
+  height: 22rpx;
+  flex: 0 0 22rpx;
+  margin-top: 10rpx;
+  border-right: 3rpx solid #9ca3af;
+  border-bottom: 3rpx solid #9ca3af;
+  transform: rotate(45deg);
+}
+
+.dci-faq-chevron.is-open {
+  margin-top: 18rpx;
+  border-color: #6b7280;
+  transform: rotate(-135deg);
+}
+
+.dci-faq-answer {
+  padding: 0 52rpx 36rpx 0;
+  color: #303030;
+  font-size: 32rpx;
   line-height: 1.6;
-  color: #555;
+  white-space: pre-wrap;
+}
+
+.dci-faq-contact {
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.6;
 }
