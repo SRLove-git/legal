@@ -85,6 +85,17 @@ function encodePageCapital(max, start) {
   return 'Page={Max:' + max + ',Start:' + start + '}';
 }
 
+// Multi-value list filters (countries / categories) travel as one
+// comma-separated, percent-encoded parameter, exactly like the website sends
+// them from its SORT & FILTER panel.
+function encodeValueList(values) {
+  const list = Array.isArray(values) ? values : String(values || '').split(',');
+  return list
+    .map(function (value) { return encodeURIComponent(String(value).trim()); })
+    .filter(Boolean)
+    .join(',');
+}
+
 // Shared loader for profile sub-lists (cases / articles / lawyers / partners / honours).
 // Defaults to the profile embed short size (5) per Annex A §1.2.
 function listSub(basePath, opts, mapFn) {
@@ -427,8 +438,24 @@ const api = {
     let q = 'api/crm/articles?' + encodePage(opts.max || 12, opts.start || 1) + '&orderby=latest';
     if (opts.search) q += '&search=' + encodeURIComponent(opts.search);
     if (opts.section) q += '&section=' + encodeURIComponent(opts.section);
+    // Website SORT & FILTER: countries and regions / practice areas and industries.
+    if (opts.countries && opts.countries.length) q += '&countries=' + encodeValueList(opts.countries);
+    if (opts.categories && opts.categories.length) q += '&categories=' + encodeValueList(opts.categories);
     if (opts.highlighted) q += '&highlighted=true';
     return get(q).then(function (r) { return (r || []).map(normalizeArticle); });
+  },
+  // Option lists for the Articles page filter panel (website uses the lawyer
+  // country codes plus the shared area codes, with "News" hidden).
+  getArticleFilters: function () {
+    return Promise.all([
+      get('api/legal/lawyers/codes/country'),
+      get('api/core/codes/areas')
+    ]).then(function (responses) {
+      return {
+        countries: normalizeCodeList(responses[0]),
+        areas: normalizeCodeList(responses[1]).filter(function (value) { return value !== 'News'; })
+      };
+    });
   },
   getAwards: function (opts) {
     opts = opts || {};

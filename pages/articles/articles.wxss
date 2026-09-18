@@ -1,3 +1,152 @@
-.list {
-  padding-bottom: 40rpx;
+.articles-page {
+  background: #ffffff;
+}
+
+/* Website "SORT & FILTER" bar (article_list). */
+.article-filter-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 86rpx;
+  padding: 18rpx 36rpx;
+  background: #edebeb;
+  color: #202020;
+  font-size: 30rpx;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.filter-count {
+  min-width: 34rpx;
+  height: 34rpx;
+  margin-left: 12rpx;
+  padding: 0 8rpx;
+  border-radius: 17rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 21rpx;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.filter-chevron,
+.field-chevron {
+  width: 0;
+  height: 0;
+  border-left: 9rpx solid transparent;
+  border-right: 9rpx solid transparent;
+  border-top: 12rpx solid #777777;
+}
+
+.filter-chevron {
+  position: absolute;
+  right: 82rpx;
+  top: 38rpx;
+  transition: transform 0.2s ease;
+}
+
+.filter-chevron.open {
+  transform: rotate(180deg);
+}
+
+.article-filter-panel {
+  padding: 28rpx 36rpx 34rpx;
+  border-bottom: 2rpx solid #d9d9d9;
+  background: #f6f6f6;
+}
+
+.article-filter-group {
+  margin-bottom: 18rpx;
+}
+
+.article-filter-field,
+.article-search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 76rpx;
+  padding: 0 74rpx 0 24rpx;
+  border: 2rpx solid #bcbcbc;
+  background: #ffffff;
+  color: #333333;
+  font-size: 26rpx;
+  line-height: 1.35;
+}
+
+.article-filter-field.active {
+  border-color: #0084ba;
+  color: #0084ba;
+}
+
+.field-chevron {
+  position: absolute;
+  right: 26rpx;
+  top: 31rpx;
+  transition: transform 0.2s ease;
+}
+
+.field-chevron.up {
+  transform: rotate(180deg);
+}
+
+/* The countries list is long, so it scrolls inside the panel. */
+.article-filter-options {
+  max-height: 520rpx;
+  margin-top: -2rpx;
+  padding: 8rpx 24rpx;
+  border: 2rpx solid #0084ba;
+  border-top: 0;
+  background: #ffffff;
+}
+
+.article-filter-option {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0;
+  font-size: 26rpx;
+  color: #333333;
+  line-height: 1.35;
+}
+
+.article-filter-check {
+  margin-right: 14rpx;
+  transform: scale(0.85);
+}
+
+.article-filter-option-text {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.article-search-field {
+  margin-bottom: 18rpx;
+}
+
+.article-search-field input {
+  width: 100%;
+  height: 72rpx;
+  font-size: 26rpx;
+}
+
+.article-filter-actions {
+  display: flex;
+  gap: 18rpx;
+  padding-top: 2rpx;
+}
+
+.article-filter-button {
+  flex: 1;
+  height: 72rpx;
+  border: 2rpx solid #0084ba;
+  color: #0084ba;
+  font-size: 27rpx;
+  line-height: 68rpx;
+  text-align: center;
+}
+
+.article-filter-button.primary {
+  background: #0084ba;
+  color: #ffffff;
 }

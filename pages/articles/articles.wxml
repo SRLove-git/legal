@@ -1,35 +1,64 @@
 <site-header />
-<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage articles-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Articles</text>
   </view>
-  <view class="list-filters">SORT & FILTER</view>
-  <view class="list-body">
-  <view class="list-search-wrap">
-    <input class="list-search-input" type="text" placeholder="Search articles" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+
+  <view class="article-filter-toggle" bindtap="toggleFilters">
+    <text>{{sortFilterLabel}}</text>
+    <text class="filter-count" wx:if="{{activeFilterCount}}">{{activeFilterCount}}</text>
+    <view class="filter-chevron {{filtersOpen ? 'open' : ''}}"></view>
   </view>
-  <block wx:if="{{searching}}">
-    <view class="list-heading"><view class="list-heading-dot"></view>Search results</view>
-    <view class="list">
-      <view class="list-entry" wx:for="{{results}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
-        <view class="entry-labels" wx:if="{{item.labels.length}}">
-          <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>
-        </view>
-        <image class="entry-image" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
-        <view class="entry-title">{{item.title}}</view>
-        <view class="entry-by" wx:if="{{item.author}}">By {{item.author}}</view>
-        <view class="entry-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
+
+  <view class="article-filter-panel" wx:if="{{filtersOpen}}">
+    <view class="article-filter-group">
+      <view class="article-filter-field {{countries.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="countries">
+        <text>{{countriesLabel}}</text>
+        <view class="field-chevron {{openGroups.countries ? 'up' : ''}}"></view>
       </view>
-      <view class="list-end" wx:if="{{!results.length}}">No articles found</view>
+      <scroll-view class="article-filter-options" scroll-y wx:if="{{openGroups.countries}}">
+        <checkbox-group bindchange="onCountriesChange">
+          <label class="article-filter-option" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text class="article-filter-option-text">{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
     </view>
-  </block>
-  <block wx:else>
-    <view class="article-section" wx:for="{{sections}}" wx:for-item="sec" wx:key="title">
-      <view class="list-heading"><view class="list-heading-dot"></view>{{sec.title}}</view>
+
+    <view class="article-filter-group">
+      <view class="article-filter-field {{areas.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="areas">
+        <text>{{areasLabel}}</text>
+        <view class="field-chevron {{openGroups.areas ? 'up' : ''}}"></view>
+      </view>
+      <scroll-view class="article-filter-options" scroll-y wx:if="{{openGroups.areas}}">
+        <checkbox-group bindchange="onAreasChange">
+          <label class="article-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text class="article-filter-option-text">{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+
+    <view class="article-search-field">
+      <input placeholder="Search deals/cases" value="{{keyword}}" bindinput="onInput" bindconfirm="onApply" confirm-type="search" />
+      <view class="search-icon" bindtap="onApply"></view>
+    </view>
+
+    <view class="article-filter-actions">
+      <view class="article-filter-button primary" bindtap="onApply">Apply</view>
+      <view class="article-filter-button" bindtap="onReset">Reset</view>
+    </view>
+  </view>
+
+  <view class="list-body">
+    <block wx:if="{{filtered}}">
+      <view class="list-heading" wx:if="{{heading}}"><view class="list-heading-dot"></view>{{heading}}</view>
       <view class="list">
-        <view class="list-entry" wx:for="{{sec.items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+        <view class="list-entry" wx:for="{{results}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
           <view class="entry-labels" wx:if="{{item.labels.length}}">
             <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>
           </view>
@@ -38,9 +67,27 @@
           <view class="entry-by" wx:if="{{item.author}}">By {{item.author}}</view>
           <view class="entry-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
         </view>
+        <view class="list-end" wx:if="{{!results.length && !loading}}">No articles found</view>
+        <view class="list-end" wx:elif="{{!hasMore && !loading}}">No more results</view>
       </view>
-    </view>
-  </block>
+    </block>
+
+    <block wx:else>
+      <view class="article-section" wx:for="{{sections}}" wx:for-item="sec" wx:key="title">
+        <view class="list-heading"><view class="list-heading-dot"></view>{{sec.title}}</view>
+        <view class="list">
+          <view class="list-entry" wx:for="{{sec.items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+            <view class="entry-labels" wx:if="{{item.labels.length}}">
+              <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>
+            </view>
+            <image class="entry-image" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
+            <view class="entry-title">{{item.title}}</view>
+            <view class="entry-by" wx:if="{{item.author}}">By {{item.author}}</view>
+            <view class="entry-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
   </view>
 </view>
 <site-footer />
