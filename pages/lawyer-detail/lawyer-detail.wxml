@@ -1,74 +1,187 @@
 <site-header />
-<view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb">
+<view class="subpage lawyer-detail-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb" wx:if="{{item}}">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/lawyers/lawyers">Lawyers</text>
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-current">{{item.name}}</text>
   </view>
-  <view class="detail">
-    <view class="lawyer-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
-    <view class="lawyer-brief">
-      <image class="photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
-      <view class="photo placeholder" wx:else></view>
-      <view class="lawyer-brief-info">
-        <view class="name">{{item.name}}</view>
-        <view class="positions">
-          <view class="pos" wx:for="{{item.positions}}" wx:key="*this">{{item}}</view>
+
+  <view class="profile-loading" wx:if="{{loading}}">Loading...</view>
+  <view class="lawyer-detail" wx:if="{{item}}">
+    <view class="lawyer-meta">
+      <text class="lawyer-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</text>
+      <text class="lawyer-ref" wx:if="{{item.refNo}}">Ref: {{item.refNo}}</text>
+    </view>
+
+    <view class="lawyer-profile">
+      <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+      <view class="lawyer-photo placeholder" wx:else></view>
+      <view class="lawyer-profile-info">
+        <view class="lawyer-name">{{item.name}}</view>
+        <view class="lawyer-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
+        <image class="lawyer-verified" wx:if="{{item.verified}}" src="https://www.legaloneglobal.com/images/Verilegal_logo_3_upper.png" mode="widthFix" />
+        <view class="lawyer-positions" wx:if="{{item.positions.length}}">
+          <text class="lawyer-position" wx:for="{{item.positions}}" wx:for-item="position" wx:key="*this">{{position}}</text>
         </view>
-        <view class="firm">{{item.firm}}</view>
-        <view class="loc" wx:if="{{item.location}}">{{item.location}}</view>
+        <view class="lawyer-firm" wx:if="{{item.firm}}" bindtap="goFirm" data-id="{{item.firmId}}" data-name="{{item.firm}}">{{item.firm}}</view>
+        <view class="lawyer-location" wx:if="{{item.location}}">{{item.location}}</view>
+        <view class="lawyer-contact" wx:for="{{item.contacts}}" wx:for-item="contact" wx:key="detail"><text>{{contact.type}}: </text>{{contact.detail}}</view>
       </view>
+    </view>
+
+    <view class="lawyer-stat-card merits-card">
+      <view class="lawyer-stat-label">LegalOne Merits</view>
+      <view class="lawyer-stat-row total">
+        <text>Total deals/cases</text>
+        <text class="stat-value" wx:if="{{item.numOfDeal}}">{{item.numOfDeal}}</text>
+        <view class="stat-value stat-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+      </view>
+      <view class="lawyer-stat-row">
+        <view class="stat-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+        <text class="stat-value" wx:if="{{item.distinguished}}">{{item.distinguished}}</text>
+        <view class="stat-value stat-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+      </view>
+      <view class="lawyer-stat-row">
+        <view class="stat-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+        <text class="stat-value" wx:if="{{item.exemplary}}">{{item.exemplary}}</text>
+        <view class="stat-value stat-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+      </view>
+      <view class="lawyer-stat-row">
+        <view class="stat-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+        <text class="stat-value" wx:if="{{item.remarkable}}">{{item.remarkable}}</text>
+        <view class="stat-value stat-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+      </view>
+    </view>
+
+    <view class="lawyer-stat-card testimonials-card">
+      <view class="lawyer-stat-label wide">LegalOne Testimonials</view>
+      <view class="lawyer-stat-row total">
+        <text>No. of Testimonials</text>
+        <text class="stat-value light" wx:if="{{item.testimonials}}">{{item.testimonials}}</text>
+        <view class="stat-value light stat-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen-blue.JPG" mode="aspectFit" /></view>
+      </view>
+    </view>
+
+    <view class="lawyer-action-row">
+      <button class="lawyer-share-button" open-type="share">
+        <text class="lawyer-share-label">Share</text>
+        <view class="lawyer-share-icon"><image class="lawyer-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
+      </button>
+      <view class="lawyer-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+        <text class="lawyer-save-label">{{saved ? 'Saved' : 'Save'}}</text>
+        <image class="lawyer-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="lawyer-ad-list" wx:if="{{topAds.length}}">
+      <image class="lawyer-ad" wx:for="{{topAds}}" wx:for-item="ad" wx:key="id" src="{{ad.image}}" mode="widthFix" bindtap="openAdvertisement" data-link="{{ad.link}}" />
     </view>
 
     <view class="lawyer-section" wx:if="{{item.biography}}">
       <view class="lawyer-section-title">Biography</view>
-      <rich-text class="bio-rich" wx:if="{{item.biographyHtml}}" nodes="{{item.biographyHtml}}"></rich-text>
-      <view class="bio" wx:else>{{item.biography}}</view>
+      <rich-text class="lawyer-biography-rich" wx:if="{{item.biographyHtml}}" nodes="{{item.biographyHtml}}"></rich-text>
+      <view class="lawyer-biography" wx:else>{{item.biography}}</view>
     </view>
+
     <view class="lawyer-section" wx:if="{{cases.length}}">
-      <view class="lawyer-section-title">Cases / deals</view>
-      <view class="lawyer-list-item" wx:for="{{cases}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
-    </view>
-    <view class="lawyer-section" wx:if="{{articles.length}}">
-      <view class="lawyer-section-title">Articles</view>
-      <view class="lawyer-list-item" wx:for="{{articles}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
-    </view>
-    <view class="lawyer-section" wx:if="{{item.practiceAreas.length}}">
-      <view class="lawyer-section-title">Practice areas</view>
-      <view class="lawyer-list-item" wx:for="{{item.practiceAreas}}" wx:key="*this">{{item}}</view>
-    </view>
-    <view class="lawyer-section" wx:if="{{item.awards.length}}">
-      <view class="lawyer-section-title">Awards</view>
-      <view class="lawyer-list-item" wx:for="{{item.awards}}" wx:key="title">
-        <text wx:if="{{item.year}}">{{item.year}} · </text>{{item.title}}<text wx:if="{{item.org}}"> — {{item.org}}</text>
+      <view class="lawyer-section-title">Deals/cases</view>
+      <view class="lawyer-linked-item dot" wx:for="{{cases}}" wx:for-item="deal" wx:key="id" bindtap="goDeal" data-id="{{deal.id}}" data-title="{{deal.title}}">
+        <view class="linked-title">{{deal.title}}</view>
+        <view class="linked-meta" wx:if="{{deal.completed || deal.jurisdictionText}}">{{deal.completed}}<text wx:if="{{deal.completed && deal.jurisdictionText}}"> · </text>{{deal.jurisdictionText}}</view>
       </view>
     </view>
-    <view class="lawyer-section" wx:if="{{item.legalOneAwards.length}}">
-      <view class="lawyer-section-title">LegalOne Awards</view>
-      <view class="lawyer-list-item" wx:for="{{item.legalOneAwards}}" wx:key="*this">{{item}}</view>
+
+    <view class="lawyer-section" wx:if="{{item.careerPaths.length}}">
+      <view class="lawyer-section-title">Career path</view>
+      <view class="lawyer-record dot" wx:for="{{item.careerPaths}}" wx:for-item="career" wx:key="title">
+        <view class="record-main">
+          <view class="record-title">{{career.title}}<text wx:if="{{career.title && career.company}}">, </text>{{career.company}}</view>
+          <view class="record-organization italic">{{career.start}} - {{career.end}}</view>
+          <view class="record-organization" wx:if="{{career.location}}">{{career.location}}</view>
+        </view>
+      </view>
     </view>
+
+    <view class="lawyer-section" wx:if="{{item.awards.length}}">
+      <view class="lawyer-section-title">Awards</view>
+      <view class="lawyer-record dot" wx:for="{{item.awards}}" wx:for-item="award" wx:key="title">
+        <view class="record-main">
+          <view class="record-title">{{award.title}}</view>
+          <view class="record-organization" wx:if="{{award.org}}">{{award.org}}</view>
+        </view>
+        <view class="record-year">{{award.year}}</view>
+      </view>
+    </view>
+
+    <view class="lawyer-section" wx:if="{{item.legalOneAwards.length}}">
+      <view class="lawyer-section-title">LegalOne awards</view>
+      <view class="lawyer-record dot" wx:for="{{item.legalOneAwards}}" wx:for-item="award" wx:key="id" bindtap="goArticle" data-id="{{award.articleId}}" data-title="{{award.name}}">
+        <view class="record-main"><view class="record-title link">{{award.name}}</view></view>
+        <view class="record-year">{{award.year}}</view>
+      </view>
+    </view>
+
+    <view class="lawyer-section" wx:if="{{item.practiceAreas.length}}">
+      <view class="lawyer-section-title">Practice areas and industries</view>
+      <view class="lawyer-plain-item" wx:for="{{item.practiceAreas}}" wx:for-item="area" wx:key="*this">{{area}}</view>
+    </view>
+
+    <view class="lawyer-section" wx:if="{{articles.length}}">
+      <view class="lawyer-section-title">LegalOne articles</view>
+      <view class="lawyer-linked-item dot" wx:for="{{articles}}" wx:for-item="article" wx:key="id" bindtap="goArticle" data-id="{{article.id}}" data-title="{{article.title}}">
+        <view class="linked-title">{{article.title}}</view>
+        <view class="linked-meta italic" wx:if="{{article.publishedDate}}">{{article.publishedDate}}</view>
+      </view>
+    </view>
+
+    <view class="lawyer-section" wx:if="{{testimonials.length}}">
+      <view class="lawyer-section-title">Client testimonials</view>
+      <view class="testimonial-item dot" wx:for="{{testimonials}}" wx:for-item="testimonial" wx:key="id">
+        <view class="testimonial-quote">“{{testimonial.comment}}”</view>
+        <view class="testimonial-author" wx:if="{{testimonial.author}}">{{testimonial.author}}</view>
+        <view class="testimonial-company" wx:if="{{testimonial.company}}">{{testimonial.company}}</view>
+        <view class="testimonial-date italic" wx:if="{{testimonial.date}}">{{testimonial.date}}</view>
+      </view>
+    </view>
+
     <view class="lawyer-section" wx:if="{{item.admissions.length}}">
       <view class="lawyer-section-title">Admissions</view>
-      <view class="lawyer-list-item" wx:for="{{item.admissions}}" wx:key="*this">{{item}}</view>
+      <view class="lawyer-record compact dot" wx:for="{{item.admissions}}" wx:for-item="admission" wx:key="country">
+        <view class="record-main"><view class="record-title">{{admission.country}}</view></view>
+        <view class="record-year">{{admission.year}}<text wx:if="{{admission.licenseNumber}}">  #{{admission.licenseNumber}}</text></view>
+      </view>
     </view>
+
     <view class="lawyer-section" wx:if="{{item.languages.length}}">
-      <view class="lawyer-section-title">Language</view>
-      <view class="lawyer-list-item" wx:for="{{item.languages}}" wx:key="*this">{{item}}</view>
+      <view class="lawyer-section-title">Languages</view>
+      <view class="lawyer-plain-item dot" wx:for="{{item.languages}}" wx:for-item="language" wx:key="*this">{{language}}</view>
     </view>
+
     <view class="lawyer-section" wx:if="{{item.educations.length}}">
       <view class="lawyer-section-title">Education</view>
-      <view class="lawyer-list-item" wx:for="{{item.educations}}" wx:key="*this">{{item}}</view>
+      <view class="lawyer-record dot" wx:for="{{item.educations}}" wx:for-item="education" wx:key="qualification">
+        <view class="record-main">
+          <view class="record-title">{{education.institution}}</view>
+          <view class="record-organization">{{education.qualification}}</view>
+        </view>
+        <view class="record-year">{{education.year}}</view>
+      </view>
     </view>
+
     <view class="lawyer-section" wx:if="{{item.memberships.length}}">
       <view class="lawyer-section-title">Professional memberships</view>
-      <view class="lawyer-list-item" wx:for="{{item.memberships}}" wx:key="*this">{{item}}</view>
+      <view class="lawyer-plain-item dot" wx:for="{{item.memberships}}" wx:for-item="membership" wx:key="title">{{membership.organization}}<text wx:if="{{membership.organization && membership.title}}"> - </text>{{membership.title}}</view>
     </view>
-    <view class="lawyer-section" wx:if="{{item.contacts.length}}">
-      <view class="lawyer-section-title">Contact</view>
-      <view class="lawyer-list-item" wx:for="{{item.contacts}}" wx:key="detail">{{item.type}}: {{item.detail}}</view>
+
+    <image class="lawyer-bottom-banner" src="https://www.legaloneglobal.com/images/inHouseAdv/Large_Leaderboard_970x90_Fireside_Chat_202501.gif" mode="widthFix" bindtap="goCrumb" data-url="/pages/articles/articles" />
+
+    <view class="lawyer-ad-list bottom" wx:if="{{downAds.length}}">
+      <image class="lawyer-ad" wx:for="{{downAds}}" wx:for-item="ad" wx:key="id" src="{{ad.image}}" mode="widthFix" bindtap="openAdvertisement" data-link="{{ad.link}}" />
     </view>
   </view>
+
+  <view class="profile-empty" wx:if="{{!loading && !item}}">Profile not found</view>
 </view>
 <site-footer />
