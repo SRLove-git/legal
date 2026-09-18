@@ -165,10 +165,9 @@
   margin-bottom: 28rpx;
 }
 
-.drawer-title {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #00558d;
+.drawer-logo {
+  width: 200rpx;
+  height: auto;
 }
 
 .drawer-close {

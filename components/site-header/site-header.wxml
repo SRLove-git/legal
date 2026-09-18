@@ -23,7 +23,7 @@
 <view class="drawer-mask {{menuOpen ? 'show' : ''}}" bindtap="closeMenu"></view>
 <view class="drawer {{menuOpen ? 'open' : ''}}" style="padding-top:calc(96rpx + {{statusBarHeight}}px);">
   <view class="drawer-head">
-    <text class="drawer-title">LegalOne</text>
+    <image class="drawer-logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
     <view class="drawer-close" bindtap="closeMenu">✕</view>
   </view>
   <view class="drawer-search">
