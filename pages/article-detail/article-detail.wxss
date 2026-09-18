@@ -90,3 +90,153 @@
   padding: 14rpx 0;
   border-bottom: 1rpx solid #f1f1f1;
 }
+
+/* Award write-ups: the website prints its "LIST OF WINNERS" block below the
+   article body, with one artwork card per winner and a clamped biography. */
+.award {
+  margin-top: 50rpx;
+}
+
+.award-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150rpx;
+  margin: 60rpx -36rpx;
+  background: #000a5a;
+}
+
+.award-title text {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: 700;
+  text-align: center;
+}
+
+.award-rich {
+  display: block;
+  color: #303030;
+  font-size: 30rpx;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+.award-winner {
+  margin-bottom: 46rpx;
+}
+
+.award-card {
+  position: relative;
+  /* The artwork is a fixed banner; keep any very long details inside it. */
+  overflow: hidden;
+}
+
+.award-photo {
+  display: block;
+  width: 100%;
+  /* Website: display:block; margin:0 auto; max-width:100%; */
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* The winner details sit on the artwork's dark band, like .sa-lawyer-detail. */
+.award-info {
+  position: absolute;
+  top: 18rpx;
+  left: 34rpx;
+  width: 62%;
+}
+
+.award-winner-name {
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 1.15;
+  word-break: break-word;
+}
+
+.award-winner-local {
+  margin-top: 2rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+/* Firm/city and the View profile button on the left, phone/email on the right
+   (website .sa-lawyer-detail-left / -right). */
+.award-winner-columns {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 6rpx;
+}
+
+.award-winner-left {
+  flex: 44%;
+  padding-right: 6rpx;
+  min-width: 0;
+}
+
+.award-winner-right {
+  flex: 54%;
+  min-width: 0;
+}
+
+.award-winner-item {
+  display: block;
+  margin: 1rpx 0;
+  color: #ffffff;
+  font-size: 19rpx;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.award-view-profile {
+  width: 130rpx;
+  height: auto;
+  margin-top: 6rpx;
+}
+
+.award-bio-label {
+  display: flex;
+  align-items: center;
+  margin: 26rpx 0 12rpx;
+}
+
+.award-bio-bar {
+  width: 8rpx;
+  height: 34rpx;
+  margin-right: 16rpx;
+  background: #2f80ed;
+}
+
+.award-bio-label text {
+  color: #000000;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.award-bio {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  max-height: 300rpx;
+  color: #303030;
+  font-size: 29rpx;
+  line-height: 1.5;
+}
+
+.award-bio.open {
+  display: block;
+  max-height: none;
+}
+
+.award-bio-toggle {
+  margin-top: 10rpx;
+  color: #00558d;
+  font-size: 26rpx;
+  font-style: italic;
+  text-decoration: underline;
+  text-align: right;
+}

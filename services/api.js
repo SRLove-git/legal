@@ -2,6 +2,7 @@
 // Reference: Technical Annex A (Phase 1 public browse) + Annex B (Phase 2 login).
 const config = require('../config.js');
 const richText = require('./rich-text.js');
+const awardContent = require('./award-content.js');
 const BASE = config.baseUrl || 'https://www.legaloneglobal.com/';
 const CDN = 'https://legaloneglobal.azureedge.net/storelegaloneglobalpub/';
 
@@ -508,6 +509,9 @@ const api = {
       const articleContent = o.content || o.descript;
       norm.bodyHtml = richText.toRichHtml(articleContent);
       norm.body = norm.bodyHtml ? '' : stripHtml(articleContent);
+      // Award write-ups carry their "LIST OF WINNERS" block in awardContent;
+      // the website renders it below the article body.
+      norm.award = awardContent.parseAwardContent(o.awardContent);
       return norm;
     });
   },

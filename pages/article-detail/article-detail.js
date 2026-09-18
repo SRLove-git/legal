@@ -45,6 +45,24 @@ Page({
     const d = e.currentTarget.dataset;
     wx.navigateTo({ url: '/pages/article-detail/article-detail?id=' + encodeURIComponent(d.id || '') + '&title=' + encodeURIComponent(d.title || '') });
   },
+  // The award cards link to the winner's profile, exactly like the website's
+  // "View profile" button, but inside the mini program.
+  goWinner(e) {
+    const d = e.currentTarget.dataset;
+    if (!d.id) return;
+    const path = d.kind === 'lawfirms' ? '/pages/lawfirm-detail/lawfirm-detail' : '/pages/lawyer-detail/lawyer-detail';
+    wx.navigateTo({ url: path + '?id=' + encodeURIComponent(d.id) + '&name=' + encodeURIComponent(d.name || '') });
+  },
+  // The website clamps each biography and expands it with these buttons.
+  toggleBio(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    const blocks = (this.data.item && this.data.item.award && this.data.item.award.blocks) || [];
+    const block = blocks[index];
+    if (!block || block.type !== 'winner') return;
+    const patch = {};
+    patch['item.award.blocks[' + index + '].winner.open'] = !block.winner.open;
+    this.setData(patch);
+  },
   copyDoi() {
     const url = this.data.item && this.data.item.doiUrl;
     if (!url) return;
