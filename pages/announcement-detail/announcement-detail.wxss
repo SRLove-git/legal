@@ -11,7 +11,7 @@
 .ann-headline {
   font-size: 38rpx;
   font-weight: 700;
-  color: #00558d;
+  color: #2d2d2d;
   line-height: 1.3;
 }
 
