@@ -1,29 +1,98 @@
 <site-header />
-<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage lawyers-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Lawyers</text>
   </view>
-  <view class="list-filters">SORT & FILTER</view>
-  <view class="list-body">
-  <view class="list-heading"><view class="list-heading-dot"></view>Recently updated profiles</view>
-  <view class="list-search-wrap">
-    <input class="list-search-input" type="text" placeholder="Search lawyers" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+
+  <view class="lawyer-filter-toggle" bindtap="toggleFilters">
+    <text>{{sortFilterLabel}}</text>
+    <text class="filter-count" wx:if="{{activeFilterCount}}">{{activeFilterCount}}</text>
+    <view class="filter-chevron {{filtersOpen ? 'open' : ''}}"></view>
   </view>
-  <view class="list">
-    <view class="lawyer-row" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-name="{{item.name}}">
-      <image class="lawyer-row-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
-      <view class="lawyer-row-photo placeholder" wx:else></view>
-      <view class="lawyer-row-detail">
-        <view class="lawyer-row-name">{{item.name}}</view>
-        <view class="lawyer-row-pos" wx:if="{{item.positions.length}}">{{item.positions[0]}}</view>
-        <view class="lawyer-row-firm">{{item.firm}}</view>
-        <view class="lawyer-row-loc">{{item.location}}</view>
-      </view>
+
+  <view class="lawyer-filter-panel" wx:if="{{filtersOpen}}">
+    <picker class="lawyer-filter-picker" mode="selector" range="{{admissionOptions}}" value="{{admissionIndex}}" data-filter="admission" bindchange="onFilterChange">
+      <view class="lawyer-filter-field {{admissionIndex ? 'active' : ''}}">{{admissionOptions[admissionIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+    <picker class="lawyer-filter-picker" mode="selector" range="{{positionOptions}}" value="{{positionIndex}}" data-filter="position" bindchange="onFilterChange">
+      <view class="lawyer-filter-field {{positionIndex ? 'active' : ''}}">{{positionOptions[positionIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+    <picker class="lawyer-filter-picker" mode="selector" range="{{languageOptions}}" value="{{languageIndex}}" data-filter="language" bindchange="onFilterChange">
+      <view class="lawyer-filter-field {{languageIndex ? 'active' : ''}}">{{languageOptions[languageIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+    <picker class="lawyer-filter-picker" mode="selector" range="{{areaOptions}}" value="{{areaIndex}}" data-filter="area" bindchange="onFilterChange">
+      <view class="lawyer-filter-field {{areaIndex ? 'active' : ''}}">{{areaOptions[areaIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+    <view class="lawyer-search-field">
+      <input placeholder="Search by name / keyword" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+      <view class="lawyer-search-icon" bindtap="onSearch"></view>
     </view>
-    <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+    <picker class="lawyer-filter-picker" mode="selector" range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange">
+      <view class="lawyer-filter-field {{sortIndex ? 'active' : ''}}">{{sortOptions[sortIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+    <view class="lawyer-filter-actions">
+      <view class="lawyer-filter-button primary" bindtap="onApply">Apply</view>
+      <view class="lawyer-filter-button" bindtap="onReset">Reset</view>
+    </view>
   </view>
+
+  <view class="lawyer-list-body">
+    <view class="lawyer-heading-accent"></view>
+    <view class="lawyer-list-heading">Recently updated profiles</view>
+
+    <view class="lawyer-list">
+      <view class="lawyer-card" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-name="{{item.name}}">
+        <view class="lawyer-profile">
+          <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+          <view class="lawyer-photo placeholder" wx:else></view>
+          <view class="lawyer-profile-detail">
+            <view class="lawyer-name">{{item.name}}</view>
+            <view class="lawyer-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
+            <image class="lawyer-verified" wx:if="{{item.verified}}" src="https://www.legaloneglobal.com/images/Verilegal_logo_3_upper.png" mode="widthFix" />
+            <view class="lawyer-positions" wx:if="{{item.positions.length}}">
+              <text class="lawyer-position" wx:for="{{item.positions}}" wx:for-item="position" wx:key="*this">{{position}}</text>
+            </view>
+            <view class="lawyer-firm" wx:if="{{item.firm}}">{{item.firm}}</view>
+            <view class="lawyer-location" wx:if="{{item.location}}">{{item.location}}</view>
+            <view class="lawyer-contact" wx:for="{{item.contacts}}" wx:for-item="contact" wx:key="detail"><text>{{contact.type}}: </text>{{contact.detail}}</view>
+          </view>
+        </view>
+
+        <view class="lawyer-metrics-title">LegalOne Merits</view>
+        <view class="lawyer-metric-row metric-total">
+          <text>Total deals/cases</text>
+          <text class="metric-value" wx:if="{{item.numOfDeal}}">{{item.numOfDeal}}</text>
+          <view class="metric-value metric-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="lawyer-metric-row">
+          <view class="metric-label"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+          <text class="metric-value" wx:if="{{item.distinguished}}">{{item.distinguished}}</text>
+          <view class="metric-value metric-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="lawyer-metric-row">
+          <view class="metric-label"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+          <text class="metric-value" wx:if="{{item.exemplary}}">{{item.exemplary}}</text>
+          <view class="metric-value metric-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="lawyer-metric-row">
+          <view class="metric-label"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+          <text class="metric-value" wx:if="{{item.remarkable}}">{{item.remarkable}}</text>
+          <view class="metric-value metric-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="lawyer-testimonials-title">LegalOne Testimonials</view>
+        <view class="lawyer-metric-row testimonials-total">
+          <text>No. of Testimonials</text>
+          <text class="metric-value testimonial-value" wx:if="{{item.testimonials}}">{{item.testimonials}}</text>
+          <view class="metric-value testimonial-value metric-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen-blue.JPG" mode="aspectFit" /></view>
+        </view>
+      </view>
+
+      <view class="lawyer-loading" wx:if="{{loading}}">Loading...</view>
+      <view class="lawyer-list-end" wx:if="{{!loading && !hasMore && items.length}}">End of list</view>
+      <view class="lawyer-list-end" wx:if="{{!loading && !items.length}}">No matching profiles</view>
+    </view>
   </view>
 </view>
 <site-footer />
