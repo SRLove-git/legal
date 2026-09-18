@@ -24,11 +24,12 @@ const builder = (sel) => {
   const defaultColor = 'rgb(45, 45, 45)';
 
   const borderSide = (s, side) => {
-    const w = n(s[side + 'Width']);
+    const prop = 'border' + side;
+    const w = n(s[prop + 'Width']);
     if (!w) return '';
-    const st = s[side + 'Style'];
+    const st = s[prop + 'Style'];
     if (st === 'none' || st === 'hidden') return '';
-    return `border-${side}:${w}px ${st} ${s[side + 'Color']};`;
+    return `border-${side.toLowerCase()}:${w}px ${st} ${s[prop + 'Color']};`;
   };
 
   const contentLeft = (el) => {
@@ -105,6 +106,7 @@ const builder = (sel) => {
     const parent = node.parentElement;
     const ps = parent ? cs(parent) : null;
     const parts = [];
+    const attrs = [];
     let lead = '';
 
     const fs = n(s.fontSize);
@@ -155,6 +157,12 @@ const builder = (sel) => {
         break;
       case 'td':
       case 'th': {
+        // Merged rows are used for every principle/action heading. Dropping
+        // colspan makes those headings occupy only the first column in rich-text.
+        for (const name of ['colspan', 'rowspan']) {
+          const value = node.getAttribute(name);
+          if (value) attrs.push(`${name}="${value}"`);
+        }
         const table = node.closest('table');
         const tw = table ? table.getBoundingClientRect().width : 0;
         if (node.parentElement === table.querySelector('tr') && tw) {
@@ -187,7 +195,8 @@ const builder = (sel) => {
     }
     const style = parts.join('');
     const body = kids();
-    return `<${tag}${style ? ` style="${style}"` : ''}>${lead}${body}</${tag}>`;
+    const attrText = attrs.length ? ` ${attrs.join(' ')}` : '';
+    return `<${tag}${attrText}${style ? ` style="${style}"` : ''}>${lead}${body}</${tag}>`;
   };
   return render(root).replace(/\s{2,}/g, ' ');
 };
