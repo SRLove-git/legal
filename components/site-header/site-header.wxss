@@ -99,6 +99,7 @@
   align-items: center;
   gap: 6rpx;
   flex-shrink: 0;
+  margin-right: 20rpx;
 }
 
 .menu-label {
@@ -138,13 +139,14 @@
 .drawer {
   position: fixed;
   top: 0;
-  right: 0;
+  right: auto;
+  left: 0;
   bottom: 0;
   width: 78%;
   max-width: 600rpx;
   background: #ffffff;
   z-index: 9992;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   transition: transform 0.28s ease;
   padding-left: 36rpx;
   padding-right: 36rpx;

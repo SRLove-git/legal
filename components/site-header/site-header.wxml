@@ -1,14 +1,5 @@
 <view class="header" style="padding-top:{{statusBarHeight}}px;">
   <view class="header-inner" style="padding-left:36rpx;padding-right:{{headerRightPadding}}px;">
-    <view class="logo-wrap" bindtap="goHome">
-      <image class="logo" src="/assets/img/logo.png" mode="widthFix" />
-    </view>
-
-    <view class="ai-pill" bindtap="goAi">
-      <view class="ai-pill-prompt">{{aiPrompt}}<text class="ai-pill-caret">|</text></view>
-      <view class="ai-pill-action"><view class="ai-pill-icon"></view></view>
-    </view>
-
     <view class="menu-button" bindtap="toggleMenu">
       <text class="menu-label">Menu</text>
       <view class="menu-lines">
@@ -16,6 +7,15 @@
         <view class="menu-line"></view>
         <view class="menu-line"></view>
       </view>
+    </view>
+
+    <view class="logo-wrap" bindtap="goHome">
+      <image class="logo" src="/assets/img/logo.png" mode="widthFix" />
+    </view>
+
+    <view class="ai-pill" bindtap="goAi">
+      <view class="ai-pill-prompt">{{aiPrompt}}<text class="ai-pill-caret">|</text></view>
+      <view class="ai-pill-action"><view class="ai-pill-icon"></view></view>
     </view>
   </view>
 </view>
