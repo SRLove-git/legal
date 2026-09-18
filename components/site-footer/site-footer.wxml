@@ -1,18 +1,18 @@
 <view class="footer">
   <view class="footer-inner container">
     <view class="footer-top">
-      <image class="footer-logo" src="/assets/img/logo-white.png" mode="widthFix" bindtap="goHome" />
+      <image class="footer-logo" src="https://www.legaloneglobal.com/images/Logo2-white.XL.TradeMark.png" mode="widthFix" bindtap="goHome" />
       <view class="badges">
         <view class="badge">
-          <image class="badge-img" src="/assets/img/iso.png" mode="heightFix" />
+          <image class="badge-img" src="https://www.legaloneglobal.com/images/ISO_logo.png" mode="heightFix" />
           <text class="badge-text">ISO 9001:2015</text>
         </view>
         <view class="badge">
-          <image class="badge-img" src="/assets/img/doi.png" mode="heightFix" />
+          <image class="badge-img" src="https://www.legaloneglobal.com/images/DOI_logo.png" mode="heightFix" />
           <text class="badge-text">DOI: 10.62436</text>
         </view>
         <view class="badge badge-link" hover-class="badge-hover" bindtap="openIssn">
-          <image class="badge-img" src="/assets/img/issn.png" mode="heightFix" />
+          <image class="badge-img" src="https://www.legaloneglobal.com/images/ISSN_logo.png" mode="heightFix" />
           <text class="badge-text">ISSN: 3006-2756</text>
         </view>
       </view>

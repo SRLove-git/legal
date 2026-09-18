@@ -31,21 +31,21 @@ module.exports = {
       {
         "title": "LegalOne Deals of The Year China 2024",
         "description": "",
-        "image": "/assets/img/deal-case/DealsofTheYearChina2024.jpg",
+        "image": "https://www.legaloneglobal.com/images/DealCase/DealsofTheYearChina2024.png",
         "webUrl": "https://www.legaloneglobal.com/articles/a-1754038882395"
       },
       {
         "title": "LegalOne Deals of The Year China 2023",
         "description": "",
-        "image": "/assets/img/deal-case/DealsofTheYearChina2023.jpg",
+        "image": "https://www.legaloneglobal.com/images/DealCase/DealsofTheYearChina2023.png",
         "webUrl": "https://www.legaloneglobal.com/articles/a-1709819050106"
       }
     ],
     "archive": {
       "title": "LegalOne Deals of the Year in Libraries Worldwide",
       "description": "The LegalOne Deals of the Year yearbook has been archived in the collections of several renowned university libraries, national libraries, and embassies worldwide, underscoring LegalOne's outstanding contributions to the documentation of legal practice achievements and disseminating professional knowledge.",
-      "image": "/assets/img/deal-case/DealsofTheYearyearbook.jpg",
-      "map": "/assets/img/deal-case/deals-of-the-year-archive-world-map.jpg"
+      "image": "https://www.legaloneglobal.com/images/DealCase/DealsofTheYearyearbook.png",
+      "map": "https://www.legaloneglobal.com/images/AboutUs/deals-of-the-year-archived-worldwide/deals-of-the-year-archive-world-map.png"
     }
   },
   "faq": [

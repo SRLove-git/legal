@@ -81,9 +81,9 @@ function parseMethodology(html) {
   return { cards: panels.slice(0, 4), merits: panels[4] };
 }
 
-function localImage(src) {
-  const filename = src.split('/').pop();
-  return `/assets/img/deal-case/${filename.replace(/\.png$/i, '.jpg')}`;
+// Images stay on the website/CDN, so the mini program never ships image copies.
+function siteImage(src) {
+  return /^https?:\/\//i.test(src) ? src : ORIGIN + src;
 }
 
 function parseDoty(html) {
@@ -93,7 +93,7 @@ function parseDoty(html) {
     return {
       title: cleanText(matchOne(body, /class="deals-doty-feature-card-title">([\s\S]*?)<\/h2>/, 'feature title')),
       description: '',
-      image: localImage(matchOne(body, /<img[^>]+src="([^"]+)"/, 'feature image')),
+      image: siteImage(matchOne(body, /<img[^>]+src="([^"]+)"/, 'feature image')),
       webUrl: ORIGIN + matchOne(body, /<a[^>]+href="([^"]+)"/, 'feature link')
     };
   });
@@ -105,8 +105,8 @@ function parseDoty(html) {
     archive: {
       title: 'LegalOne Deals of the Year in Libraries Worldwide',
       description: cleanText(matchOne(archive, /class="deals-doty-feature-card-desc">([\s\S]*?)<\/p>/, 'archive description')),
-      image: localImage(matchOne(archive, /<img[^>]+src="([^"]+)"/, 'archive image')),
-      map: localImage(matchOne(html, /class="about-archive-map-image"[\s\S]*?src="([^"]+)"/, 'archive map'))
+      image: siteImage(matchOne(archive, /<img[^>]+src="([^"]+)"/, 'archive image')),
+      map: siteImage(matchOne(html, /class="about-archive-map-image"[\s\S]*?src="([^"]+)"/, 'archive map'))
     }
   };
 }

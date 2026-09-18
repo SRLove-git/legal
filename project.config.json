@@ -31,6 +31,10 @@
         "value": ".uv-cache-docs"
       },
       {
+        "type": "folder",
+        "value": "assets/img"
+      },
+      {
         "type": "file",
         "value": "project.private.config.json"
       }

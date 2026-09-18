@@ -1,13 +1,13 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Deals/Cases</text>
   </view>
 
   <view class="list-hero">
-    <image class="list-hero-bg" src="/assets/img/homepage-banner.png" mode="aspectFill" />
+    <image class="list-hero-bg" src="https://www.legaloneglobal.com/images/Homepage/HomepageBanner.png" mode="aspectFill" />
     <view class="list-hero-inner">
       <view class="list-hero-title"><text class="list-hero-title-line">Showcasing Outstanding</text><text class="list-hero-title-line">Deals & Cases</text></view>
       <view class="list-hero-desc">Discover the LegalOne archive of corporate and commercial legal matters, a comprehensive collection of highly regarded transactions and cases submitted by lawyers and law firms, independently recognised with LegalOne Merits, a distinction that reflects excellence.</view>

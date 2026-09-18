@@ -1,7 +1,7 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="ai-hero">
-    <image class="ai-logo" src="/assets/img/logo.png" mode="widthFix" />
+    <image class="ai-logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
     <view class="ai-search-bar">
       <input
         class="ai-input"

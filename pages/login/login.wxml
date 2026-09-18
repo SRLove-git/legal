@@ -1,7 +1,7 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="login">
-    <image class="login-logo" src="/assets/img/logo.png" mode="widthFix" />
+    <image class="login-logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
     <view class="login-title">Login</view>
     <view class="field">
       <input class="field-input" type="text" placeholder="Email address" value="{{email}}" bindinput="onEmail" />

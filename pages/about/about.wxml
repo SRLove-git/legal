@@ -1,18 +1,18 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">About</text>
   </view>
 
   <view class="about-hero">
-    <image class="about-hero-bg" src="/assets/img/about-banner.png" mode="aspectFill" />
+    <image class="about-hero-bg" src="https://www.legaloneglobal.com/images/Homepage/HomepageBanner.png" mode="aspectFill" />
     <view class="about-hero-inner">
       <view class="about-hero-title">{{hero.title}}</view>
       <view class="about-hero-subtitle">{{hero.subtitle}}</view>
       <view class="about-hero-brochures">
-        <image class="about-hero-brochure-cover" src="/assets/img/brochure-cover.jpg" mode="aspectFill" />
+        <image class="about-hero-brochure-cover" src="https://www.legaloneglobal.com/images/AboutUs/hero/legalone-corporate-brochure-cover.png" mode="aspectFill" />
         <view class="about-hero-brochure-label">{{hero.brochureLabel}}</view>
         <view class="about-hero-brochure-links">
           <block wx:for="{{hero.brochures}}" wx:key="label">

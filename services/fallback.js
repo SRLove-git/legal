@@ -2,8 +2,12 @@
 // It mirrors the same normalized shape as services/api.js so pages can render either source.
 const d = require('../data/content.js');
 
-function img(name) {
-  return name ? '/assets/img/' + name : '';
+// Snapshot entries carry the website/CDN URLs, so images stay on the official
+// host instead of shipping copies inside the mini program package.
+const WATERMARK = 'https://www.legaloneglobal.com/images/Logo-watermark.s.png';
+
+function img(url) {
+  return url || '';
 }
 
 function lastSeg(link) {
@@ -32,7 +36,7 @@ module.exports = {
     return { id: lastSeg(x.link), title: x.title, rank: x.rank, date: bareDate(x.date), updated: '', jurisdictionText: '', labels: [] };
   }),
   latestLawfirms: d.latestLawfirms.map(function (x) {
-    return { id: lastSeg(x.link), name: x.name, image: img('watermark.png') };
+    return { id: lastSeg(x.link), name: x.name, image: WATERMARK };
   }),
   latestPartners: d.latestPartners.map(function (x) {
     return { id: lastSeg(x.link), name: x.name, image: '', positions: [], firm: '', location: '' };
@@ -56,6 +60,6 @@ module.exports = {
     return { id: lastSeg(x.link), name: x.name, image: img(x.image), positions: x.positions, firm: x.firm, location: x.location };
   }),
   lawfirms: d.lawfirms.map(function (x) {
-    return { id: lastSeg(x.link), name: x.name, image: img('watermark.png') };
+    return { id: lastSeg(x.link), name: x.name, image: img(x.image) || WATERMARK };
   })
 };

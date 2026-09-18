@@ -25,7 +25,9 @@
 ## 目录
 
 - `data/content.js` — 从原站提取的结构化内容
-- `assets/img/` — 已本地化的图片资源
+- 图片统一走官网/CDN 链接（`https://www.legaloneglobal.com/images/...` 与
+  `https://legaloneglobal.azureedge.net/...`），小程序包内不再放本地图片副本；
+  旧的 `assets/img/` 已不再被引用，可从项目里删除。
 - `components/` — 共享的站点头部/页脚组件
 - `pages/` — 各页面
 
@@ -44,6 +46,7 @@
    `https://www.legaloneglobal.com`
 2. 添加「downloadFile 合法域名」：
    `https://legaloneglobal.azureedge.net`
+   `https://www.legaloneglobal.com`（页面里的图片直接引用官网图片地址，必须一起加）
 3. 本地开发可在 DevTools「详情 → 本地设置」勾选「不校验合法域名」，或保持 `project.config.json` 中 `urlCheck: false`。
 
 ## 说明

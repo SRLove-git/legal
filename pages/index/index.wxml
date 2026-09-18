@@ -13,7 +13,7 @@
   >
     <swiper-item wx:for="{{announcements}}" wx:key="id">
       <view class="announcement-slide">
-        <image class="announcement-banner" src="/assets/img/homepage-banner.png" mode="aspectFill" />
+        <image class="announcement-banner" src="https://www.legaloneglobal.com/images/Homepage/HomepageBanner.png" mode="aspectFill" />
         <view class="announcement-inner">
           <view class="announcement-title">{{item.type}}</view>
           <view class="announcement-content">

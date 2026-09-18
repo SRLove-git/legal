@@ -1,13 +1,13 @@
 <site-header />
 <view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Register</text>
   </view>
 
   <view class="form">
-    <image class="form-logo" src="/assets/img/logo.png" mode="widthFix" />
+    <image class="form-logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
     <view class="form-title">Create your account</view>
 
     <block wx:if="{{step === 1}}">

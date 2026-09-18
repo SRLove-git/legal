@@ -10,7 +10,7 @@
     </view>
 
     <view class="logo-wrap" bindtap="goHome">
-      <image class="logo" src="/assets/img/logo.png" mode="widthFix" />
+      <image class="logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
     </view>
 
     <view class="ai-pill" bindtap="goAi">
