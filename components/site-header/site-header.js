@@ -1,6 +1,7 @@
 Component({
   data: {
     menuOpen: false,
+    dealsMenuOpen: false,
     keyword: '',
     loggedIn: false,
     statusBarHeight: 20,
@@ -8,9 +9,15 @@ Component({
     nav: [
       { label: 'Home', path: '/pages/index/index' },
       { label: 'Announcements', path: '/pages/announcements/announcements' },
-      { label: 'Deals / Cases', path: '/pages/deals/deals' },
-      { label: 'Deals of the Year', path: '/pages/deal-case-intro/deal-case-intro' },
-      { label: 'FAQ', path: '/pages/deal-case-intro/deal-case-intro' },
+      {
+        label: 'Deals / Cases',
+        path: '/pages/deals/deals',
+        children: [
+          { label: 'Methodology', path: '/pages/deal-case-intro/deal-case-intro?section=methodology' },
+          { label: 'Deals of the Year', path: '/pages/deal-case-intro/deal-case-intro?section=doty' },
+          { label: 'Frequently asked questions', path: '/pages/deal-case-intro/deal-case-intro?section=faq' }
+        ]
+      },
       { label: 'Awards', path: '/pages/awards/awards' },
       { label: 'Articles', path: '/pages/articles/articles' },
       { label: 'Lawyers', path: '/pages/lawyers/lawyers' },
@@ -41,11 +48,14 @@ Component({
       this.setData({ menuOpen: !this.data.menuOpen });
     },
     closeMenu() {
-      this.setData({ menuOpen: false });
+      this.setData({ menuOpen: false, dealsMenuOpen: false });
+    },
+    toggleDealsMenu() {
+      this.setData({ dealsMenuOpen: !this.data.dealsMenuOpen });
     },
     onNav(e) {
       const path = e.currentTarget.dataset.path;
-      this.setData({ menuOpen: false });
+      this.setData({ menuOpen: false, dealsMenuOpen: false });
       if (!path) return;
       wx.navigateTo({ url: path });
     },

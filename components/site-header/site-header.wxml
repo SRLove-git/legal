@@ -42,13 +42,40 @@
     <view class="drawer-search-btn" bindtap="onSearch">Search</view>
   </view>
   <view class="drawer-nav">
-    <view
-      class="drawer-nav-item"
-      wx:for="{{nav}}"
-      wx:key="label"
-      data-path="{{item.path}}"
-      bindtap="onNav"
-    >{{item.label}}</view>
+    <block wx:for="{{nav}}" wx:for-item="navItem" wx:key="label">
+      <view class="drawer-nav-group" wx:if="{{navItem.children}}">
+        <view class="drawer-nav-row">
+          <view
+            class="drawer-nav-item drawer-nav-parent"
+            data-path="{{navItem.path}}"
+            bindtap="onNav"
+          >{{navItem.label}}</view>
+          <view
+            class="drawer-nav-toggle"
+            bindtap="toggleDealsMenu"
+            aria-label="{{dealsMenuOpen ? 'Hide Deals / Cases submenu' : 'Show Deals / Cases submenu'}}"
+          >
+            <view class="drawer-nav-chevron {{dealsMenuOpen ? 'open' : ''}}"></view>
+          </view>
+        </view>
+        <view class="drawer-subnav {{dealsMenuOpen ? 'open' : ''}}">
+          <view
+            class="drawer-subnav-item"
+            wx:for="{{navItem.children}}"
+            wx:for-item="childItem"
+            wx:key="label"
+            data-path="{{childItem.path}}"
+            bindtap="onNav"
+          >{{childItem.label}}</view>
+        </view>
+      </view>
+      <view
+        class="drawer-nav-item"
+        wx:else
+        data-path="{{navItem.path}}"
+        bindtap="onNav"
+      >{{navItem.label}}</view>
+    </block>
     <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goAccount">Account</view>
     <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goLogout">Logout</view>
     <view class="drawer-nav-item" wx:else bindtap="goLogin">Login</view>
