@@ -73,12 +73,15 @@ function remove(path, options) {
   return request('DELETE', path, options);
 }
 
+// The API only accepts the literal brace form. Percent-encoded braces
+// ("page=%7Bmax:12,start:1%7D") are rejected with HTTP 500, which is what the
+// website sends too, so the query keeps the braces verbatim.
 function encodePage(max, start) {
-  return 'page=' + encodeURIComponent('{max:' + max + ',start:' + start + '}');
+  return 'page={max:' + max + ',start:' + start + '}';
 }
 
 function encodePageCapital(max, start) {
-  return 'Page=' + encodeURIComponent('{Max:' + max + ',Start:' + start + '}');
+  return 'Page={Max:' + max + ',Start:' + start + '}';
 }
 
 // Shared loader for profile sub-lists (cases / articles / lawyers / partners / honours).
