@@ -1,57 +1,173 @@
 <site-header />
-<view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb">
+<view class="subpage lawfirm-detail-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb" wx:if="{{item}}">
     <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/lawfirms/lawfirms">Law Firms</text>
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-current">{{item.name}}</text>
   </view>
-  <view class="detail">
+
+  <view class="profile-loading" wx:if="{{loading}}">Loading...</view>
+
+  <view class="lawfirm-detail" wx:if="{{item}}">
+    <view class="firm-ref" wx:if="{{item.refNo}}">Ref.: {{item.refNo}}</view>
+
+    <view class="firm-name-block">
+      <view class="firm-name">{{item.name}}</view>
+      <view class="firm-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
+    </view>
+
     <view class="firm-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
-    <view class="firm-logo-box">
+
+    <view class="firm-action-row">
+      <button class="firm-share-button" open-type="share">
+        <text class="firm-share-label">Share</text>
+        <view class="firm-share-icon"><image class="firm-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
+      </button>
+      <view class="firm-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+        <text class="firm-save-label">{{saved ? 'Saved' : 'Save'}}</text>
+        <image class="firm-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="firm-logo-box" wx:if="{{item.image}}">
       <image class="firm-logo" src="{{item.image}}" mode="aspectFit" />
     </view>
-    <view class="firm-name">{{item.name}}</view>
-    <view class="firm-established" wx:if="{{item.established}}">Established in {{item.established}}</view>
-    <view class="firm-website" wx:if="{{item.website}}">{{item.website}}</view>
-    <view class="firm-stats" wx:if="{{item.numOfLawyer || item.numOfPartner || item.numOfOffice}}">
-      <text wx:if="{{item.numOfLawyer}}">Lawyers: {{item.numOfLawyer}}</text>
-      <text wx:if="{{item.numOfPartner}}"> · Partners: {{item.numOfPartner}}</text>
-      <text wx:if="{{item.numOfOffice}}"> · Offices: {{item.numOfOffice}}</text>
-    </view>
-    <view class="firm-loc" wx:if="{{item.location}}">{{item.location}}</view>
 
-    <view class="firm-section" wx:if="{{item.overview}}">
-      <view class="firm-section-title">Overview</view>
-      <rich-text class="firm-rich" wx:if="{{item.overviewHtml}}" nodes="{{item.overviewHtml}}"></rich-text>
-      <view class="firm-overview" wx:else>{{item.overview}}</view>
+    <view class="firm-established" wx:if="{{item.established}}">Established in {{item.established}}</view>
+    <view class="firm-website" wx:if="{{item.website}}"><text class="firm-website-link" bindtap="goWebsite">{{item.website}}</text></view>
+
+    <view class="firm-info" wx:if="{{item.numOfOffice || item.numOfPartner || item.numOfLawyer}}">
+      <view class="firm-info-row">
+        <view class="firm-info-heading">Offices</view>
+        <view class="firm-info-detail">{{item.numOfOffice ? item.numOfOffice : '-'}}</view>
+      </view>
+      <view class="firm-info-row">
+        <view class="firm-info-heading">Partners</view>
+        <view class="firm-info-detail">{{item.numOfPartner ? item.numOfPartner + '+' : '-'}}</view>
+      </view>
+      <view class="firm-info-row">
+        <view class="firm-info-heading">Lawyers</view>
+        <view class="firm-info-detail">{{item.numOfLawyer ? item.numOfLawyer + '+' : '-'}}</view>
+      </view>
     </view>
-    <view class="firm-section" wx:if="{{item.offices.length}}">
-      <view class="firm-section-title">Offices</view>
-      <view class="firm-list-item" wx:for="{{item.offices}}" wx:key="*this">{{item}}</view>
+
+    <view class="firm-merit-card">
+      <view class="firm-merit-label">LegalOne Merits</view>
+      <view class="firm-merit-row total">
+        <text class="firm-merit-name">Total deals/cases</text>
+        <text class="firm-merit-value" wx:if="{{item.numOfDeal}}">{{item.numOfDeal}}</text>
+        <view class="firm-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+      <view class="firm-merit-row">
+        <view class="firm-merit-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+        <text class="firm-merit-value" wx:if="{{item.distinguished}}">{{item.distinguished}}</text>
+        <view class="firm-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+      <view class="firm-merit-row">
+        <view class="firm-merit-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+        <text class="firm-merit-value" wx:if="{{item.exemplary}}">{{item.exemplary}}</text>
+        <view class="firm-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+      <view class="firm-merit-row">
+        <view class="firm-merit-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+        <text class="firm-merit-value" wx:if="{{item.remarkable}}">{{item.remarkable}}</text>
+        <view class="firm-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
     </view>
+
+    <view class="firm-ad-list" wx:if="{{topAds.length}}">
+      <image class="firm-ad" wx:for="{{topAds}}" wx:for-item="ad" wx:key="id" src="{{ad.image}}" mode="widthFix" bindtap="openAdvertisement" data-link="{{ad.link}}" />
+    </view>
+
+    <view class="firm-band">LegalOne data and insights</view>
+
+    <view class="firm-section" wx:if="{{cases.length}}">
+      <view class="firm-section-title">Deals/cases</view>
+      <view class="firm-linked-item dot" wx:for="{{cases}}" wx:for-item="deal" wx:key="id" bindtap="goDeal" data-id="{{deal.id}}" data-title="{{deal.title}}">
+        <view class="linked-title">{{deal.title}}</view>
+        <view class="linked-rank" wx:if="{{deal.rank}}">
+          <image class="rank-icon-small" wx:if="{{deal.rankIcon}}" src="{{deal.rankIcon}}" mode="aspectFit" />
+          <text>{{deal.rank}}</text>
+        </view>
+        <view class="linked-meta" wx:if="{{deal.completed}}">{{deal.completed}}</view>
+      </view>
+      <view class="firm-more" wx:if="{{moreCases}}" bindtap="showMore" data-kind="cases">More</view>
+    </view>
+
+    <view class="firm-section" wx:if="{{articles.length}}">
+      <view class="firm-section-title">LegalOne column</view>
+      <view class="firm-linked-item dot" wx:for="{{articles}}" wx:for-item="article" wx:key="id" bindtap="goArticle" data-id="{{article.id}}" data-title="{{article.title}}">
+        <view class="linked-title">{{article.title}}</view>
+        <view class="linked-meta" wx:if="{{article.publishedDate}}">{{article.publishedDate}}</view>
+      </view>
+      <view class="firm-more" wx:if="{{moreArticles}}" bindtap="showMore" data-kind="articles">More</view>
+    </view>
+
     <view class="firm-section" wx:if="{{item.industries.length}}">
-      <view class="firm-section-title">Practice areas</view>
-      <view class="firm-list-item" wx:for="{{item.industries}}" wx:key="*this">{{item}}</view>
+      <view class="firm-section-title">Practice areas and industries</view>
+      <view class="firm-plain-item dot" wx:for="{{item.industries}}" wx:for-item="area" wx:key="*this">{{area}}</view>
     </view>
-    <view class="firm-section" wx:if="{{item.contacts.length}}">
-      <view class="firm-section-title">Contact</view>
-      <view class="firm-list-item" wx:for="{{item.contacts}}" wx:key="*this">{{item}}</view>
+
+    <view class="firm-section" wx:if="{{honours.length}}">
+      <view class="firm-section-title">Lawyers' honours list</view>
+      <view class="firm-linked-item dot" wx:for="{{honours}}" wx:for-item="honour" wx:key="articleId" bindtap="goArticle" data-id="{{honour.articleId}}" data-title="{{honour.awardName}}">
+        <view class="linked-title">{{honour.name}}<text wx:if="{{honour.name && honour.awardName}}"> - </text>{{honour.awardName}}</view>
+      </view>
+      <view class="firm-more" wx:if="{{moreHonours}}" bindtap="showMore" data-kind="honours">More</view>
+    </view>
+
+    <view class="firm-section" wx:if="{{offices.length}}">
+      <view class="firm-section-title">Offices</view>
+      <view class="firm-office" wx:for="{{offices}}" wx:for-item="office" wx:key="id" wx:for-index="officeIndex">
+        <view class="firm-office-name" bindtap="toggleOffice" data-index="{{officeIndex}}">
+          <image class="firm-office-toggle" wx:if="{{office.industries.length}}" src="{{office.open ? 'https://www.legaloneglobal.com/images/arrow-up2.png' : 'https://www.legaloneglobal.com/images/arrow-down2.png'}}" mode="aspectFit" />
+          <text>{{office.city}}</text>
+        </view>
+        <view class="firm-office-areas" wx:if="{{office.open}}">
+          <view class="firm-office-area" wx:for="{{office.industries}}" wx:for-item="area" wx:key="*this">{{area}}</view>
+        </view>
+      </view>
+      <view class="firm-more" wx:if="{{moreOffices}}" bindtap="showMore" data-kind="offices">More</view>
     </view>
 
     <view class="firm-section" wx:if="{{lawyers.length}}">
       <view class="firm-section-title">Lawyers</view>
-      <view class="firm-list-item" wx:for="{{lawyers}}" wx:key="id" bindtap="goLawyer" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+      <view class="firm-linked-item dot" wx:for="{{lawyers}}" wx:for-item="lawyer" wx:key="id" bindtap="goLawyer" data-id="{{lawyer.id}}" data-name="{{lawyer.name}}">
+        <view class="linked-title">{{lawyer.name}}</view>
+      </view>
+      <view class="firm-more" wx:if="{{moreLawyers}}" bindtap="showMore" data-kind="lawyers">More</view>
     </view>
-    <view class="firm-section" wx:if="{{cases.length}}">
-      <view class="firm-section-title">Cases / deals</view>
-      <view class="firm-list-item" wx:for="{{cases}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+
+    <view class="firm-section" wx:if="{{partners.length}}">
+      <view class="firm-section-title">Partners</view>
+      <view class="firm-linked-item dot" wx:for="{{partners}}" wx:for-item="partner" wx:key="id" bindtap="goLawyer" data-id="{{partner.id}}" data-name="{{partner.name}}">
+        <view class="linked-title">{{partner.name}}</view>
+      </view>
+      <view class="firm-more" wx:if="{{morePartners}}" bindtap="showMore" data-kind="partners">More</view>
     </view>
-    <view class="firm-section" wx:if="{{honours.length}}">
-      <view class="firm-section-title">Honours</view>
-      <view class="firm-list-item" wx:for="{{honours}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+
+    <view class="firm-band profile">Profile</view>
+
+    <view class="firm-section" wx:if="{{item.overview}}">
+      <view class="firm-section-title">Overview</view>
+      <rich-text class="firm-overview-rich" wx:if="{{item.overviewHtml}}" nodes="{{item.overviewHtml}}"></rich-text>
+      <view class="firm-overview" wx:else>{{item.overview}}</view>
+    </view>
+
+    <view class="firm-section" wx:if="{{item.industriesProvidedByClient}}">
+      <view class="firm-section-title">Practice areas and industries</view>
+      <view class="firm-overview">{{item.industriesProvidedByClient}}</view>
+    </view>
+
+    <image class="firm-bottom-banner" src="https://www.legaloneglobal.com/images/inHouseAdv/Large_Leaderboard_970x90_Fireside_Chat_202501.gif" mode="widthFix" bindtap="goCrumb" data-url="/pages/articles/articles" />
+
+    <view class="firm-ad-list bottom" wx:if="{{downAds.length}}">
+      <image class="firm-ad" wx:for="{{downAds}}" wx:for-item="ad" wx:key="id" src="{{ad.image}}" mode="widthFix" bindtap="openAdvertisement" data-link="{{ad.link}}" />
     </view>
   </view>
+
+  <view class="profile-empty" wx:if="{{!loading && !item}}">Profile not found</view>
 </view>
 <site-footer />

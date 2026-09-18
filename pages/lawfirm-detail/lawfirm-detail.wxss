@@ -1,89 +1,457 @@
-.detail {
-  padding: 30rpx 36rpx 60rpx;
+.lawfirm-detail-page {
+  background: #ffffff;
 }
 
-.firm-updated {
-  font-size: 24rpx;
-  color: #777777;
-  margin-bottom: 18rpx;
-}
-
-.firm-established,
-.firm-website {
-  margin-top: 10rpx;
-  font-size: 26rpx;
-  color: #555555;
-}
-
-.firm-section {
-  margin-top: 44rpx;
-}
-
-.firm-section-title {
-  font-size: 34rpx;
-  font-weight: 700;
-  color: #00558d;
-  padding-bottom: 12rpx;
-  border-bottom: 2rpx solid #00558d;
-  margin-bottom: 20rpx;
-}
-
-.firm-list-item {
-  font-size: 28rpx;
+.lawfirm-detail {
+  padding: 20rpx 26rpx 80rpx;
   color: #2d2d2d;
-  line-height: 1.5;
-  padding: 12rpx 0;
-  border-bottom: 1rpx solid #f1f1f1;
 }
 
-.firm-logo-box {
-  width: 100%;
-  height: 260rpx;
-  background: #f2f2f2;
-  border-radius: 12rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30rpx;
+.firm-ref {
+  padding: 10rpx 0 20rpx;
+  color: #2d2d2d;
+  font-size: 25rpx;
+  line-height: 1.4;
 }
 
-.firm-logo {
-  width: 300rpx;
-  height: 180rpx;
+.firm-name-block {
+  margin-bottom: 12rpx;
 }
 
 .firm-name {
-  margin-top: 26rpx;
-  font-size: 42rpx;
+  color: #171717;
+  font-size: 36rpx;
   font-weight: 700;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.firm-local-name {
+  margin-top: 6rpx;
+  color: #171717;
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.firm-updated {
+  margin-bottom: 16rpx;
+  font-size: 25rpx;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.firm-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 40rpx;
+  width: 100%;
+  padding: 8rpx 0 16rpx;
+  overflow: visible;
+}
+
+.firm-share-button,
+.firm-save-button {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin: 0;
+  padding: 0;
+  min-height: 42rpx;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #636363;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 42rpx;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.firm-share-button::after {
+  border: 0;
+}
+
+.firm-share-icon {
+  width: 42rpx;
+  height: 34rpx;
+  overflow: hidden;
+}
+
+.firm-share-sprite {
+  display: block;
+  width: 42rpx;
+  height: auto;
+}
+
+.firm-save-icon {
+  display: block;
+  width: 42rpx;
+  height: 42rpx;
+  flex: 0 0 42rpx;
+}
+
+.firm-save-button.is-saved {
   color: #00558d;
 }
 
-.firm-stats {
-  margin-top: 16rpx;
-  font-size: 27rpx;
-  color: #555555;
+.firm-save-button.is-loading {
+  opacity: 0.55;
 }
 
-.firm-loc {
-  margin-top: 8rpx;
+/* Website logo box: 200x80px on mobile. */
+.firm-logo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 160rpx;
+  margin: 20rpx auto 0;
+}
+
+.firm-logo {
+  width: 400rpx;
+  height: 160rpx;
+}
+
+.firm-established {
+  margin-top: 40rpx;
+  font-size: 30rpx;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.firm-website {
+  padding: 10rpx 0;
+  text-align: center;
+}
+
+.firm-website-link {
+  color: #0084ba;
+  font-size: 30rpx;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.firm-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 24rpx 0 0;
+}
+
+.firm-info-row {
+  position: relative;
+  width: 45%;
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+.firm-info-row:nth-child(1) {
+  border-right: 2rpx solid #99cee3;
+}
+
+.firm-info-row:nth-child(1),
+.firm-info-row:nth-child(2) {
+  padding-bottom: 22rpx;
+}
+
+.firm-info-row:nth-child(1)::after,
+.firm-info-row:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  left: 17%;
+  bottom: 0;
+  width: 66%;
+  border-bottom: 2rpx solid #99cee3;
+}
+
+.firm-info-heading {
+  color: #0084ba;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.firm-info-detail {
+  margin-top: 10rpx;
+  color: #2d2d2d;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* LegalOne Merits table (website .lawfirm-meritTableProfile). */
+.firm-merit-card {
+  position: relative;
+  margin: 70rpx auto 40rpx;
+  padding: 30rpx 20rpx 20rpx;
+  border: 4rpx solid #00558d;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.firm-merit-label {
+  position: absolute;
+  left: 50%;
+  top: -30rpx;
+  width: 400rpx;
+  box-sizing: border-box;
+  padding: 14rpx 20rpx;
+  border: 2rpx solid #99cee3;
+  border-radius: 20rpx;
+  background: #00558d;
+  color: #ffffff;
+  font-size: 29rpx;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.firm-merit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64rpx;
+  margin: 12rpx 0;
+}
+
+.firm-merit-row.total {
+  margin-top: 30rpx;
+  font-weight: 700;
+}
+
+.firm-merit-name {
+  display: flex;
+  align-items: center;
+}
+
+.merit-icon {
+  width: 44rpx;
+  height: 60rpx;
+  margin-right: 10rpx;
+}
+
+.firm-merit-value {
+  min-width: 90rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 10rpx;
+  background: #00558d;
+  color: #ffffff;
   font-size: 26rpx;
-  color: #555555;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.firm-merit-value.unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90rpx;
+  height: 52rpx;
+  padding: 0;
+  overflow: hidden;
+}
+
+.firm-merit-value.unavailable image {
+  display: block;
+  width: 10rpx;
+  height: 4rpx;
+}
+
+.firm-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80rpx;
+  margin: 74rpx 0;
+  background: #00558d;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.firm-section {
+  margin-top: 64rpx;
+}
+
+.firm-section-title {
+  margin-bottom: 18rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 2rpx solid #339dc8;
+  color: #0084ba;
+  font-size: 32rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.firm-linked-item {
+  padding: 16rpx 0;
+}
+
+.linked-title {
+  color: #0084ba;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.linked-rank {
+  display: flex;
+  align-items: center;
+  margin: 4rpx 0;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.rank-icon-small {
+  width: 32rpx;
+  height: 42rpx;
+  margin-right: 4rpx;
+  flex: 0 0 32rpx;
+}
+
+.linked-meta {
+  margin-top: 4rpx;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.firm-plain-item {
+  padding: 10rpx 0;
+  color: #2d2d2d;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.firm-linked-item.dot,
+.firm-plain-item.dot {
+  position: relative;
+  padding-left: 25rpx;
+}
+
+.firm-linked-item.dot::before,
+.firm-plain-item.dot::before {
+  content: "";
+  position: absolute;
+  left: 3rpx;
+  top: 29rpx;
+  width: 7rpx;
+  height: 7rpx;
+  border-radius: 50%;
+  background: #0084ba;
+}
+
+.firm-office {
+  padding: 12rpx 0;
+}
+
+.firm-office-name {
+  display: flex;
+  align-items: center;
+  color: #2d2d2d;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.firm-office-toggle {
+  width: 24rpx;
+  height: 24rpx;
+  margin: 0 8rpx 0 -8rpx;
+  flex: 0 0 24rpx;
+}
+
+.firm-office-areas {
+  margin-top: 4rpx;
+}
+
+.firm-office-area {
+  position: relative;
+  padding: 4rpx 0 4rpx 44rpx;
+  color: #2d2d2d;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.firm-office-area::before {
+  content: "";
+  position: absolute;
+  left: 32rpx;
+  top: 18rpx;
+  width: 7rpx;
+  height: 7rpx;
+  border-radius: 50%;
+  background: #0084ba;
+}
+
+.firm-more {
+  display: table;
+  margin: 28rpx auto 0;
+  padding: 12rpx 60rpx;
+  border-radius: 40rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.firm-overview,
+.firm-overview-rich {
+  display: block;
+  overflow: hidden;
+  color: #303030;
+  font-size: 29rpx;
+  line-height: 1.55;
+  text-align: justify;
+  word-break: break-word;
 }
 
 .firm-overview {
-  margin-top: 18rpx;
-  font-size: 28rpx;
-  color: #2d2d2d;
-  line-height: 1.6;
   white-space: pre-wrap;
 }
 
-.firm-rich {
+.firm-ad-list {
+  margin: 58rpx 0 14rpx;
+}
+
+.firm-ad-list.bottom {
+  margin-top: 42rpx;
+}
+
+.firm-ad {
   display: block;
-  margin-top: 18rpx;
-  color: #303030;
-  font-size: 32rpx;
-  line-height: 1.5;
-  overflow: hidden;
+  width: 600rpx;
+  max-width: 100%;
+  margin: 0 auto 38rpx;
+  border: 2rpx solid #cccccc;
+  box-sizing: border-box;
+}
+
+.firm-bottom-banner {
+  display: block;
+  width: 100%;
+  margin-top: 64rpx;
+}
+
+.profile-loading,
+.profile-empty {
+  min-height: 400rpx;
+  padding: 100rpx 36rpx;
+  color: #777777;
+  font-size: 27rpx;
+  text-align: center;
 }
