@@ -7,6 +7,7 @@
       { "type": "file", "value": ".DS_Store" },
       { "type": "file", "value": "README.md" },
       { "type": "folder", "value": "tools" },
+      { "type": "folder", "value": "deliverables" },
       { "type": "file", "value": "project.private.config.json" }
     ],
     "include": []

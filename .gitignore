@@ -2,3 +2,6 @@
 LegalOne-WeChat-MiniProgram-Phase1_2(1)/
 LegalOne-WeChat-MiniProgram-Phase1_2(1).zip
 project.private.config.json
+# Preview QR codes are written into the project folder by the DevTools CLI
+*-qr.png
+preview-qr.png
