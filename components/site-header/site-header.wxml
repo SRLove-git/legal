@@ -5,11 +5,8 @@
     </view>
 
     <view class="ai-pill" bindtap="goAi">
-      <view class="ai-pill-prompt">F</view>
-      <view class="ai-pill-action">
-        <view class="ai-pill-icon"></view>
-        <view class="ai-pill-text">AI Search</view>
-      </view>
+      <view class="ai-pill-prompt">{{aiPrompt}}<text class="ai-pill-caret">|</text></view>
+      <view class="ai-pill-action"><view class="ai-pill-icon"></view></view>
     </view>
 
     <view class="menu-button" bindtap="toggleMenu">
