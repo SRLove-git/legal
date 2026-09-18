@@ -31,6 +31,29 @@ function addClassStyle(html, className, baseStyle) {
   });
 }
 
+// The CMS keeps Word-style inline sizing on pasted images ("width: 5.5885in",
+// "height: 2.9218in", width/height attributes), which the website drops when it
+// sanitises article HTML. Reproduce that here so an image can never be wider
+// than the reader's screen and always keeps its own aspect ratio.
+function normalizeImages(html) {
+  const sizing = 'display:block;width:100%;max-width:100%;height:auto;margin:16px auto;';
+  return html.replace(/<img\b([^>]*?)(\/?)>/gi, function (whole, attributes, selfClosing) {
+    let cleaned = attributes.replace(/\s(?:width|height)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+    const styleMatch = cleaned.match(/\sstyle\s*=\s*(["'])([\s\S]*?)\1/i);
+    if (styleMatch) {
+      const kept = styleMatch[2].split(';').filter(function (declaration) {
+        return declaration.trim() &&
+          !/^\s*(?:width|height|max-width|max-height|min-width|min-height|object-fit|transform)\s*:/i.test(declaration);
+      }).join(';');
+      cleaned = cleaned.replace(styleMatch[0],
+        ' style=' + styleMatch[1] + (kept ? kept + ';' : '') + sizing + styleMatch[1]);
+    } else {
+      cleaned += ' style="' + sizing + '"';
+    }
+    return '<img' + cleaned + (selfClosing ? ' /' : '') + '>';
+  });
+}
+
 function absoluteUrls(html) {
   return html.replace(/\s(src|href)\s*=\s*(["'])([^"']*)\2/gi, function (whole, name, quote, url) {
     if (!url || /^(?:https?:|data:|mailto:|tel:|#)/i.test(url)) return whole;
@@ -59,7 +82,7 @@ function toRichHtml(value) {
   html = addStyle(html, 'ol', 'margin:0 0 24px;padding-left:22px;color:#303030;');
   html = addStyle(html, 'li', 'margin:0 0 10px;');
   html = addStyle(html, 'a', 'color:#0084ba;text-decoration:none;word-break:break-word;');
-  html = addStyle(html, 'img', 'display:block;width:100%;max-width:100%;height:auto;margin:16px auto;');
+  html = normalizeImages(html);
   html = addStyle(html, 'table', 'display:table;width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;color:#303030;');
   html = addStyle(html, 'thead', 'background:#00558d;color:#ffffff;');
   html = addStyle(html, 'th', 'border:1px solid #00558d;padding:8px 6px;font-size:14px;line-height:1.4;font-weight:700;text-align:left;word-break:break-word;');
