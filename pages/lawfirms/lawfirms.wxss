@@ -1,17 +1,167 @@
-.search-wrap {
-  padding: 0 36rpx 20rpx;
+.lawfirms-page {
+  background: #ffffff;
 }
 
-.search-input {
-  height: 76rpx;
+/* Website "SORT & FILTER" bar (lawfirm_list). */
+.firm-filter-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 86rpx;
+  padding: 18rpx 36rpx;
+  background: #edebeb;
+  color: #202020;
+  font-size: 30rpx;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.filter-count {
+  min-width: 34rpx;
+  height: 34rpx;
+  margin-left: 12rpx;
+  padding: 0 8rpx;
+  border-radius: 17rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 21rpx;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.filter-chevron,
+.field-chevron {
+  width: 0;
+  height: 0;
+  border-left: 9rpx solid transparent;
+  border-right: 9rpx solid transparent;
+  border-top: 12rpx solid #777777;
+}
+
+.filter-chevron {
+  position: absolute;
+  right: 82rpx;
+  top: 38rpx;
+  transition: transform 0.2s ease;
+}
+
+.filter-chevron.open {
+  transform: rotate(180deg);
+}
+
+.firm-filter-panel {
+  padding: 28rpx 36rpx 34rpx;
+  border-bottom: 2rpx solid #d9d9d9;
+  background: #f6f6f6;
+}
+
+.firm-filter-picker {
+  display: block;
+  margin-bottom: 18rpx;
+}
+
+.firm-filter-group {
+  margin-bottom: 18rpx;
+}
+
+.firm-filter-field,
+.firm-search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 76rpx;
+  padding: 0 74rpx 0 24rpx;
+  border: 2rpx solid #bcbcbc;
+  background: #ffffff;
+  color: #333333;
+  font-size: 26rpx;
+  line-height: 1.35;
+}
+
+.firm-filter-field.active {
+  border-color: #0084ba;
+  color: #0084ba;
+}
+
+.field-chevron {
+  position: absolute;
+  right: 26rpx;
+  top: 31rpx;
+  transition: transform 0.2s ease;
+}
+
+.field-chevron.up {
+  transform: rotate(180deg);
+}
+
+/* City and area lists are long, so they scroll inside the panel. */
+.firm-filter-options {
+  max-height: 520rpx;
+  margin-top: -2rpx;
+  padding: 8rpx 24rpx;
   border: 2rpx solid #0084ba;
-  border-radius: 38rpx;
-  padding: 0 28rpx;
-  font-size: 28rpx;
+  border-top: 0;
+  background: #ffffff;
+}
+
+.firm-filter-option {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0;
+  color: #333333;
+  font-size: 26rpx;
+  line-height: 1.35;
+}
+
+.firm-filter-check {
+  margin-right: 14rpx;
+  transform: scale(0.85);
+}
+
+.firm-filter-option-text {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.firm-search-field {
+  margin-bottom: 18rpx;
+}
+
+.firm-search-field input {
+  width: 100%;
+  height: 72rpx;
+  font-size: 26rpx;
+}
+
+.firm-filter-actions {
+  display: flex;
+  gap: 18rpx;
+  padding-top: 2rpx;
+}
+
+.firm-filter-button {
+  flex: 1;
+  height: 72rpx;
+  border: 2rpx solid #0084ba;
+  color: #0084ba;
+  font-size: 27rpx;
+  line-height: 68rpx;
+  text-align: center;
+}
+
+.firm-filter-button.primary {
+  background: #0084ba;
+  color: #ffffff;
+}
+
+.list-body {
+  padding: 34rpx 26rpx 68rpx;
 }
 
 .list {
-  padding: 0 36rpx 40rpx;
+  padding: 0 10rpx 40rpx;
 }
 
 .firm-row {
@@ -31,13 +181,7 @@
 }
 
 .firm-row-name {
+  color: #2d2d2d;
   font-size: 30rpx;
   font-weight: 700;
-  color: #2d2d2d;
-}
-
-.empty {
-  text-align: center;
-  color: #999999;
-  padding: 60rpx 0;
 }

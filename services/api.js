@@ -474,9 +474,29 @@ const api = {
   },
   getLawfirms: function (opts) {
     opts = opts || {};
-    let q = 'api/legal/lawfirms/?' + encodePage(opts.max || 12, opts.start || 1) + '&orderby=latest';
+    let q = 'api/legal/lawfirms/?' + encodePage(opts.max || 12, opts.start || 1);
+    q += '&orderby=' + encodeURIComponent(opts.orderby || 'latest');
     if (opts.search) q += '&search=' + encodeURIComponent(opts.search);
+    // Website SORT & FILTER: countries and regions / offices / practice areas.
+    if (opts.countries && opts.countries.length) q += '&countries=' + encodeValueList(opts.countries);
+    if (opts.office && opts.office.length) q += '&office=' + encodeValueList(opts.office);
+    if (opts.categories && opts.categories.length) q += '&categories=' + encodeValueList(opts.categories);
     return get(q).then(function (r) { return (r || []).map(normalizeLawfirm); });
+  },
+  // Option lists for the Law Firms page filter panel. The website drops the
+  // "Hong Kong" country entries and hides the "News" area.
+  getLawfirmFilters: function () {
+    return Promise.all([
+      get('api/legal/lawyers/codes/country'),
+      get('api/legal/lawyers/codes/city'),
+      get('api/core/codes/areas')
+    ]).then(function (responses) {
+      return {
+        countries: normalizeCodeList(responses[0]).filter(function (value) { return value.indexOf('Hong Kong') !== 0; }),
+        cities: normalizeCodeList(responses[1]),
+        areas: normalizeCodeList(responses[2]).filter(function (value) { return value !== 'News'; })
+      };
+    });
   },
   getLawyers: function (opts) {
     opts = opts || {};
@@ -781,7 +801,8 @@ const api = {
   getCodeAreas: function () { return this.getCodes('api/core/codes/areas'); },
   getCitiesByCountry: function (country) {
     return get('api/core/codelinks/countryAndCity/' + encodeURIComponent(country)).then(function (r) {
-      return ((r && r.contents) || []).map(function (x) { return x && x.city; }).filter(Boolean);
+      // The endpoint answers { contents: [{ code: "Beijing" }, ...] }.
+      return ((r && r.contents) || []).map(function (x) { return x && (x.city || x.code); }).filter(Boolean);
     });
   },
   searchLawfirms: function (term) {

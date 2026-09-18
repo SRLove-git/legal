@@ -1,23 +1,77 @@
 <site-header />
-<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage lawfirms-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="/assets/img/court-icon.png" bindtap="goHome" />
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text">Law Firms</text>
   </view>
-  <view class="list-filters">SORT & FILTER</view>
-  <view class="list-body">
-  <view class="list-heading"><view class="list-heading-dot"></view>Recently updated profiles</view>
-  <view class="list-search-wrap">
-    <input class="list-search-input" type="text" placeholder="Search law firms" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+
+  <view class="firm-filter-toggle" bindtap="toggleFilters">
+    <text>{{sortFilterLabel}}</text>
+    <text class="filter-count" wx:if="{{activeFilterCount}}">{{activeFilterCount}}</text>
+    <view class="filter-chevron {{filtersOpen ? 'open' : ''}}"></view>
   </view>
-  <view class="list">
-    <view class="firm-row" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-name="{{item.name}}">
-      <image class="firm-row-logo" src="{{item.image}}" mode="aspectFit" />
-      <view class="firm-row-name">{{item.name}}</view>
+
+  <view class="firm-filter-panel" wx:if="{{filtersOpen}}">
+    <picker class="firm-filter-picker" mode="selector" range="{{countryOptions}}" value="{{countryIndex}}" bindchange="onCountryChange">
+      <view class="firm-filter-field {{countryIndex ? 'active' : ''}}">{{countryOptions[countryIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+
+    <view class="firm-filter-group">
+      <view class="firm-filter-field {{offices.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="offices">
+        <text>{{officesLabel}}</text>
+        <view class="field-chevron {{openGroups.offices ? 'up' : ''}}"></view>
+      </view>
+      <scroll-view class="firm-filter-options" scroll-y wx:if="{{openGroups.offices}}">
+        <checkbox-group bindchange="onOfficesChange">
+          <label class="firm-filter-option" wx:for="{{officeOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="firm-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text class="firm-filter-option-text">{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
     </view>
-    <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+
+    <view class="firm-filter-group">
+      <view class="firm-filter-field {{areas.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="areas">
+        <text>{{areasLabel}}</text>
+        <view class="field-chevron {{openGroups.areas ? 'up' : ''}}"></view>
+      </view>
+      <scroll-view class="firm-filter-options" scroll-y wx:if="{{openGroups.areas}}">
+        <checkbox-group bindchange="onAreasChange">
+          <label class="firm-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="firm-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text class="firm-filter-option-text">{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+
+    <view class="firm-search-field">
+      <input placeholder="Search by name / keyword" value="{{keyword}}" bindinput="onInput" bindconfirm="onApply" confirm-type="search" />
+      <view class="search-icon" bindtap="onApply"></view>
+    </view>
+
+    <picker class="firm-filter-picker" mode="selector" range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange">
+      <view class="firm-filter-field {{sortIndex ? 'active' : ''}}">{{sortOptions[sortIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+
+    <view class="firm-filter-actions">
+      <view class="firm-filter-button primary" bindtap="onApply">Apply</view>
+      <view class="firm-filter-button" bindtap="onReset">Reset</view>
+    </view>
   </view>
+
+  <view class="list-body">
+    <view class="list-heading"><view class="list-heading-dot"></view>Recently updated profiles</view>
+    <view class="list">
+      <view class="firm-row" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-name="{{item.name}}">
+        <image class="firm-row-logo" src="{{item.image}}" mode="aspectFit" />
+        <view class="firm-row-name">{{item.name}}</view>
+      </view>
+      <view class="list-end" wx:if="{{!items.length && !loading}}">No law firms found</view>
+      <view class="list-end" wx:elif="{{!hasMore && !loading}}">No more results</view>
+    </view>
   </view>
 </view>
 <site-footer />
