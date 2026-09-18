@@ -309,6 +309,7 @@ button::after {
 }
 
 .list-search-wrap {
+  position: relative;
   padding: 0 36rpx 20rpx;
 }
 
@@ -316,8 +317,29 @@ button::after {
   height: 76rpx;
   border: 2rpx solid #0084ba;
   border-radius: 38rpx;
-  padding: 0 28rpx;
+  padding: 0 84rpx 0 28rpx;
   font-size: 28rpx;
+}
+
+/* The website's search glyph (images/search-black@2x.png). Every search field in
+   the mini program uses this one icon so the sort & filter panels and the list
+   pages look the same. */
+.search-icon {
+  position: absolute;
+  right: 26rpx;
+  top: 50%;
+  width: 34rpx;
+  height: 32rpx;
+  margin-top: -16rpx;
+  background-image: url("https://www.legaloneglobal.com/images/search-black@2x.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Inside the rounded list search boxes the icon sits further from the edge. */
+.list-search-wrap .search-icon {
+  right: 60rpx;
 }
 
 .list-end {

@@ -24,6 +24,7 @@
   <view class="list-heading"><view class="list-heading-dot"></view>Latest Awards</view>
   <view class="list-search-wrap">
     <input class="list-search-input" type="text" placeholder="Search awards" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
+    <view class="search-icon" bindtap="onSearch"></view>
   </view>
   <view class="list">
     <view class="list-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">

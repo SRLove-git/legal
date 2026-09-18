@@ -95,28 +95,6 @@
   font-size: 26rpx;
 }
 
-.lawyer-search-icon {
-  position: absolute;
-  right: 27rpx;
-  top: 22rpx;
-  width: 25rpx;
-  height: 25rpx;
-  border: 4rpx solid #0084ba;
-  border-radius: 50%;
-}
-
-.lawyer-search-icon::after {
-  content: "";
-  position: absolute;
-  right: -11rpx;
-  bottom: -8rpx;
-  width: 14rpx;
-  height: 4rpx;
-  background: #0084ba;
-  transform: rotate(45deg);
-  transform-origin: left center;
-}
-
 .lawyer-filter-actions {
   display: flex;
   gap: 18rpx;

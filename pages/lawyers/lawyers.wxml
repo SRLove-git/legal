@@ -27,7 +27,7 @@
     </picker>
     <view class="lawyer-search-field">
       <input placeholder="Search by name / keyword" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
-      <view class="lawyer-search-icon" bindtap="onSearch"></view>
+      <view class="search-icon" bindtap="onSearch"></view>
     </view>
     <picker class="lawyer-filter-picker" mode="selector" range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange">
       <view class="lawyer-filter-field {{sortIndex ? 'active' : ''}}">{{sortOptions[sortIndex]}}<view class="field-chevron"></view></view>
