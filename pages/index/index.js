@@ -40,8 +40,10 @@ Page({
     use(api.getArticles({ max: 8 }), fb.latest).then(function (v) { set('latest', v.slice(0, 8)); });
     use(api.getAwards({ max: 4 }), fb.awards).then(function (v) { set('awards', v.slice(0, 4)); });
     use(api.getHighlights(), fb.highlights).then(function (v) { set('highlights', v.slice(0, 4)); });
-    use(api.getLawyers({ max: 12 }), fb.lawyers).then(function (v) { set('lawyers', v.slice(0, 12)); });
-    use(api.getLawfirms({ max: 12 }), fb.lawfirms).then(function (v) { set('lawfirms', v.slice(0, 12)); });
+    // The home page keeps these two directories short; the full directories are
+    // one tap away through the "Learn more" links.
+    use(api.getLawyers({ max: 6 }), fb.lawyers).then(function (v) { set('lawyers', v.slice(0, 6)); });
+    use(api.getLawfirms({ max: 6 }), fb.lawfirms).then(function (v) { set('lawfirms', v.slice(0, 6)); });
   },
 
   goAnnouncement(e) {

@@ -135,7 +135,7 @@
             <view class="lawyer-location">{{item.location}}</view>
           </view>
         </view>
-        <view class="more-link" bindtap="goLawyers">More</view>
+        <view class="more-link" bindtap="goLawyers">Learn more</view>
       </view>
     </view>
   </view>
@@ -148,7 +148,7 @@
           <image class="firm-logo" src="{{item.image}}" mode="aspectFit" />
           <view class="firm-name">{{item.name}}</view>
         </view>
-        <view class="more-link" bindtap="goLawfirms">More</view>
+        <view class="more-link" bindtap="goLawfirms">Learn more</view>
       </view>
     </view>
   </view>
