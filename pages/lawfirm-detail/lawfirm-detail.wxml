@@ -121,9 +121,9 @@
     <view class="firm-section" wx:if="{{offices.length}}">
       <view class="firm-section-title">Offices</view>
       <view class="firm-office" wx:for="{{offices}}" wx:for-item="office" wx:key="id" wx:for-index="officeIndex">
-        <view class="firm-office-name" bindtap="toggleOffice" data-index="{{officeIndex}}">
-          <image class="firm-office-toggle" wx:if="{{office.industries.length}}" src="{{office.open ? 'https://www.legaloneglobal.com/images/arrow-up2.png' : 'https://www.legaloneglobal.com/images/arrow-down2.png'}}" mode="aspectFit" />
-          <text>{{office.city}}</text>
+        <view class="firm-office-name">
+          <image class="firm-office-toggle" wx:if="{{office.industries.length}}" src="{{office.open ? 'https://www.legaloneglobal.com/images/arrow-up2.png' : 'https://www.legaloneglobal.com/images/arrow-down2.png'}}" mode="aspectFit" bindtap="toggleOffice" data-index="{{officeIndex}}" />
+          <text class="firm-office-link" bindtap="goOffice" data-id="{{office.id}}" data-name="{{office.name}}" data-city="{{office.city}}">{{office.city}}</text>
         </view>
         <view class="firm-office-areas" wx:if="{{office.open}}">
           <view class="firm-office-area" wx:for="{{office.industries}}" wx:for-item="area" wx:key="*this">{{area}}</view>

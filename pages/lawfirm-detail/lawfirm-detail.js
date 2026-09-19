@@ -199,6 +199,18 @@ Page({
     });
     this.setData({ offices: offices });
   },
+  // Office rows link to that office's profile page, like the website.
+  goOffice(e) {
+    const d = e.currentTarget.dataset;
+    const item = this.data.item || {};
+    if (!d.id || !item.id) return;
+    wx.navigateTo({
+      url: '/pages/lawfirm-office/lawfirm-office?firmId=' + encodeURIComponent(item.id) +
+        '&officeId=' + encodeURIComponent(d.id) +
+        '&name=' + encodeURIComponent(d.name || d.city || '') +
+        '&firmName=' + encodeURIComponent(item.name || '')
+    });
+  },
   loadSavedStatus(id) {
     const token = wx.getStorageSync('X-ACCESS-TOKEN');
     const memberId = wx.getStorageSync('memberId');

@@ -1,0 +1,120 @@
+<site-header />
+<view class="subpage lawfirm-office-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb" wx:if="{{item}}">
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
+    <text class="breadcrumb-sep">></text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/lawfirms/lawfirms">Law Firms</text>
+    <text class="breadcrumb-sep">></text>
+    <text class="breadcrumb-text" bindtap="goFirm">{{firmName || 'Firm profile'}}</text>
+    <text class="breadcrumb-sep">></text>
+    <text class="breadcrumb-current">{{item.name}}</text>
+  </view>
+
+  <view class="profile-loading" wx:if="{{loading}}">Loading...</view>
+
+  <view class="office-detail" wx:if="{{item}}">
+    <view class="office-ref" wx:if="{{item.refNo}}">Ref.: {{item.refNo}}</view>
+
+    <view class="office-name-block">
+      <view class="office-name">{{item.name}}</view>
+      <view class="office-location" wx:if="{{item.location}}">{{item.location}}</view>
+    </view>
+
+    <view class="office-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
+
+    <view class="office-action-row">
+      <button class="office-share-button" open-type="share">
+        <text class="office-share-label">Share</text>
+        <view class="office-share-icon"><image class="office-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
+      </button>
+      <view class="office-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+        <text class="office-save-label">{{saved ? 'Saved' : 'Save'}}</text>
+        <image class="office-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="office-merit-card">
+      <view class="office-merit-label">LegalOne Merits</view>
+      <view class="office-merit-row total">
+        <text class="office-merit-name">Total deals/cases</text>
+        <text class="office-merit-value" wx:if="{{item.numOfDeal}}">{{item.numOfDeal}}</text>
+        <view class="office-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+      <view class="office-merit-row">
+        <view class="office-merit-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+        <text class="office-merit-value" wx:if="{{item.distinguished}}">{{item.distinguished}}</text>
+        <view class="office-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+      <view class="office-merit-row">
+        <view class="office-merit-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+        <text class="office-merit-value" wx:if="{{item.exemplary}}">{{item.exemplary}}</text>
+        <view class="office-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+      <view class="office-merit-row">
+        <view class="office-merit-name"><image class="merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+        <text class="office-merit-value" wx:if="{{item.remarkable}}">{{item.remarkable}}</text>
+        <view class="office-merit-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+      </view>
+    </view>
+
+    <view class="office-ad-list" wx:if="{{topAds.length}}">
+      <image class="office-ad" wx:for="{{topAds}}" wx:for-item="ad" wx:key="id" src="{{ad.image}}" mode="widthFix" bindtap="openAdvertisement" data-link="{{ad.link}}" />
+    </view>
+
+    <view class="office-firm-link" wx:if="{{firmId}}" bindtap="goFirm">This is an office profile. For the firm profile, please click here.</view>
+
+    <view class="office-band">LegalOne data and insights</view>
+
+    <view class="office-section" wx:if="{{cases.length}}">
+      <view class="office-section-title">Deals/cases</view>
+      <view class="office-linked-item dot" wx:for="{{cases}}" wx:for-item="deal" wx:key="id" bindtap="goDeal" data-id="{{deal.id}}" data-title="{{deal.title}}">
+        <view class="linked-title">{{deal.title}}</view>
+        <view class="linked-rank" wx:if="{{deal.rank}}">
+          <image class="rank-icon-small" wx:if="{{deal.rankIcon}}" src="{{deal.rankIcon}}" mode="aspectFit" />
+          <text>{{deal.rank}}</text>
+        </view>
+        <view class="linked-meta" wx:if="{{deal.completed}}">{{deal.completed}}</view>
+      </view>
+      <view class="office-more" wx:if="{{moreCases}}" bindtap="showMore" data-kind="cases">More</view>
+    </view>
+
+    <view class="office-section" wx:if="{{item.industries.length}}">
+      <view class="office-section-title">Practice areas and industries</view>
+      <view class="office-plain-item dot" wx:for="{{item.industries}}" wx:for-item="area" wx:key="*this">{{area}}</view>
+    </view>
+
+    <view class="office-section" wx:if="{{articles.length}}">
+      <view class="office-section-title">LegalOne column</view>
+      <view class="office-linked-item dot" wx:for="{{articles}}" wx:for-item="article" wx:key="id" bindtap="goArticle" data-id="{{article.id}}" data-title="{{article.title}}">
+        <view class="linked-title">{{article.title}}</view>
+        <view class="linked-meta" wx:if="{{article.publishedDate}}">{{article.publishedDate}}</view>
+      </view>
+      <view class="office-more" wx:if="{{moreArticles}}" bindtap="showMore" data-kind="articles">More</view>
+    </view>
+
+    <view class="office-section" wx:if="{{lawyers.length}}">
+      <view class="office-section-title">Lawyers</view>
+      <view class="office-linked-item dot" wx:for="{{lawyers}}" wx:for-item="lawyer" wx:key="id" bindtap="goLawyer" data-id="{{lawyer.id}}" data-name="{{lawyer.name}}">
+        <view class="linked-title">{{lawyer.name}}</view>
+      </view>
+      <view class="office-more" wx:if="{{moreLawyers}}" bindtap="showMore" data-kind="lawyers">More</view>
+    </view>
+
+    <view class="office-section" wx:if="{{partners.length}}">
+      <view class="office-section-title">Partners</view>
+      <view class="office-linked-item dot" wx:for="{{partners}}" wx:for-item="partner" wx:key="id" bindtap="goLawyer" data-id="{{partner.id}}" data-name="{{partner.name}}">
+        <view class="linked-title">{{partner.name}}</view>
+      </view>
+      <view class="office-more" wx:if="{{morePartners}}" bindtap="showMore" data-kind="partners">More</view>
+    </view>
+
+    <image class="office-bottom-banner" src="https://www.legaloneglobal.com/images/inHouseAdv/Large_Leaderboard_970x90_Fireside_Chat_202501.gif" mode="widthFix" bindtap="goCrumb" data-url="/pages/articles/articles" />
+
+    <view class="office-ad-list bottom" wx:if="{{downAds.length}}">
+      <image class="office-ad" wx:for="{{downAds}}" wx:for-item="ad" wx:key="id" src="{{ad.image}}" mode="widthFix" bindtap="openAdvertisement" data-link="{{ad.link}}" />
+    </view>
+  </view>
+
+  <view class="profile-empty" wx:if="{{!loading && !item}}">Office profile not found</view>
+</view>
+<site-footer />

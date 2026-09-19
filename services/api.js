@@ -604,11 +604,18 @@ const api = {
       norm.industriesProvidedByClient = decodeEntities(f.industriesProvidedByClient);
       // Offices carry their own practice lists on the website (city + areas).
       norm.offices = (f.lawFirmOffices || []).map(function (o) {
+        const lastUpdated = o.lastUpdated && o.lastUpdated.indexOf('0001-') !== 0 ? monthYear(o.lastUpdated) : '';
         return {
           id: o.id || '',
           refNo: o.refNo || '',
           name: decodeEntities(o.name),
           city: decodeEntities(o.city) || decodeEntities(o.name),
+          country: decodeEntities(o.country),
+          updated: lastUpdated,
+          numOfDeal: Number(o.numOfDeal) || 0,
+          distinguished: Number(o.rank1Total) || 0,
+          exemplary: Number(o.rank2Total) || 0,
+          remarkable: Number(o.rank3Total) || 0,
           industries: (o.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean)
         };
       });
@@ -693,6 +700,44 @@ const api = {
   getLawfirmOffices: function (id) {
     return get('api/legal/lawfirms/' + encodeURIComponent(id) + '/offices').then(function (r) { return r || []; });
   },
+  // Office profile: the page behind every office row on a firm profile.
+  getLawfirmOffice: function (firmId, officeId) {
+    return get('api/legal/lawfirms/' + encodeURIComponent(firmId) + '/offices/' + encodeURIComponent(officeId))
+      .then(function (r) {
+        const o = Array.isArray(r) ? r[0] : r;
+        if (!o || !o.name) return null;
+        const lastUpdated = o.lastUpdated && o.lastUpdated.indexOf('0001-') !== 0 ? monthYear(o.lastUpdated) : '';
+        return {
+          id: o.id || officeId,
+          refNo: decodeEntities(o.refNo),
+          name: decodeEntities(o.name),
+          city: decodeEntities(o.city),
+          country: decodeEntities(o.country),
+          location: [o.city, o.country].filter(Boolean).map(decodeEntities).join(', '),
+          headOffice: !!o.headOffice,
+          updated: lastUpdated,
+          numOfDeal: Number(o.numOfDeal) || 0,
+          distinguished: Number(o.rank1Total) || 0,
+          exemplary: Number(o.rank2Total) || 0,
+          remarkable: Number(o.rank3Total) || 0,
+          industries: (o.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean)
+        };
+      });
+  },
+  getOfficeCases: function (officeId, opts) {
+    return embedSub('api/legal/LawFirmOffices/' + encodeURIComponent(officeId) + '/cases', opts, normalizeDeal);
+  },
+  getOfficeArticles: function (officeId, opts) {
+    return embedSub('api/legal/LawFirmOffices/' + encodeURIComponent(officeId) + '/articles', opts, normalizeArticle);
+  },
+  getOfficeLawyers: function (firmId, officeId, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(firmId) + '/offices/' + encodeURIComponent(officeId) +
+      '/lawyers/?functionType=lawyer', opts, normalizeLawyer);
+  },
+  getOfficePartners: function (firmId, officeId, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(firmId) + '/offices/' + encodeURIComponent(officeId) +
+      '/partners/?functionType=lawyer', opts, normalizeLawyer);
+  },
   getLawfirmLawyers: function (id, opts) {
     return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/lawyers/?functionType=lawyer', opts, normalizeLawyer);
   },
@@ -739,6 +784,19 @@ const api = {
     return Promise.all([
       get('api/Advertisement?pageName=LawfirmProfile&adType=MPU&adPosition=Top'),
       get('api/Advertisement?pageName=LawfirmProfile&adType=MPU&adPosition=Down')
+    ]).then(function (responses) {
+      const top = Array.isArray(responses[0]) ? responses[0] : (responses[0] ? [responses[0]] : []);
+      const down = Array.isArray(responses[1]) ? responses[1] : (responses[1] ? [responses[1]] : []);
+      return {
+        top: top.map(normalizeAdvertisement).filter(function (ad) { return ad.image; }),
+        down: down.map(normalizeAdvertisement).filter(function (ad) { return ad.image; })
+      };
+    });
+  },
+  getOfficeAdvertisements: function () {
+    return Promise.all([
+      get('api/Advertisement?pageName=LawfirmOfficeProfile&adType=MPU&adPosition=Top'),
+      get('api/Advertisement?pageName=LawfirmOfficeProfile&adType=MPU&adPosition=Down')
     ]).then(function (responses) {
       const top = Array.isArray(responses[0]) ? responses[0] : (responses[0] ? [responses[0]] : []);
       const down = Array.isArray(responses[1]) ? responses[1] : (responses[1] ? [responses[1]] : []);
