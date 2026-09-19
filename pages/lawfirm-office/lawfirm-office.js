@@ -39,6 +39,12 @@ function decorateArticle(article) {
   return Object.assign({}, article, { year: (article.publishedDate || article.date || '').split(', ').pop() });
 }
 
+// Office ids come with spaces or dashes depending on the source, so the
+// fallback lookup compares a normalised key as well.
+function officeKey(value) {
+  return String(value || '').toLowerCase().replace(/[\s\-_]+/g, '');
+}
+
 Page({
   behaviors: [safeArea, breadcrumb],
   data: {
@@ -80,7 +86,10 @@ Page({
       return api.getLawfirmOffice(firmId, officeId).catch(function () { return null; }).then(function (office) {
         let item = office;
         if (!item && firm) {
-          const entry = (firm.offices || []).find(function (o) { return o.id === officeId; });
+          const key = officeKey(officeId);
+          const entry = (firm.offices || []).find(function (o) {
+            return o.id === officeId || officeKey(o.id) === key || officeKey(o.refNo) === key;
+          });
           if (entry) item = entry;
         }
         if (!item && name) item = { id: officeId, name: name };
