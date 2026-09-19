@@ -78,7 +78,7 @@
             <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
           </view>
           <image class="article-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
-          <view class="article-title">{{item.title}}</view>
+          <view class="article-title is-link">{{item.title}}</view>
           <view class="article-meta">
             <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
             <text class="article-date">{{item.date}}</text>

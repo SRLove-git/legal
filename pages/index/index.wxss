@@ -251,6 +251,11 @@
   line-height: 1.35;
 }
 
+/* Titles that open a detail page read as links, like the website's cards. */
+.article-title.is-link {
+  color: #0084ba;
+}
+
 .article-meta {
   margin-top: 10rpx;
   display: flex;
