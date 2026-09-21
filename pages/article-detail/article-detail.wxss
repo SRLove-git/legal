@@ -134,67 +134,51 @@
 .award-photo {
   display: block;
   width: 100%;
-  /* Website: display:block; margin:0 auto; max-width:100%; */
-  max-width: 100%;
+  /* Website: display:block; margin:0 auto; max-width:100%; the phone crop is
+     396px wide, so never upscale it on a wide screen. */
+  max-width: 792rpx;
   margin: 0 auto;
 }
 
-/* The winner details sit on the artwork's dark band, like .sa-lawyer-detail. */
+/* The winner details sit on the artwork's dark band and are vertically centred
+   in the card, like the website's .sa-lawyer-detail (margin: auto 0). */
 .award-info {
   position: absolute;
-  top: 18rpx;
+  top: 50%;
   left: 34rpx;
-  width: 62%;
+  width: 85%;
+  transform: translateY(-50%);
 }
 
 .award-winner-name {
   color: #ffffff;
-  font-size: 26rpx;
+  font-size: 38rpx;
   font-weight: 700;
   line-height: 1.15;
   word-break: break-word;
 }
 
 .award-winner-local {
-  margin-top: 2rpx;
+  margin-top: 4rpx;
   color: #ffffff;
-  font-size: 24rpx;
+  font-size: 34rpx;
   font-weight: 700;
   line-height: 1.15;
 }
 
-/* Firm/city and the View profile button on the left, phone/email on the right
-   (website .sa-lawyer-detail-left / -right). */
-.award-winner-columns {
-  display: flex;
-  align-items: flex-start;
-  margin-top: 6rpx;
-}
-
-.award-winner-left {
-  flex: 44%;
-  padding-right: 6rpx;
-  min-width: 0;
-}
-
-.award-winner-right {
-  flex: 54%;
-  min-width: 0;
-}
-
 .award-winner-item {
   display: block;
-  margin: 1rpx 0;
+  margin: 6rpx 0;
   color: #ffffff;
-  font-size: 19rpx;
-  line-height: 1.25;
+  font-size: 24rpx;
+  line-height: 1.3;
   word-break: break-word;
 }
 
 .award-view-profile {
-  width: 130rpx;
+  width: 230rpx;
   height: auto;
-  margin-top: 6rpx;
+  margin-top: 14rpx;
 }
 
 .award-bio-label {

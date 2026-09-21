@@ -33,25 +33,19 @@
             <view class="award-info">
               <view class="award-winner-name">{{block.winner.name}}</view>
               <view class="award-winner-local" wx:if="{{block.winner.secondName}}">{{block.winner.secondName}}</view>
-              <view class="award-winner-columns">
-                <view class="award-winner-left">
-                  <view class="award-winner-item" wx:if="{{block.winner.firm}}">{{block.winner.firm}}</view>
-                  <view class="award-winner-item" wx:if="{{block.winner.city}}">{{block.winner.city}}</view>
-                  <image
-                    class="award-view-profile"
-                    wx:if="{{block.winner.profileImg}}"
-                    src="{{block.winner.profileImg}}"
-                    mode="widthFix"
-                    bindtap="goWinner"
-                    data-kind="{{block.winner.profileKind}}"
-                    data-id="{{block.winner.profileId}}"
-                    data-name="{{block.winner.name}}"
-                  />
-                </view>
-                <view class="award-winner-right">
-                  <view class="award-winner-item" wx:for="{{block.winner.contacts}}" wx:for-item="line" wx:key="*this">{{line}}</view>
-                </view>
-              </view>
+              <view class="award-winner-item" wx:if="{{block.winner.firm}}">{{block.winner.firm}}</view>
+              <view class="award-winner-item" wx:if="{{block.winner.city}}">{{block.winner.city}}</view>
+              <view class="award-winner-item" wx:for="{{block.winner.contacts}}" wx:for-item="line" wx:key="*this">{{line}}</view>
+              <image
+                class="award-view-profile"
+                wx:if="{{block.winner.profileImg}}"
+                src="{{block.winner.profileImg}}"
+                mode="widthFix"
+                bindtap="goWinner"
+                data-kind="{{block.winner.profileKind}}"
+                data-id="{{block.winner.profileId}}"
+                data-name="{{block.winner.name}}"
+              />
             </view>
           </view>
           <block wx:if="{{block.winner.hasBio}}">

@@ -6,9 +6,10 @@
 const richText = require('./rich-text.js');
 
 const BLOB = 'https://legaloneglobal.azureedge.net/storelegaloneglobalpub/';
-// The website's card artwork ("970-270", the <img> its getBlobImage helper
-// writes) is the wide banner the profile cards are laid out for.
-const PHOTO_FILE = '970-270';
+// The website serves a portrait crop to phones (its <source media="(max-width:
+// 27.5em)"> entry), which is the card the readers of the mini program see.
+const PHOTO_FILE = '396-462';
+const PLAIN_FILE = '396-264';
 const WINNER_ANCHOR = /<div class="sa-lawyer(?![-\w])[^"]*">/g;
 
 function decodeEntities(value) {
@@ -56,9 +57,8 @@ function resolvePlaceholders(html) {
     .replace(/\{\{\s*getBloburl\s*\}\}/g, BLOB)
     .replace(/\{\{\s*getBlobImage\s+[^}]*?"([^"]+)"\s+"([\w]+)"\s*(?:"([^"]*)")?\s*\}\}/gi,
       function (whole, path, ext, alt) {
-        // The helper's own <img> is always the wide 970-270 crop, for the plain
-        // background card as well.
-        return '<img src="' + BLOB + path + '/' + PHOTO_FILE + '.' + ext + '"' +
+        const file = /PlainBackground$/.test(path) ? PLAIN_FILE : PHOTO_FILE;
+        return '<img src="' + BLOB + path + '/' + file + '.' + ext + '"' +
           (alt ? ' alt="' + alt + '"' : '') + ' />';
       })
     .replace(/\{\{[^}]*\}\}/g, '')
