@@ -461,7 +461,23 @@ const api = {
     opts = opts || {};
     let q = 'api/crm/awards?' + encodePage(opts.max || 12, opts.start || 1) + '&orderby=latest';
     if (opts.search) q += '&search=' + encodeURIComponent(opts.search);
+    // Website SORT & FILTER: countries and regions / practice areas and industries.
+    if (opts.countries && opts.countries.length) q += '&countries=' + encodeValueList(opts.countries);
+    if (opts.categories && opts.categories.length) q += '&categories=' + encodeValueList(opts.categories);
     return get(q).then(function (r) { return (r || []).map(normalizeArticle); });
+  },
+  // Option lists for the Awards page filter panel: the website uses the award
+  // country codes plus the shared area codes, with "News" hidden.
+  getAwardFilters: function () {
+    return Promise.all([
+      get('api/legal/lawyers/codes/awardCountry'),
+      get('api/core/codes/areas')
+    ]).then(function (responses) {
+      return {
+        countries: normalizeCodeList(responses[0]),
+        areas: normalizeCodeList(responses[1]).filter(function (value) { return value !== 'News'; })
+      };
+    });
   },
   getHighlights: function () {
     return this.getArticles({ max: 12, highlighted: true });

@@ -13,19 +13,61 @@
       <view class="list-hero-tagline">Recognising Excellence.</view>
       <view class="list-hero-desc">LegalOne awards recognise legal professionals across jurisdictions for their demonstrated expertise and experience. Evaluations are based on applicant submissions, while incorporating a range of other practice-oriented factors, in line with LegalOne’s philosophy of focusing on the practical skills and experience of legal practitioners and experts.</view>
       <view class="list-hero-actions">
-        <view class="list-hero-btn">Apply award</view>
+        <view class="list-hero-btn" bindtap="applyAward">Apply award</view>
       </view>
     </view>
   </view>
 
-  <view class="list-filters">SORT & FILTER</view>
+  <view class="award-filter-toggle" bindtap="toggleFilters">
+    <text>{{sortFilterLabel}}</text>
+    <text class="filter-count" wx:if="{{activeFilterCount}}">{{activeFilterCount}}</text>
+    <view class="filter-chevron {{filtersOpen ? 'open' : ''}}"></view>
+  </view>
+
+  <view class="award-filter-panel" wx:if="{{filtersOpen}}">
+    <view class="award-filter-group">
+      <view class="award-filter-field {{countries.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="countries">
+        <text>{{countriesLabel}}</text>
+        <view class="field-chevron {{openGroups.countries ? 'up' : ''}}"></view>
+      </view>
+      <scroll-view class="award-filter-options" scroll-y wx:if="{{openGroups.countries}}">
+        <checkbox-group bindchange="onCountriesChange">
+          <label class="award-filter-option" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="award-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text class="award-filter-option-text">{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+
+    <view class="award-filter-group">
+      <view class="award-filter-field {{areas.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="areas">
+        <text>{{areasLabel}}</text>
+        <view class="field-chevron {{openGroups.areas ? 'up' : ''}}"></view>
+      </view>
+      <scroll-view class="award-filter-options" scroll-y wx:if="{{openGroups.areas}}">
+        <checkbox-group bindchange="onAreasChange">
+          <label class="award-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="award-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text class="award-filter-option-text">{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+
+    <view class="award-search-field">
+      <input placeholder="Search awards" value="{{keyword}}" bindinput="onInput" bindconfirm="onApply" confirm-type="search" />
+      <view class="search-icon" bindtap="onApply"></view>
+    </view>
+
+    <view class="award-filter-actions">
+      <view class="award-filter-button primary" bindtap="onApply">Apply</view>
+      <view class="award-filter-button" bindtap="onReset">Reset</view>
+    </view>
+  </view>
 
   <view class="list-body">
   <view class="list-heading"><view class="list-heading-dot"></view>Latest Awards</view>
-  <view class="list-search-wrap">
-    <input class="list-search-input" type="text" placeholder="Search awards" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
-    <view class="search-icon" bindtap="onSearch"></view>
-  </view>
   <view class="list">
     <view class="list-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
       <view class="entry-labels" wx:if="{{item.labels.length}}">
@@ -36,7 +78,8 @@
       <view class="entry-by" wx:if="{{item.author}}">By {{item.author}}</view>
       <view class="entry-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
     </view>
-    <view class="list-end" wx:if="{{!hasMore && items.length}}">No more results</view>
+    <view class="list-end" wx:if="{{!items.length && !loading}}">No awards found</view>
+    <view class="list-end" wx:elif="{{!hasMore && !loading}}">No more results</view>
   </view>
   </view>
 </view>
