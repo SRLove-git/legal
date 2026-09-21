@@ -140,11 +140,11 @@
   margin: 0 auto;
 }
 
-/* The winner details sit on the artwork's dark band and are vertically centred
-   in the card, like the website's .sa-lawyer-detail (margin: auto 0). */
+/* The winner details sit on the artwork's dark band, pushed a little below the
+   middle so the card does not end with a large empty area underneath. */
 .award-info {
   position: absolute;
-  top: 50%;
+  top: 58%;
   left: 34rpx;
   width: 85%;
   transform: translateY(-50%);
@@ -152,33 +152,33 @@
 
 .award-winner-name {
   color: #ffffff;
-  font-size: 38rpx;
+  font-size: 42rpx;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
   word-break: break-word;
 }
 
 .award-winner-local {
   margin-top: 4rpx;
   color: #ffffff;
-  font-size: 34rpx;
+  font-size: 38rpx;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .award-winner-item {
   display: block;
-  margin: 6rpx 0;
+  margin: 8rpx 0;
   color: #ffffff;
-  font-size: 24rpx;
-  line-height: 1.3;
+  font-size: 27rpx;
+  line-height: 1.4;
   word-break: break-word;
 }
 
 .award-view-profile {
-  width: 230rpx;
+  width: 250rpx;
   height: auto;
-  margin-top: 14rpx;
+  margin-top: 16rpx;
 }
 
 .award-bio-label {
