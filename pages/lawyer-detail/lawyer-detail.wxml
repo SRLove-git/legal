@@ -21,7 +21,7 @@
       <view class="lawyer-profile-info">
         <view class="lawyer-name">{{item.name}}</view>
         <view class="lawyer-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
-        <image class="lawyer-verified" wx:if="{{item.verified}}" src="https://www.legaloneglobal.com/images/Verilegal_logo_3_upper.png" mode="widthFix" />
+        <image class="lawyer-verified" wx:if="{{item.verified}}" src="https://www.legaloneglobal.com/images/Verilegal_logo_3_upper.png" mode="widthFix" bindtap="openVerification" aria-role="button" aria-label="View verification certificate" />
         <view class="lawyer-positions" wx:if="{{item.positions.length}}">
           <text class="lawyer-position" wx:for="{{item.positions}}" wx:for-item="position" wx:key="*this">{{position}}</text>
         </view>

@@ -33,6 +33,7 @@
     "pages/deal-detail/deal-detail",
     "pages/article-detail/article-detail",
     "pages/lawyer-detail/lawyer-detail",
+    "pages/verification-detail/verification-detail",
     "pages/lawfirm-detail/lawfirm-detail",
     "pages/lawfirm-office/lawfirm-office"
   ],

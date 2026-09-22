@@ -1,0 +1,54 @@
+<site-header />
+<view class="verification-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="verification-loading" wx:if="{{loading}}">Loading...</view>
+  <view class="verification-error" wx:elif="{{error}}">{{error}}</view>
+
+  <view class="certificate" wx:elif="{{verification}}">
+    <image class="certificate-icon" src="https://www.legaloneglobal.com/images/verification_detail_icon.png" mode="widthFix" />
+
+    <view class="certificate-copy">
+      The verified person is featured on the platform of LegalOne Global Limited (LegalOne) as
+      <text class="emphasis">{{verification.displayName}}</text>
+      (LegalOne reference: <text class="emphasis">{{verification.lawyerRef}}</text>).
+      The verification is based on the official licence/certificate affirming the person's status as a legal practitioner qualified to practise in
+      <text class="emphasis">{{verification.jurisdiction}}</text>.
+    </view>
+
+    <view class="credential-card">
+      <view class="credential-intro">The credentials of the legal professional have been verified by LegalOne within the scope of details listed below:</view>
+      <view class="credential-row">
+        <text class="credential-label">Name on licence:</text>
+        <text class="credential-value">{{verification.legalName}}</text>
+      </view>
+      <view class="credential-row">
+        <text class="credential-label">Licence number:</text>
+        <text class="credential-value">{{verification.licenceNumber}}</text>
+      </view>
+      <view class="credential-row">
+        <text class="credential-label">Category:</text>
+        <text class="credential-value">{{verification.category}}</text>
+      </view>
+      <view class="credential-row">
+        <text class="credential-label">Licence issued by:</text>
+        <text class="credential-value">{{verification.issuedBy}}</text>
+      </view>
+    </view>
+
+    <view class="certificate-copy confirmation-copy">
+      LegalOne confirms that the information has been reviewed and verified as accurate as of the date of issuance and is valid for one year. LegalOne does not guarantee legal outcomes or legal services.
+    </view>
+
+    <view class="verification-dates">
+      <view class="verification-title">LegalOne Verification:</view>
+      <view class="date-list">
+        <view>Date of issue: <text class="emphasis">{{verification.issueDate}}</text></view>
+        <view>Expiry date: <text class="emphasis">{{verification.expiryDate}}</text></view>
+      </view>
+    </view>
+
+    <view class="disclaimer">
+      The LegalOne® logo is a registered trademark of LegalOne Global Limited ("LegalOne"). LegalOne has verified the legitimacy of the lawyer's license based on the information provided by the lawyer and the registered legal governing body of their jurisdiction. It is the responsibility of the lawyer to update LegalOne regarding any changes to their licensing status. LegalOne shall not be held liable for any legal consequences arising from inaccuracies or omissions in the provided information.
+    </view>
+  </view>
+</view>
+<site-footer />

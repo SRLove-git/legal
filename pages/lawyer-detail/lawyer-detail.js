@@ -143,6 +143,16 @@ Page({
     if (!d.id) return;
     wx.navigateTo({ url: '/pages/lawfirm-detail/lawfirm-detail?id=' + encodeURIComponent(d.id) + '&name=' + encodeURIComponent(d.name || '') });
   },
+  openVerification() {
+    const verificationId = this.data.item && this.data.item.verificationId;
+    if (!verificationId) {
+      wx.showToast({ title: 'Verification details unavailable', icon: 'none' });
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/verification-detail/verification-detail?id=' + encodeURIComponent(verificationId)
+    });
+  },
   openAdvertisement(e) {
     const link = e.currentTarget.dataset.link;
     if (link) h5.open(link, 'Advertisement');

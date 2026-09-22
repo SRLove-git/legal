@@ -145,7 +145,7 @@
 .award-info {
   position: absolute;
   top: 58%;
-  left: 34rpx;
+  left: 62rpx;
   width: 85%;
   transform: translateY(-50%);
 }

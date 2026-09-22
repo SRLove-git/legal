@@ -1,0 +1,117 @@
+.verification-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #f4f6f7;
+  color: #303030;
+}
+
+.certificate {
+  width: calc(100% - 48rpx);
+  margin: 34rpx auto 70rpx;
+  padding: 48rpx 34rpx 38rpx;
+  box-sizing: border-box;
+  border: 2rpx solid #d6dfe3;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(0, 43, 73, 0.08);
+}
+
+.certificate-icon {
+  display: block;
+  width: 250rpx;
+  margin: 0 auto 42rpx;
+}
+
+.certificate-copy {
+  font-size: 27rpx;
+  line-height: 1.65;
+  text-align: justify;
+}
+
+.emphasis {
+  color: #00558d;
+  font-weight: 700;
+}
+
+.credential-card {
+  margin: 38rpx -12rpx;
+  padding: 30rpx 26rpx 18rpx;
+  border: 3rpx solid #0084ba;
+  background: #f7fcfe;
+}
+
+.credential-intro {
+  margin-bottom: 22rpx;
+  color: #00558d;
+  font-size: 27rpx;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.credential-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+  border-top: 1rpx solid #c9e4ef;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.credential-label {
+  width: 210rpx;
+  flex: 0 0 210rpx;
+  color: #555555;
+}
+
+.credential-value {
+  flex: 1;
+  min-width: 0;
+  color: #171717;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.confirmation-copy {
+  margin-top: 34rpx;
+}
+
+.verification-dates {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 28rpx;
+  padding: 24rpx;
+  background: #eef7fa;
+  font-size: 25rpx;
+  line-height: 1.65;
+}
+
+.verification-title {
+  width: 220rpx;
+  flex: 0 0 220rpx;
+  color: #00558d;
+  font-weight: 700;
+}
+
+.date-list {
+  flex: 1;
+  min-width: 0;
+}
+
+.disclaimer {
+  margin-top: 38rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx solid #b9b9b9;
+  color: #777777;
+  font-size: 20rpx;
+  line-height: 1.55;
+  text-align: justify;
+}
+
+.verification-loading,
+.verification-error {
+  min-height: 520rpx;
+  padding: 120rpx 40rpx;
+  box-sizing: border-box;
+  color: #777777;
+  font-size: 27rpx;
+  text-align: center;
+}

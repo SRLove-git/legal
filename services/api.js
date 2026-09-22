@@ -961,6 +961,10 @@ const api = {
     return get('api/crm/member/' + encodeURIComponent(memberId) + '/verifications', { auth: true })
       .then(function (r) { return r || []; });
   },
+  getVerificationDetail: function (verificationId) {
+    return get('api/crm/verification/' + encodeURIComponent(verificationId))
+      .then(function (r) { return (Array.isArray(r) ? r[0] : r) || null; });
+  },
   getDealSubmissions: function (memberId) {
     return get('api/crm/member/submissionHistory/' + encodeURIComponent(memberId) + '/deal-submission', { auth: true })
       .then(function (r) { return r || []; });
