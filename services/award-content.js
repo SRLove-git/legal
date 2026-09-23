@@ -114,23 +114,13 @@ function parseWinner(chunk) {
     firm: items[0] || '',
     city: items[1] || '',
     contacts: items.slice(2),
-    hasBio: !!bio,
-    // Roughly six lines of body copy, which is where the website clamps and
-    // starts showing its "Continue reading" button.
-    bioLong: bioText.length > 320,
-    bioHtml: bio ? richText.toRichHtml(bio) : ''
+    hasBio: !!bioText,
+    bioLong: /blue-ribbon-expandButton/i.test(chunk) || bioText.length > 180,
+    bioHtml: bioText ? richText.toRichHtml(bio) : ''
   };
 }
 
-function parseAwardContent(html) {
-  if (!html) return null;
-  const resolved = resolvePlaceholders(html);
-  const title = toText(firstMatch(resolved, /class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i)) ||
-    toText(firstMatch(resolved, /<label[^>]*>([\s\S]*?)<\/label>/i));
-  const body = resolved.replace(/<div class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i, '');
-
-  // Cut the winner blocks out of the body so what is left over can be rendered
-  // as rich text (league tables, headings, article images).
+function parseBlocks(body) {
   const blocks = [];
   let cursor = 0;
   const pushHtml = function (html) {
@@ -146,8 +136,11 @@ function parseAwardContent(html) {
     pushHtml(body.slice(cursor, match.index));
     const element = sliceElement(body, match.index);
     const winner = parseWinner(element.html);
-    if (winner.name || winner.photo) blocks.push({ id: 'winner-' + blocks.length, type: 'winner', winner: winner });
-    else pushHtml(element.html);
+    if (winner.name || winner.photo) {
+      blocks.push({ id: 'winner-' + blocks.length, type: 'winner', winner: winner });
+    } else {
+      pushHtml(element.html);
+    }
     cursor = element.end;
     anchor.lastIndex = element.end;
   }
@@ -160,10 +153,90 @@ function parseAwardContent(html) {
     block.html = rich;
     block.text = rich ? '' : toText(raw);
   });
+  return blocks;
+}
+
+// The website initially shows only its practice-area rows. Each row owns one
+// hidden div containing that area's winner cards and expands independently.
+function parseRegions(body) {
+  const regions = [];
+  const outside = [];
+  const pattern = /(<p\b[^>]*class="[^"]*\bstellarAccoladeRegion\b[^"]*"[^>]*>([\s\S]*?)<\/p>)\s*(<div\b[^>]*class="[^"]*\bstellarAccoladeRegionContentHidden\b[^"]*"[^>]*>)/gi;
+  let cursor = 0;
+  let match;
+  while ((match = pattern.exec(body))) {
+    if (match.index < cursor) continue;
+    outside.push(body.slice(cursor, match.index));
+    const divStart = match.index + match[0].length - match[3].length;
+    const element = sliceElement(body, divStart);
+    const inner = element.html
+      .replace(/^<div\b[^>]*>/i, '')
+      .replace(/<\/div>\s*$/i, '');
+    const blocks = parseBlocks(inner);
+    regions.push({
+      id: 'region-' + regions.length,
+      name: toText(match[2]),
+      open: false,
+      blocks: blocks
+    });
+    cursor = element.end;
+    pattern.lastIndex = cursor;
+  }
+  outside.push(body.slice(cursor));
+  return {
+    regions: regions,
+    before: outside.shift() || '',
+    after: outside.join('')
+  };
+}
+
+// Some Blue Ribbon write-ups place several profile-backed winners in a grey
+// "Featured" panel, followed by the remaining winners on the normal page
+// background. Preserve that wrapper instead of flattening all cards together.
+function parseFeatured(body) {
+  const pattern = /<div\b[^>]*style="[^"]*background\s*:\s*#ececec[^"]*"[^>]*>\s*<p\b[^>]*class="[^"]*\bstellarAccoladeFeature\b[^"]*"[^>]*>([\s\S]*?)<\/p>/i;
+  const match = pattern.exec(body);
+  if (!match) return null;
+  const element = sliceElement(body, match.index);
+  const inner = element.html
+    .replace(/^<div\b[^>]*>/i, '')
+    .replace(/<p\b[^>]*class="[^"]*\bstellarAccoladeFeature\b[^"]*"[^>]*>[\s\S]*?<\/p>/i, '')
+    .replace(/<\/div>\s*$/i, '');
+  return {
+    title: toText(match[1]) || 'Featured',
+    before: body.slice(0, match.index),
+    content: inner,
+    after: body.slice(element.end)
+  };
+}
+
+function parseAwardContent(html) {
+  if (!html) return null;
+  const resolved = resolvePlaceholders(html);
+  const title = toText(firstMatch(resolved, /class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i)) ||
+    toText(firstMatch(resolved, /<label[^>]*>([\s\S]*?)<\/label>/i));
+  const body = resolved.replace(/<div class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i, '');
+
+  const grouped = parseRegions(body);
+  const regions = grouped.regions;
+  const featured = regions.length ? null : parseFeatured(body);
+  const leadBlocks = featured ? parseBlocks(featured.before) : [];
+  const blocks = regions.length ? parseBlocks(grouped.before) : parseBlocks(featured ? featured.after : body);
+  const afterBlocks = regions.length ? parseBlocks(grouped.after) : [];
+  const featuredBlocks = featured ? parseBlocks(featured.content) : [];
+  const regionWinnerCount = regions.reduce(function (total, region) {
+    return total + region.blocks.filter(function (block) { return block.type === 'winner'; }).length;
+  }, 0);
+  const winnerCount = regionWinnerCount ||
+    blocks.concat(featuredBlocks).filter(function (block) { return block.type === 'winner'; }).length;
   return {
     title: title,
+    leadBlocks: leadBlocks,
     blocks: blocks,
-    winnerCount: blocks.filter(function (block) { return block.type === 'winner'; }).length
+    afterBlocks: afterBlocks,
+    featured: featured ? { title: featured.title, blocks: featuredBlocks } : null,
+    regions: regions,
+    winnerCount: winnerCount
   };
 }
 

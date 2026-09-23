@@ -53,14 +53,32 @@ Page({
     const path = d.kind === 'lawfirms' ? '/pages/lawfirm-detail/lawfirm-detail' : '/pages/lawyer-detail/lawyer-detail';
     wx.navigateTo({ url: path + '?id=' + encodeURIComponent(d.id) + '&name=' + encodeURIComponent(d.name || '') });
   },
+  // Stellar Accolade pages group hundreds of winners by practice area. Match
+  // the website's initial collapsed list and its independent +/- disclosures.
+  toggleRegion(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    const regions = (this.data.item && this.data.item.award && this.data.item.award.regions) || [];
+    if (!regions[index]) return;
+    const patch = {};
+    patch['item.award.regions[' + index + '].open'] = !regions[index].open;
+    this.setData(patch);
+  },
   // The website clamps each biography and expands it with these buttons.
   toggleBio(e) {
     const index = Number(e.currentTarget.dataset.index);
-    const blocks = (this.data.item && this.data.item.award && this.data.item.award.blocks) || [];
+    const regionIndex = Number(e.currentTarget.dataset.regionIndex);
+    const award = this.data.item && this.data.item.award;
+    const inRegion = regionIndex >= 0 && award && award.regions && award.regions[regionIndex];
+    const inFeatured = regionIndex === -2 && award && award.featured;
+    const blocks = inRegion ? award.regions[regionIndex].blocks :
+      (inFeatured ? award.featured.blocks : ((award && award.blocks) || []));
     const block = blocks[index];
     if (!block || block.type !== 'winner') return;
     const patch = {};
-    patch['item.award.blocks[' + index + '].winner.open'] = !block.winner.open;
+    const base = inRegion ?
+      'item.award.regions[' + regionIndex + '].blocks[' + index + ']' :
+      (inFeatured ? 'item.award.featured.blocks[' + index + ']' : 'item.award.blocks[' + index + ']');
+    patch[base + '.winner.open'] = !block.winner.open;
     this.setData(patch);
   },
   copyDoi() {

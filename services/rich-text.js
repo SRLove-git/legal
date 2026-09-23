@@ -2,6 +2,8 @@
 // <rich-text> component. The CMS is trusted, but executable/embedded content is
 // removed before rendering and website-relative asset URLs are made absolute.
 const ORIGIN = 'https://www.legaloneglobal.com';
+const CDN = 'https://legaloneglobal.azureedge.net/storelegaloneglobalpub/';
+const LEGACY_BLOB = /^https:\/\/storelegaloneprod\.blob\.core\.windows\.net\/storelegaloneglobalpub\//i;
 
 function addStyle(html, tag, baseStyle) {
   const pattern = new RegExp('<' + tag + '([^>]*)>', 'gi');
@@ -54,9 +56,52 @@ function normalizeImages(html) {
   });
 }
 
+// League-table title artwork sits flush against the table on the website.
+// The generic article image margin otherwise adds 32px to every table and
+// makes the stacked Deals of the Year section noticeably taller.
+function normalizeDotyHeaderImages(html) {
+  return html.replace(/<div\b[^>]*class\s*=\s*(["'])[^"']*\bdoty-header-container\b[^"']*\1[^>]*>[\s\S]*?<\/div>/gi,
+    function (block) {
+      return block.replace(/margin:16px auto;/gi, 'margin:0 auto;');
+    });
+}
+
+// Some older CMS award templates still point directly at the backing Azure
+// Blob account. That host is not one of the mini program's download domains,
+// while the same files are available through LegalOne's configured CDN. The
+// templates also contain literal spaces and HTML-escaped ampersands in paths
+// (for example "W&amp;HTeam/Member/Yunzhao GENG.png"), so make those paths safe
+// before handing them to <rich-text>.
+function normalizeAssetUrl(value) {
+  let url = String(value || '')
+    .replace(/&amp;/gi, '&')
+    .replace(/&#0*38;/gi, '&')
+    .replace(/&#x0*26;/gi, '&')
+    .replace(LEGACY_BLOB, CDN)
+    // Stellar Team templates mix website-relative /images URLs with direct
+    // Blob URLs. Both sets exist in the public CDN container, so keep every
+    // card and member portrait on the mini program's single image domain.
+    .replace(/^\/images\/(StellarTeam\/)/i, CDN + '$1');
+
+  if (!/^(?:https?:\/\/|\/)/i.test(url)) return url;
+
+  const hashAt = url.indexOf('#');
+  const hash = hashAt >= 0 ? url.slice(hashAt) : '';
+  if (hashAt >= 0) url = url.slice(0, hashAt);
+  const queryAt = url.indexOf('?');
+  const query = queryAt >= 0 ? url.slice(queryAt) : '';
+  let path = queryAt >= 0 ? url.slice(0, queryAt) : url;
+  path = path.replace(/ /g, '%20').replace(/&/g, '%26');
+  return path + query + hash;
+}
+
 function absoluteUrls(html) {
   return html.replace(/\s(src|href)\s*=\s*(["'])([^"']*)\2/gi, function (whole, name, quote, url) {
-    if (!url || /^(?:https?:|data:|mailto:|tel:|#)/i.test(url)) return whole;
+    if (name.toLowerCase() === 'src') url = normalizeAssetUrl(url);
+    if (!url) return whole;
+    if (/^(?:https?:|data:|mailto:|tel:|#)/i.test(url)) {
+      return ' ' + name + '=' + quote + url + quote;
+    }
     const absolute = url.charAt(0) === '/' ? ORIGIN + url : ORIGIN + '/' + url.replace(/^\.\//, '');
     return ' ' + name + '=' + quote + absolute + quote;
   });
@@ -83,6 +128,7 @@ function toRichHtml(value) {
   html = addStyle(html, 'li', 'margin:0 0 10px;');
   html = addStyle(html, 'a', 'color:#0084ba;text-decoration:none;word-break:break-word;');
   html = normalizeImages(html);
+  html = normalizeDotyHeaderImages(html);
   html = addStyle(html, 'table', 'display:table;width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;color:#303030;');
   html = addStyle(html, 'thead', 'background:#00558d;color:#ffffff;');
   html = addStyle(html, 'th', 'border:1px solid #00558d;padding:8px 6px;font-size:14px;line-height:1.4;font-weight:700;text-align:left;word-break:break-word;');
@@ -92,13 +138,13 @@ function toRichHtml(value) {
   // Deals of the Year articles use div-based six-column league tables rather
   // than semantic <table> markup. Recreate the website's mobile grid because
   // class selectors outside <rich-text> do not cascade into its node tree.
-  html = addClassStyle(html, 'doty-table', 'display:grid;grid-template-columns:30px minmax(110px,2fr) repeat(4,1fr);width:100%;margin:20px 0;background:#e7f3f8;font-size:12px;line-height:1.35;overflow:hidden;');
+  html = addClassStyle(html, 'doty-table', 'display:grid;grid-template-columns:9% 41% repeat(4,12.5%);width:100%;margin:0;background:#e7f3f8;font-size:14px;line-height:1.35;overflow:hidden;');
   html = addClassStyle(html, 'doty-table-colspan-6', 'grid-column:1 / span 6;');
-  html = addClassStyle(html, 'doty-table-cell', 'min-width:0;padding:6px 3px;border-top:1px solid #fff;border-bottom:1px solid #fff;text-align:center;word-break:break-word;');
+  html = addClassStyle(html, 'doty-table-cell', 'min-width:0;padding:6px 4px;border-top:1px solid #fff;border-bottom:1px solid #fff;font-size:14px;text-align:center;word-break:break-word;');
   html = addClassStyle(html, 'table-header', 'display:none;');
   html = addClassStyle(html, 'mobile-table-header', 'display:block;background:#a1cee4;font-weight:700;');
   html = addClassStyle(html, 'lawfirm-name', 'text-align:left;');
-  html = addClassStyle(html, 'highlight', 'background:#d2e8f2;border-color:#e7f3f8;font-weight:700;');
+  html = addClassStyle(html, 'highlight', 'background:#d2e8f2;border-color:#e7f3f8;');
   html = addClassStyle(html, 'doty-table-footer', 'display:block;grid-column:1 / span 6;font-size:12px;');
   html = addClassStyle(html, 'rank1IconMedium', 'display:inline-block;width:16px;height:21px;background:url(https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon_Medium.png) no-repeat center/contain;');
   html = addClassStyle(html, 'rank2IconMedium', 'display:inline-block;width:16px;height:21px;background:url(https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon_Medium.png) no-repeat center/contain;');
