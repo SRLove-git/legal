@@ -1,7 +1,7 @@
 <template name="award-block">
   <rich-text class="award-rich" wx:if="{{block.type === 'html' && block.html}}" nodes="{{block.html}}"></rich-text>
   <view class="award-winner" wx:elif="{{block.type === 'winner'}}">
-    <view class="award-card">
+    <view class="award-card {{block.winner.photoTall ? 'award-card-tall' : ''}}">
       <image class="award-photo" wx:if="{{block.winner.photo}}" src="{{block.winner.photo}}" mode="widthFix" />
       <view class="award-info">
         <view class="award-winner-name">{{block.winner.name}}</view>

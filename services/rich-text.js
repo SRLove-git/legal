@@ -95,9 +95,18 @@ function normalizeAssetUrl(value) {
   return path + query + hash;
 }
 
+// Native <image> cards do not pass through the HTML attribute rewriter below.
+// Expose the same normalization as an absolute URL helper so award cards and
+// <rich-text> images always receive identical, mini-program-safe addresses.
+function toAbsoluteAssetUrl(value) {
+  const url = normalizeAssetUrl(value);
+  if (!url || /^(?:https?:|data:)/i.test(url)) return url;
+  return url.charAt(0) === '/' ? ORIGIN + url : ORIGIN + '/' + url.replace(/^\.\//, '');
+}
+
 function absoluteUrls(html) {
   return html.replace(/\s(src|href)\s*=\s*(["'])([^"']*)\2/gi, function (whole, name, quote, url) {
-    if (name.toLowerCase() === 'src') url = normalizeAssetUrl(url);
+    if (name.toLowerCase() === 'src') url = toAbsoluteAssetUrl(url);
     if (!url) return whole;
     if (/^(?:https?:|data:|mailto:|tel:|#)/i.test(url)) {
       return ' ' + name + '=' + quote + url + quote;
@@ -152,4 +161,4 @@ function toRichHtml(value) {
   return '<div style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;letter-spacing:0.3px;color:#303030;">' + html + '</div>';
 }
 
-module.exports = { toRichHtml };
+module.exports = { toRichHtml, toAbsoluteAssetUrl };

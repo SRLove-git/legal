@@ -92,9 +92,22 @@ function parseItems(chunk) {
   let match;
   while ((match = pattern.exec(chunk))) {
     const value = toText(match[1]);
-    if (value) items.push(value);
+    // A few responsive Stellar Team cards repeat the same contact block for
+    // different breakpoints. Native rendering has no CSS breakpoint wrapper,
+    // so keep the first copy and avoid doubling lines over the artwork frame.
+    if (value && items.indexOf(value) < 0) items.push(value);
   }
   return items;
+}
+
+// Responsive Stellar Team cards put the extra vertical room for names and
+// contact details in the first (phone) <source>. Using the desktop fallback
+// image makes the artwork too short and lets long text cross its gold frame.
+function parseWinnerPhoto(chunk) {
+  const picture = firstMatch(chunk, /<picture\b[^>]*>([\s\S]*?)<\/picture>/i) || chunk;
+  return firstMatch(picture, /<source\b[^>]*\bsrcset="([^"]+)"[^>]*>/i) ||
+    firstMatch(picture, /<img[^>]+src="([^"]+)"/i) ||
+    firstMatch(chunk, /<img[^>]+src="([^"]+)"/i);
 }
 
 function parseWinner(chunk) {
@@ -104,11 +117,17 @@ function parseWinner(chunk) {
   const profile = href.match(/^\/?profile\/(lawyers|lawfirms)\/(.+)$/i);
   const bio = firstMatch(chunk, /class="stellarAccoladeContent[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
   const bioText = toText(bio);
+  const photo = richText.toAbsoluteAssetUrl(parseWinnerPhoto(chunk));
   return {
     name: toText(firstMatch(chunk, /class="sa-lawyer-detail-name[^"]*"[^>]*>([\s\S]*?)<\/div>/i)),
     secondName: toText(firstMatch(chunk, /class="[^"]*second-name[^"]*"[^>]*>([\s\S]*?)<\/div>/i)),
-    photo: firstMatch(chunk, /<img[^>]+src="([^"]+)"/i),
-    profileImg: firstMatch(profileBlock, /<img[^>]+src="([^"]+)"/i),
+    // These images are rendered by native <image>, not <rich-text>, so resolve
+    // website-relative and legacy Blob paths before they reach WXML.
+    photo: photo,
+    // The 396x592 Stellar Team artwork reserves its lower portion for text.
+    // WXML uses this flag to start details one line below the team photo.
+    photoTall: /\/396-592\.png(?:[?#]|$)/i.test(photo),
+    profileImg: richText.toAbsoluteAssetUrl(firstMatch(profileBlock, /<img[^>]+src="([^"]+)"/i)),
     profileKind: profile ? profile[1].toLowerCase() : '',
     profileId: profile ? profile[2] : '',
     firm: items[0] || '',

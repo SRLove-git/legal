@@ -207,6 +207,13 @@
   transform: translateY(-50%);
 }
 
+/* Tall Stellar Team artwork keeps the team photograph in its top 40%.
+   Leave one normal text line between the photograph and the details. */
+.award-card-tall .award-info {
+  top: calc(40% + 42rpx);
+  transform: none;
+}
+
 .award-winner-name {
   color: #ffffff;
   font-size: 42rpx;
