@@ -65,13 +65,18 @@
     </view>
 
     <view class="lawyer-action-row">
-      <button class="lawyer-share-button" open-type="share">
-        <text class="lawyer-share-label">Share</text>
-        <view class="lawyer-share-icon"><image class="lawyer-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
-      </button>
-      <view class="lawyer-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
-        <text class="lawyer-save-label">{{saved ? 'Saved' : 'Save'}}</text>
-        <image class="lawyer-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+      <view class="lawyer-action-cluster">
+        <view class="lawyer-share-control">
+          <view class="lawyer-share-visual">
+            <text class="lawyer-share-label">Share</text>
+            <view class="lawyer-share-icon"><image class="lawyer-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
+          </view>
+          <button class="lawyer-share-button" open-type="share" aria-label="Share"></button>
+        </view>
+        <view class="lawyer-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+          <text class="lawyer-save-label">{{saved ? 'Saved' : 'Save'}}</text>
+          <image class="lawyer-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+        </view>
       </view>
     </view>
 

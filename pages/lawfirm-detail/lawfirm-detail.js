@@ -36,6 +36,14 @@ function completeDetail(item) {
     remarkable: 0,
     industries: [],
     industriesProvidedByClient: '',
+    officesProvidedByClient: '',
+    officesProvidedByClientHtml: '',
+    awards: '',
+    awardsHtml: '',
+    video: '',
+    videoPoster: '',
+    videoCaption: '',
+    carouselImages: [],
     offices: [],
     honours: [],
     overview: '',
@@ -66,6 +74,8 @@ Page({
     offices: [],
     topAds: [],
     downAds: [],
+    mediaItems: [],
+    mediaImageUrls: [],
     moreCases: false,
     moreArticles: false,
     moreHonours: false,
@@ -106,7 +116,7 @@ Page({
   },
   applyDetail(item) {
     const detail = item ? completeDetail(item) : null;
-    const data = { item: detail, loading: false };
+    const data = { item: detail, loading: false, mediaItems: [], mediaImageUrls: [] };
     if (!detail) {
       this.setData(data);
       return;
@@ -114,6 +124,17 @@ Page({
     if (!detail.overview && !detail.overviewHtml) {
       detail.overview = 'This law firm is listed in the LegalOne Global directory. Its full profile is available on the LegalOne Global website.';
     }
+    if (detail.video) {
+      data.mediaItems.push({
+        type: 'video',
+        url: detail.video,
+        poster: detail.videoPoster || ''
+      });
+    }
+    detail.carouselImages.forEach(function (url) {
+      data.mediaItems.push({ type: 'image', url: url });
+      data.mediaImageUrls.push(url);
+    });
     data.offices = detail.offices.slice(0, EMBED_MAX);
     data.moreOffices = detail.offices.length > EMBED_MAX;
     // The honours endpoint is the website's source; the profile payload keeps a
@@ -121,6 +142,11 @@ Page({
     data.honours = detail.honours.slice(0, EMBED_MAX);
     data.moreHonours = detail.honours.length > EMBED_MAX;
     this.setData(data);
+  },
+  previewMediaImage(e) {
+    const current = e.currentTarget.dataset.url;
+    if (!current || !this.data.mediaImageUrls.length) return;
+    wx.previewImage({ current: current, urls: this.data.mediaImageUrls });
   },
   // Annex A section 4.1 - profile sub-lists (cases / articles / honours / lawyers / partners)
   loadSub(id) {

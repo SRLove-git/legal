@@ -9,6 +9,13 @@ const PER_PAGE = 12;
 const SORT_OPTIONS = ['Sort', 'Recorded lawyers \u25bc', 'Recorded lawyers \u25b2', 'Name \u25bc', 'Name \u25b2'];
 const SORT_VALUES = ['', 'numOfLawyer desc', 'numOfLawyer asc', 'name desc', 'name asc'];
 
+function fallbackRows(keyword) {
+  const term = String(keyword || '').trim().toLowerCase();
+  return fb.lawfirms.filter(function (item) {
+    return !term || item.name.toLowerCase().indexOf(term) >= 0;
+  });
+}
+
 function withChecked(values, selected) {
   return values.map(function (value) {
     return { value: value, checked: selected.indexOf(value) >= 0 };
@@ -189,6 +196,15 @@ Page({
     const page = reset ? 1 : this.data.page + 1;
     this.setData({ loading: true });
     return api.getLawfirms(this.buildOptions(page)).then(function (items) {
+      // The public endpoint can legitimately answer with an empty first page
+      // while its index is refreshing. Keep the directory useful by showing
+      // the bundled LegalOne snapshot in that case.
+      if (reset && !items.length && !self.data.countryIndex &&
+          !self.data.offices.length && !self.data.areas.length) {
+        const rows = fallbackRows(self.data.keyword);
+        self.setData({ items: rows, page: 1, hasMore: false, loading: false });
+        return;
+      }
       const rows = reset ? items : self.data.items.concat(items);
       self.setData({
         items: rows,
@@ -197,14 +213,11 @@ Page({
         loading: false
       });
     }).catch(function () {
-      const keyword = (self.data.keyword || '').trim().toLowerCase();
       if (!reset) {
         self.setData({ loading: false, hasMore: false });
         return;
       }
-      const rows = fb.lawfirms.filter(function (it) {
-        return !keyword || it.name.toLowerCase().indexOf(keyword) >= 0;
-      });
+      const rows = fallbackRows(self.data.keyword);
       self.setData({ items: rows, page: 1, hasMore: false, loading: false });
     });
   },

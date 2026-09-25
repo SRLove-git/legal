@@ -4,13 +4,7 @@ const h5 = require('../../services/h5.js');
 const ISSN_URL = 'https://portal.issn.org/resource/ISSN/3006-2756';
 
 Component({
-  data: {
-    cookieVisible: true
-  },
   methods: {
-    okCookie() {
-      this.setData({ cookieVisible: false });
-    },
     goHome() {
       wx.reLaunch({ url: '/pages/index/index' });
     },

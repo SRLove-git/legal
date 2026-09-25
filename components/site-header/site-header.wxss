@@ -38,6 +38,13 @@
   max-width: 330rpx;
 }
 
+.drawer-ai-pill {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 28rpx;
+  border-color: #0084ba;
+}
+
 .ai-pill-prompt {
   flex: 1;
   min-width: 0;
@@ -48,12 +55,6 @@
   line-height: 50rpx;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.ai-pill-caret {
-  margin-left: 3rpx;
-  color: #0084ba;
-  font-weight: 400;
 }
 
 .ai-pill-action {
@@ -95,27 +96,26 @@
 
 .menu-button {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6rpx;
+  justify-content: center;
+  width: 68rpx;
+  height: 68rpx;
   flex-shrink: 0;
-  margin-right: 20rpx;
-}
-
-.menu-label {
-  font-size: 18rpx;
-  color: #333333;
 }
 
 .menu-lines {
-  width: 36rpx;
+  width: 42rpx;
 }
 
 .menu-line {
-  height: 3rpx;
-  background: #333333;
-  margin-bottom: 6rpx;
+  height: 4rpx;
+  background: #0084ba;
+  margin-bottom: 8rpx;
   border-radius: 2rpx;
+}
+
+.menu-line:last-child {
+  margin-bottom: 0;
 }
 
 .drawer-mask {
@@ -173,32 +173,6 @@
 .drawer-close {
   font-size: 40rpx;
   color: #333333;
-}
-
-.drawer-search {
-  display: flex;
-  align-items: center;
-  margin-bottom: 28rpx;
-}
-
-.drawer-search-input {
-  flex: 1;
-  height: 72rpx;
-  border: 2rpx solid #0084ba;
-  border-radius: 36rpx;
-  padding: 0 24rpx;
-  font-size: 26rpx;
-}
-
-.drawer-search-btn {
-  margin-left: 16rpx;
-  color: #ffffff;
-  background: #0084ba;
-  border-radius: 32rpx;
-  height: 72rpx;
-  line-height: 72rpx;
-  padding: 0 28rpx;
-  font-size: 26rpx;
 }
 
 .drawer-nav-item {

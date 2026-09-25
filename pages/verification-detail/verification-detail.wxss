@@ -18,7 +18,7 @@
 .certificate-icon {
   display: block;
   width: 250rpx;
-  margin: 0 auto 42rpx;
+  margin: 0 0 42rpx;
 }
 
 .certificate-copy {
@@ -87,7 +87,7 @@
 .verification-title {
   width: 220rpx;
   flex: 0 0 220rpx;
-  color: #00558d;
+  color: #171717;
   font-weight: 700;
 }
 

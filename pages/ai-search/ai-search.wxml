@@ -1,38 +1,11 @@
 <site-header />
-<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="ai-hero">
-    <image class="ai-logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
-    <view class="ai-search-bar">
-      <input
-        class="ai-input"
-        type="text"
-        placeholder="AI Search"
-        value="{{keyword}}"
-        bindinput="onInput"
-        confirm-type="search"
-        bindconfirm="search"
-        maxlength="500"
-      />
-    </view>
-    <view class="ai-beta">Beta</view>
-    <view class="ai-char-count">{{500 - keyword.length}} characters left</view>
-    <view class="ai-disclaimer">The AI Search function is provided to assist users in locating information and data on LegalOne's platform. LegalOne does not provide legal advice. AI-generated search results should be regarded as general information only and may not be accurate, relevant, complete or up to date. The results produced by AI do not represent the official position of LegalOne, and LegalOne assumes no responsibility or liability for your use of such information. Your messages will be stored to operate this function.</view>
-  </view>
-
-  <view class="results" wx:if="{{results.length}}">
-    <view
-      class="result-item"
-      wx:for="{{results}}"
-      wx:key="index"
-      bindtap="goResult"
-      data-page="{{item.page}}"
-      data-param="{{item.param}}"
-      data-value="{{item.title}}"
-    >
-      <view class="result-type">{{item.type}}</view>
-      <view class="result-title">{{item.title}}</view>
-      <view class="result-sub" wx:if="{{item.sub}}">{{item.sub}}</view>
-    </view>
+<view class="subpage ai-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="ai-notice">
+    <view class="ai-notice-title">AI Search</view>
+    <view class="ai-notice-text">AI Search is currently unavailable in the LegalOne mini program. Please visit the LegalOne website to use this feature.</view>
+    <view class="ai-notice-url">{{websiteUrl}}</view>
+    <view class="ai-notice-button" bindtap="copyLink">Copy link</view>
+    <view class="ai-notice-button ghost" bindtap="retry">Retry</view>
   </view>
 </view>
 <site-footer />

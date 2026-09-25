@@ -14,10 +14,10 @@
     </view>
     <view class="detail-title">{{item.title}}</view>
     <view class="detail-meta">
-      <text class="detail-rank" wx:if="{{item.rank}}">LegalOne Merits: {{item.rank}}</text>
       <text class="detail-date" wx:if="{{item.updated}}">Updated: {{item.updated}}</text>
     </view>
     <image class="detail-banner" src="{{item.banner}}" mode="widthFix" wx:if="{{item.banner}}" />
+    <view class="detail-score" wx:if="{{item.score}}">{{item.score}}</view>
     <rich-text class="detail-rich" wx:if="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
     <view class="detail-body" wx:elif="{{item.body}}">{{item.body}}</view>
 
@@ -25,18 +25,87 @@
       <view class="detail-block-head">Date of completion</view>
       <view class="detail-block-value">{{item.completed}}</view>
     </view>
+
+    <!-- Website order: the value blocks sit under "Date of completion", and the
+         USD block also appears when the amount is undisclosed. -->
+    <view class="detail-block" wx:if="{{item.showLocalValue}}">
+      <view class="detail-block-head">{{item.valueLabel}}</view>
+      <view class="detail-block-value">{{item.localValue}}</view>
+    </view>
+    <view class="detail-block" wx:if="{{item.showUsdValue}}">
+      <view class="detail-block-head">Value (USD)</view>
+      <view class="detail-block-value">{{item.usdValue}}</view>
+    </view>
+
+    <view class="detail-block" wx:if="{{item.briefs.length}}">
+      <view class="detail-block-head">Brief description of work</view>
+      <view class="detail-brief" wx:for="{{item.briefs}}" wx:key="id">
+        <view class="detail-brief-firm">{{item.firm}}:</view>
+        <view class="detail-brief-text">{{item.text}}</view>
+      </view>
+    </view>
+
     <view class="detail-block" wx:if="{{item.jurisdictions.length}}">
       <view class="detail-block-head">Related jurisdictions</view>
       <view class="detail-block-value" wx:for="{{item.jurisdictions}}" wx:key="*this">{{item}}</view>
     </view>
-    <view class="detail-block" wx:if="{{item.lawFirms.length}}">
-      <view class="detail-block-head">Law firms</view>
-      <view class="detail-block-value" wx:for="{{item.lawFirms}}" wx:key="id">{{item.name}}</view>
+
+    <view class="detail-block" wx:if="{{item.firms.length}}">
+      <view class="detail-block-head">Involved law firm(s) and lawyer(s)</view>
+      <view class="detail-party" wx:for="{{item.firms}}" wx:key="id" wx:for-item="firm">
+        <view class="detail-party-firm" bindtap="goLawfirm" data-id="{{firm.id}}" data-name="{{firm.name}}">{{firm.name}}</view>
+        <view class="detail-lawyer" wx:for="{{firm.lawyers}}" wx:key="id" wx:for-item="lawyer">
+          <view class="detail-lawyer-name" bindtap="goLawyer" data-id="{{lawyer.id}}" data-name="{{lawyer.name}}"><text class="detail-bullet">•</text>{{lawyer.label}}</view>
+          <view class="detail-lawyer-location" wx:if="{{lawyer.location}}">{{lawyer.location}}</view>
+          <view class="detail-lawyer-areas" wx:if="{{lawyer.areas.length}}">
+            <text class="detail-advised">Advised on:</text>
+            <text class="detail-area" wx:for="{{lawyer.areas}}" wx:key="*this" wx:for-item="area"><text class="detail-bullet">•</text>{{area}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-block" wx:if="{{item.execs.length}}">
+      <view class="detail-block-head">Corporate executive(s)</view>
+      <view class="detail-party" wx:for="{{item.execs}}" wx:key="id" wx:for-item="firm">
+        <view class="detail-party-name" wx:if="{{!firm.id}}">{{firm.name}}</view>
+        <view class="detail-party-firm" wx:else bindtap="goLawfirm" data-id="{{firm.id}}" data-name="{{firm.name}}">{{firm.name}}</view>
+        <view class="detail-lawyer" wx:for="{{firm.lawyers}}" wx:key="id" wx:for-item="lawyer">
+          <view class="detail-lawyer-name" bindtap="goLawyer" data-id="{{lawyer.id}}" data-name="{{lawyer.name}}"><text class="detail-bullet">•</text>{{lawyer.label}}</view>
+          <view class="detail-lawyer-location" wx:if="{{lawyer.location}}">{{lawyer.location}}</view>
+          <view class="detail-lawyer-areas" wx:if="{{lawyer.areas.length}}">
+            <text class="detail-advised">Advised on:</text>
+            <text class="detail-area" wx:for="{{lawyer.areas}}" wx:key="*this" wx:for-item="area"><text class="detail-bullet">•</text>{{area}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-block" wx:if="{{item.others.length}}">
+      <view class="detail-block-head">Other involved parties</view>
+      <view class="detail-block-value" wx:for="{{item.others}}" wx:key="*this">{{item}}</view>
+    </view>
+
+    <view class="detail-block" wx:if="{{insights.length}}">
+      <view class="detail-block-head">Expert insights</view>
+      <view class="detail-entry" wx:for="{{insights}}" wx:key="id" bindtap="goArticle" data-id="{{item.id}}" data-title="{{item.title}}">
+        <view class="detail-entry-title">{{item.title}}</view>
+        <view class="detail-entry-meta">{{item.date}}<text wx:if="{{item.author}}">, {{item.author}}</text></view>
+      </view>
     </view>
 
     <view class="detail-block" wx:if="{{related.length}}">
       <view class="detail-block-head">Related deals/cases</view>
-      <view class="detail-related" wx:for="{{related}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">{{item.title}}</view>
+      <view class="detail-entry" wx:for="{{related}}" wx:key="id" bindtap="goDeal" data-id="{{item.id}}" data-title="{{item.title}}">
+        <view class="detail-entry-title">{{item.title}}</view>
+        <view class="detail-entry-rank" wx:if="{{item.rank}}">
+          <image class="detail-entry-rank-icon" wx:if="{{item.rankNo === 1}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon_Small.png" mode="aspectFit" />
+          <image class="detail-entry-rank-icon" wx:elif="{{item.rankNo === 2}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon_Small.png" mode="aspectFit" />
+          <image class="detail-entry-rank-icon" wx:elif="{{item.rankNo === 3}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon_Small.png" mode="aspectFit" />
+          <text>{{item.rank}}</text>
+        </view>
+        <view class="detail-entry-meta">Date of completion: {{item.completed || item.date || 'TBA'}}</view>
+      </view>
     </view>
   </view>
 </view>

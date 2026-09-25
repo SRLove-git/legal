@@ -213,17 +213,26 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 40rpx;
   width: 100%;
   padding: 16rpx 0;
   overflow: visible;
 }
 
-.lawyer-share-button,
+.lawyer-action-cluster {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.lawyer-share-visual,
 .lawyer-save-button {
   display: flex;
   align-items: center;
-  gap: 12rpx;
+  gap: 6rpx;
+  width: auto;
+  min-width: 0;
+  max-width: none;
   margin: 0;
   padding: 0;
   min-height: 42rpx;
@@ -235,11 +244,32 @@
   font-weight: 700;
   line-height: 42rpx;
   white-space: nowrap;
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
 
-.lawyer-share-button::after {
-  border: 0;
+.lawyer-share-control {
+  position: relative;
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.lawyer-share-button {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.lawyer-save-button {
+  margin-left: 8rpx;
 }
 
 .lawyer-share-icon {
@@ -277,7 +307,7 @@
   margin-bottom: 18rpx;
   padding-bottom: 10rpx;
   border-bottom: 2rpx solid #339dc8;
-  color: #0084ba;
+  color: #171717;
   font-size: 32rpx;
   font-weight: 700;
   line-height: 1.35;

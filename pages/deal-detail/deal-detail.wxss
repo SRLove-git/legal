@@ -39,14 +39,21 @@
   color: #2d2d2d;
 }
 
-.detail-rank {
-  color: #0084ba;
-  font-weight: 700;
+.detail-date {
+  font-size: 22rpx;
+  color: #2d2d2d;
 }
 
 .detail-banner {
   width: 100%;
   margin: 31rpx 0;
+}
+
+/* Website .score .quotient: the placeholder shown for unranked deals. */
+.detail-score {
+  font-size: 27rpx;
+  color: #555555;
+  margin-bottom: 20rpx;
 }
 
 .detail-body {
@@ -68,11 +75,15 @@
   margin-top: 40rpx;
 }
 
+/* Website .deal .content-left .heading: every block heading carries a #339DC8
+   rule underneath (1px on the site, with 2px padding/margin on phones). */
 .detail-block-head {
   font-size: 27rpx;
   font-weight: 700;
   color: #2d2d2d;
-  margin-bottom: 10rpx;
+  padding-bottom: 4rpx;
+  margin-bottom: 8rpx;
+  border-bottom: 2rpx solid #339dc8;
 }
 
 .detail-block-value {
@@ -81,10 +92,123 @@
   line-height: 1.5;
 }
 
-.detail-related {
+/* Involved law firm(s) and lawyer(s) / Corporate executive(s):
+   website .deal-articles .list-entry with .list-heading a/b/c/d/e rows. */
+.detail-party {
+  margin-top: 20rpx;
+}
+
+.detail-party-firm {
+  font-size: 29rpx;
+  font-weight: 700;
+  color: #0084ba;
+  line-height: 1.35;
+}
+
+.detail-party-name {
+  font-size: 29rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+  line-height: 1.35;
+}
+
+.detail-lawyer {
+  margin: 0;
+}
+
+/* Website indents the lawyer rows by 20px and the practice areas by 40px, with
+   a #0084BA bullet in front of each row (a hanging indent on the site). */
+.detail-bullet {
+  color: #0084ba;
+  font-weight: 700;
+  margin-right: 10rpx;
+}
+
+.detail-lawyer-name {
+  margin-left: 40rpx;
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #0084ba;
+  line-height: 1.4;
+}
+
+.detail-lawyer-location {
+  margin-left: 40rpx;
+  font-size: 24rpx;
+  color: #555555;
+  line-height: 1.4;
+  margin-top: 4rpx;
+}
+
+.detail-lawyer-areas {
+  margin-left: 40rpx;
+  font-size: 24rpx;
+  color: #555555;
+  line-height: 1.4;
+  margin-top: 4rpx;
+}
+
+.detail-advised {
+  color: #2d2d2d;
+  font-weight: 700;
+  margin-right: 8rpx;
+}
+
+.detail-area {
+  display: block;
+  margin-left: 40rpx;
+}
+
+/* Brief description of work: "Law firm:" then the firm's write-up. */
+.detail-brief {
+  margin-top: 20rpx;
+}
+
+.detail-brief-firm {
+  font-size: 27rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+  line-height: 1.4;
+}
+
+.detail-brief-text {
+  font-size: 27rpx;
+  color: #303030;
+  line-height: 1.5;
+  margin-top: 6rpx;
+}
+
+/* Expert insights / Related deals/cases entries. */
+.detail-entry {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.detail-entry-title {
   font-size: 28rpx;
   color: #0084ba;
   line-height: 1.45;
-  padding: 14rpx 0;
-  border-bottom: 1rpx solid #f1f1f1;
+}
+
+.detail-entry-rank {
+  display: flex;
+  align-items: center;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.detail-entry-rank-icon {
+  width: 26rpx;
+  height: 34rpx;
+  margin-right: 6rpx;
+  flex-shrink: 0;
+}
+
+.detail-entry-meta {
+  font-size: 23rpx;
+  color: #2d2d2d;
+  line-height: 1.4;
+  margin-top: 6rpx;
 }

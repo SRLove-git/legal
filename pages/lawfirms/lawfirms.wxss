@@ -160,28 +160,50 @@
   padding: 34rpx 26rpx 68rpx;
 }
 
+.list-heading {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .list {
   padding: 0 10rpx 40rpx;
 }
 
 .firm-row {
   display: flex;
-  align-items: center;
-  gap: 24rpx;
-  padding: 24rpx 0;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 28rpx;
+  padding: 0 0 24rpx;
   border-bottom: 1rpx solid #eeeeee;
+  background: #ffffff;
+}
+
+.firm-row-logo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 210rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx 28rpx;
+  background: #f2f2f2;
+  border-radius: 8rpx;
+  box-sizing: border-box;
 }
 
 .firm-row-logo {
-  width: 120rpx;
-  height: 90rpx;
-  background: #f2f2f2;
-  border-radius: 8rpx;
-  flex-shrink: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .firm-row-name {
+  width: 100%;
   color: #2d2d2d;
   font-size: 30rpx;
   font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
 }

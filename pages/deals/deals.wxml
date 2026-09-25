@@ -12,12 +12,59 @@
       <view class="list-hero-title"><text class="list-hero-title-line">Showcasing Outstanding</text><text class="list-hero-title-line">Deals & Cases</text></view>
       <view class="list-hero-desc">Discover the LegalOne archive of corporate and commercial legal matters, a comprehensive collection of highly regarded transactions and cases submitted by lawyers and law firms, independently recognised with LegalOne Merits, a distinction that reflects excellence.</view>
       <view class="list-hero-actions">
-        <view class="list-hero-btn">Submit deal/case</view>
+        <view class="list-hero-btn" bindtap="startSubmission">Submit deal/case</view>
       </view>
     </view>
   </view>
 
-  <view class="list-filters">SORT & FILTER</view>
+  <view class="deal-filter-toggle" bindtap="toggleFilters">
+    <text>SORT & FILTER</text>
+    <text class="filter-count" wx:if="{{activeFilterCount}}">{{activeFilterCount}}</text>
+    <view class="filter-chevron {{filtersOpen ? 'open' : ''}}"></view>
+  </view>
+
+  <view class="deal-filter-panel" wx:if="{{filtersOpen}}">
+    <picker class="deal-filter-picker" mode="selector" range="{{years}}" value="{{yearIndex}}" bindchange="onYearChange">
+      <view class="deal-filter-field {{yearIndex ? 'active' : ''}}">{{years[yearIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+
+    <view class="deal-filter-group">
+      <view class="deal-filter-field {{jurisdictions.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="jurisdictions">
+        <text>Jurisdiction{{jurisdictions.length ? ' (' + jurisdictions.length + ')' : ''}}</text><view class="field-chevron {{openGroups.jurisdictions ? 'open' : ''}}"></view>
+      </view>
+      <scroll-view class="deal-filter-options" scroll-y wx:if="{{openGroups.jurisdictions}}">
+        <checkbox-group bindchange="onFilterChange" data-group="jurisdictions">
+          <label class="deal-filter-option" wx:for="{{jurisdictionOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="deal-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text>{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+
+    <view class="deal-filter-group">
+      <view class="deal-filter-field {{areas.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="areas">
+        <text>Practice areas and industries{{areas.length ? ' (' + areas.length + ')' : ''}}</text><view class="field-chevron {{openGroups.areas ? 'open' : ''}}"></view>
+      </view>
+      <scroll-view class="deal-filter-options" scroll-y wx:if="{{openGroups.areas}}">
+        <checkbox-group bindchange="onFilterChange" data-group="areas">
+          <label class="deal-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
+            <checkbox class="deal-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+            <text>{{option.value}}</text>
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+
+    <picker class="deal-filter-picker" mode="selector" range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange">
+      <view class="deal-filter-field {{sortIndex ? 'active' : ''}}">{{sortOptions[sortIndex]}}<view class="field-chevron"></view></view>
+    </picker>
+
+    <view class="deal-filter-actions">
+      <view class="deal-filter-button primary" bindtap="onApply">Apply</view>
+      <view class="deal-filter-button" bindtap="onReset">Reset</view>
+    </view>
+  </view>
 
   <view class="list-body">
   <view class="list-heading"><view class="list-heading-dot"></view>Latest deals/cases</view>
@@ -27,12 +74,20 @@
   </view>
   <view class="list">
     <view class="list-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
+      <image class="deal-cover" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
       <view class="entry-labels" wx:if="{{item.labels.length}}">
         <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>
       </view>
       <view class="entry-title">{{item.title}}</view>
-      <view class="entry-by" wx:if="{{item.rank}}">{{item.rank}}</view>
+      <view class="deal-merit" wx:if="{{item.rank}}">
+        <image class="deal-merit-logo" wx:if="{{item.rankNo === 1}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon_Medium.png" mode="aspectFit" />
+        <image class="deal-merit-logo" wx:elif="{{item.rankNo === 2}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon_Medium.png" mode="aspectFit" />
+        <image class="deal-merit-logo" wx:elif="{{item.rankNo === 3}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon_Medium.png" mode="aspectFit" />
+        <text>{{item.rank}}</text>
+      </view>
+      <view class="entry-by deal-under-evaluation" wx:elif="{{item.date}}">Under evaluation</view>
       <view class="entry-date" wx:if="{{item.date}}">Date: {{item.date}}</view>
+      <view class="entry-date" wx:if="{{item.value}}">Value: {{item.value}}</view>
       <view class="entry-date" wx:if="{{item.jurisdictionText}}">Jurisdictions: {{item.jurisdictionText}}</view>
       <view class="entry-date" wx:if="{{item.updated}}">Updated: {{item.updated}}</view>
     </view>

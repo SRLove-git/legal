@@ -21,13 +21,18 @@
     <view class="firm-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
 
     <view class="firm-action-row">
-      <button class="firm-share-button" open-type="share">
-        <text class="firm-share-label">Share</text>
-        <view class="firm-share-icon"><image class="firm-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
-      </button>
-      <view class="firm-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
-        <text class="firm-save-label">{{saved ? 'Saved' : 'Save'}}</text>
-        <image class="firm-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+      <view class="firm-action-cluster">
+        <view class="firm-share-control">
+          <view class="firm-share-visual">
+            <text class="firm-share-label">Share</text>
+            <view class="firm-share-icon"><image class="firm-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
+          </view>
+          <button class="firm-share-button" open-type="share" aria-label="Share"></button>
+        </view>
+        <view class="firm-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+          <text class="firm-save-label">{{saved ? 'Saved' : 'Save'}}</text>
+          <image class="firm-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+        </view>
       </view>
     </view>
 
@@ -37,6 +42,38 @@
 
     <view class="firm-established" wx:if="{{item.established}}">Established in {{item.established}}</view>
     <view class="firm-website" wx:if="{{item.website}}"><text class="firm-website-link" bindtap="goWebsite">{{item.website}}</text></view>
+
+    <swiper
+      class="firm-media-swiper"
+      wx:if="{{mediaItems.length}}"
+      indicator-dots="{{mediaItems.length > 1}}"
+      indicator-color="rgba(255, 255, 255, 0.55)"
+      indicator-active-color="#0084ba"
+      circular="{{mediaItems.length > 1}}"
+      duration="500"
+    >
+      <swiper-item wx:for="{{mediaItems}}" wx:for-item="media" wx:key="url">
+        <video
+          class="firm-media-video"
+          wx:if="{{media.type === 'video'}}"
+          src="{{media.url}}"
+          poster="{{media.poster}}"
+          controls
+          object-fit="contain"
+          enable-progress-gesture
+          show-fullscreen-btn
+          show-play-btn
+        />
+        <image
+          class="firm-media-image"
+          wx:else
+          src="{{media.url}}"
+          mode="aspectFit"
+          bindtap="previewMediaImage"
+          data-url="{{media.url}}"
+        />
+      </swiper-item>
+    </swiper>
 
     <view class="firm-info" wx:if="{{item.numOfOffice || item.numOfPartner || item.numOfLawyer}}">
       <view class="firm-info-row">
@@ -122,7 +159,8 @@
       <view class="firm-section-title">Offices</view>
       <view class="firm-office" wx:for="{{offices}}" wx:for-item="office" wx:key="id" wx:for-index="officeIndex">
         <view class="firm-office-name">
-          <image class="firm-office-toggle" wx:if="{{office.industries.length}}" src="{{office.open ? 'https://www.legaloneglobal.com/images/arrow-up2.png' : 'https://www.legaloneglobal.com/images/arrow-down2.png'}}" mode="aspectFit" bindtap="toggleOffice" data-index="{{officeIndex}}" />
+          <view class="firm-office-toggle" wx:if="{{office.industries.length}}" bindtap="toggleOffice" data-index="{{officeIndex}}" aria-role="button" aria-label="{{office.open ? 'Hide office practice areas' : 'Show office practice areas'}}"></view>
+          <view class="firm-office-toggle" wx:else></view>
           <text class="firm-office-link" bindtap="goOffice" data-id="{{office.id}}" data-name="{{office.name}}" data-city="{{office.city}}">{{office.city}}</text>
         </view>
         <view class="firm-office-areas" wx:if="{{office.open}}">
@@ -159,6 +197,18 @@
     <view class="firm-section" wx:if="{{item.industriesProvidedByClient}}">
       <view class="firm-section-title">Practice areas and industries</view>
       <view class="firm-overview">{{item.industriesProvidedByClient}}</view>
+    </view>
+
+    <view class="firm-section" wx:if="{{item.officesProvidedByClient || item.officesProvidedByClientHtml}}">
+      <view class="firm-section-title profile-blue-line">Offices</view>
+      <rich-text class="firm-overview-rich" wx:if="{{item.officesProvidedByClientHtml}}" nodes="{{item.officesProvidedByClientHtml}}"></rich-text>
+      <view class="firm-overview" wx:else>{{item.officesProvidedByClient}}</view>
+    </view>
+
+    <view class="firm-section" wx:if="{{item.awards || item.awardsHtml}}">
+      <view class="firm-section-title profile-blue-line">Awards</view>
+      <rich-text class="firm-overview-rich" wx:if="{{item.awardsHtml}}" nodes="{{item.awardsHtml}}"></rich-text>
+      <view class="firm-overview" wx:else>{{item.awards}}</view>
     </view>
 
     <image class="firm-bottom-banner" src="https://www.legaloneglobal.com/images/inHouseAdv/Large_Leaderboard_970x90_Fireside_Chat_202501.gif" mode="widthFix" bindtap="goCrumb" data-url="/pages/articles/articles" />

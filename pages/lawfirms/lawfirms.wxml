@@ -66,7 +66,9 @@
     <view class="list-heading"><view class="list-heading-dot"></view>Recently updated profiles</view>
     <view class="list">
       <view class="firm-row" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-name="{{item.name}}">
-        <image class="firm-row-logo" src="{{item.image}}" mode="aspectFit" />
+        <view class="firm-row-logo-box">
+          <image class="firm-row-logo" src="{{item.image}}" mode="aspectFit" />
+        </view>
         <view class="firm-row-name">{{item.name}}</view>
       </view>
       <view class="list-end" wx:if="{{!items.length && !loading}}">No law firms found</view>

@@ -28,12 +28,3 @@
     </view>
   </view>
 </view>
-
-<view class="cookie-notice" wx:if="{{cookieVisible}}">
-  <view class="cookie-text">
-    <text class="cookie-bold">Notice</text>. LegalOneGlobal.com uses cookies to provide necessary
-    website functionality, improve your experience and analyse our traffic. By using our website,
-    you agree to our Privacy Policy and our cookies usage.
-  </view>
-  <view class="cookie-ok" bindtap="okCookie">OK</view>
-</view>

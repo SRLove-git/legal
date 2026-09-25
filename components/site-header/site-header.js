@@ -2,8 +2,6 @@ Component({
   data: {
     menuOpen: false,
     dealsMenuOpen: false,
-    keyword: '',
-    aiPrompt: 'Find a lawyer',
     loggedIn: false,
     statusBarHeight: 20,
     headerRightPadding: 16,
@@ -33,15 +31,6 @@ Component({
       const headerRightPadding = (app && app.globalData && app.globalData.headerRightPadding) || 16;
       this.setData({ statusBarHeight, headerRightPadding });
       this.refreshAuth();
-      const prompts = ['Find a lawyer', 'Find a law firm', 'Find legal insights', 'Find a deal or case'];
-      let promptIndex = 0;
-      this.aiPromptTimer = setInterval(() => {
-        promptIndex = (promptIndex + 1) % prompts.length;
-        this.setData({ aiPrompt: prompts[promptIndex] });
-      }, 3000);
-    },
-    detached() {
-      if (this.aiPromptTimer) clearInterval(this.aiPromptTimer);
     }
   },
   pageLifetimes: {
@@ -76,16 +65,6 @@ Component({
     goAi() {
       this.setData({ menuOpen: false });
       wx.navigateTo({ url: '/pages/ai-search/ai-search' });
-    },
-    onKeyword(e) {
-      this.setData({ keyword: e.detail.value });
-    },
-    onSearch() {
-      const kw = (this.data.keyword || '').trim();
-      this.setData({ menuOpen: false });
-      if (kw) {
-        wx.navigateTo({ url: '/pages/ai-search/ai-search?keyword=' + encodeURIComponent(kw) });
-      }
     },
     goLogin() {
       this.setData({ menuOpen: false });

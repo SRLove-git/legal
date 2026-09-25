@@ -96,6 +96,13 @@ function encodeValueList(values) {
     .join(',');
 }
 
+function formatNumber(value) {
+  if (value === null || value === undefined || value === '') return '';
+  const parts = String(value).split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+}
+
 // Shared loader for profile sub-lists (cases / articles / lawyers / partners / honours).
 // Defaults to the profile embed short size (5) per Annex A §1.2.
 function listSub(basePath, opts, mapFn) {
@@ -203,7 +210,44 @@ function fullDate(iso) {
 const RANK_LABELS = { 3: 'Remarkable', 2: 'Exemplary', 1: 'Distinguished' };
 
 function rankLabel(rank) {
-  return RANK_LABELS[rank] || ('Rank ' + rank);
+  return RANK_LABELS[Number(rank)] || '';
+}
+
+// Website window.app.formateValue: thousands separators, no decimals.
+function formatMoney(value) {
+  if (value === null || value === undefined || value === '') return '';
+  return (String(value) + '.').replace(/\d(?=(\d{3})+\.)/g, '$&,').replace(/\.$/, '');
+}
+
+// Website deal page: "Involved law firm(s) and lawyer(s)" lists the firms whose
+// firmType is "lawfirm" together with each lawyer's duty, while "Corporate
+// executive(s)" lists every other party. Both print "Name, Title", the
+// location, then the "Advised on:" practice areas.
+function dealParties(list, wantLawFirm) {
+  return (list || []).filter(function (f) {
+    return f && (wantLawFirm ? f.firmType === 'lawfirm' : f.firmType !== 'lawfirm');
+  }).map(function (f) {
+    const lawyers = (f.responsiblities || []).map(function (r) {
+      const lawyer = (r && r.lawyer) || {};
+      const city = decodeEntities(lawyer.city);
+      const country = decodeEntities(lawyer.country);
+      return {
+        id: lawyer.id || '',
+        name: decodeEntities(lawyer.name),
+        label: [decodeEntities(lawyer.name), decodeEntities(lawyer.primaryTitle)].filter(Boolean).join(', '),
+        // The firm list prints "City, Country"; the executive list prints the country.
+        location: wantLawFirm ? [city, country].filter(Boolean).join(', ') : country,
+        areas: ((r && r.areas) || []).map(function (a) { return decodeEntities(a && a.area); }).filter(Boolean)
+      };
+    }).filter(function (l) { return l.name; });
+    return {
+      id: f.id || '',
+      name: decodeEntities(f.name),
+      // The website hides a firm's lawyers when the CMS flags the firm as
+      // "no involving lawyer"; the executive list has no such flag.
+      lawyers: (!wantLawFirm || !f.noInvolvingLawyer) ? lawyers : []
+    };
+  }).filter(function (f) { return f.name; });
 }
 
 function normalizeDeal(d) {
@@ -216,6 +260,7 @@ function normalizeDeal(d) {
     rank: rankLabel(d.rank),
     // Numeric rank kept so callers can pick the matching merits badge.
     rankNo: Number(d.rank) || 0,
+    image: imageUrl(d.dealBannerMobile || d.dealBanner),
     // The API repeats industries; the website prints each label once, up to three.
     labels: (d.relatedIndustries || []).map(function (x) { return decodeEntities((x && x.area) || ''); })
       .filter(function (v, i, arr) { return v && arr.indexOf(v) === i; })
@@ -224,6 +269,13 @@ function normalizeDeal(d) {
     date: d.completedDateTime ? monthYear(d.completedDateTime) : '',
     completed: d.completedDateTime ? monthYear(d.completedDateTime) : '',
     jurisdictionText: jurisdictions,
+    value: d.valUndisclosed
+      ? 'Undisclosed amount'
+      : (d.currency && d.val && d.usdVal
+        ? (d.currency === 'USD'
+          ? 'USD ' + formatNumber(d.usdVal)
+          : d.currency + ' ' + formatNumber(d.val) + ' / USD ' + formatNumber(d.usdVal))
+        : ''),
     updated: d.moddttm ? fullDate(d.moddttm) : '',
     raw: d
   };
@@ -486,7 +538,22 @@ const api = {
     opts = opts || {};
     let q = 'api/legal/deals?' + encodePage(opts.max || 12, opts.start || 1) + '&orderby=latest';
     if (opts.search) q += '&search=' + encodeURIComponent(opts.search);
+    if (opts.year) q += '&year=' + encodeURIComponent(opts.year);
+    if (opts.areas && opts.areas.length) q += '&areas=' + encodeValueList(opts.areas);
+    if (opts.jurisdictions && opts.jurisdictions.length) q += '&jurisdiction=' + encodeValueList(opts.jurisdictions);
+    if (opts.orderby) q = q.replace('&orderby=latest', '&orderby=' + encodeURIComponent(opts.orderby));
     return get(q).then(function (r) { return (r || []).map(normalizeDeal); });
+  },
+  getDealFilters: function () {
+    return Promise.all([
+      get('api/core/codes/areas'),
+      get('api/legal/lawyers/codes/jurisdiction')
+    ]).then(function (responses) {
+      return {
+        areas: normalizeCodeList(responses[0]).filter(function (value) { return value !== 'News'; }),
+        jurisdictions: normalizeCodeList(responses[1])
+      };
+    });
   },
   getLawfirms: function (opts) {
     opts = opts || {};
@@ -551,13 +618,38 @@ const api = {
       delete norm.raw;
       norm.body = stripHtml(d.descript || d.descript2);
       norm.bodyHtml = richText.toRichHtml(d.descript || d.descript2);
+      // Unranked deals carry the website's score placeholder instead of a merit
+      // badge ("Not applicable" when the case has no usable completion date).
+      const completedIso = d.completedDateTime || '';
+      norm.score = Number(d.rank)
+        ? ''
+        : (completedIso > '1900-01-01' ? 'Under evaluation' : 'Not applicable');
       norm.refNo = d.refNo || '';
       const industries = (d.relatedIndustries || []).map(function (x) { return x && x.area; }).filter(Boolean);
       norm.category = industries[0] || '';
       norm.banner = imageUrl(d.dealBannerMobile || d.dealBanner);
       norm.completed = d.completedDateTime ? monthYear(d.completedDateTime) : '';
       norm.jurisdictions = d.relatedJurisdictions || [];
-      norm.lawFirms = (d.lawFirms || []).map(function (f) { return { id: f.id, name: f.name }; }).filter(function (f) { return f.name; });
+      // The website prints "Value (<currency>)" once a figure exists and
+      // "Value (USD)" also when the amount is undisclosed.
+      norm.valueLabel = 'Value (' + (decodeEntities(d.currency) || 'local currency') + ')';
+      norm.localValue = d.valUndisclosed ? 'Undisclosed amount' : (d.val ? formatMoney(d.val) : 'NA');
+      norm.showLocalValue = !!(!d.valUndisclosed && d.val);
+      norm.usdValue = d.valUndisclosed ? 'Undisclosed amount' : (d.usdVal ? formatMoney(d.usdVal) : 'NA');
+      norm.showUsdValue = !!(d.valUndisclosed || d.usdVal);
+      // "Brief description of work": one entry per firm that supplied a write-up.
+      norm.briefs = (d.contents || []).map(function (c) {
+        return {
+          id: (c && c.lawfirmId) || '',
+          firm: decodeEntities(c && c.lawfirmName),
+          text: stripHtml(c && c.content)
+        };
+      }).filter(function (c) { return c.firm && c.text; });
+      norm.firms = dealParties(d.lawFirms, true);
+      norm.execs = dealParties(d.lawFirms, false);
+      norm.others = (d.othersInvolved || []).map(function (x) {
+        return decodeEntities((x && x.name) || x);
+      }).filter(Boolean);
       return norm;
     });
   },
@@ -615,9 +707,24 @@ const api = {
       norm.updated = f.moddttm ? fullDate(f.moddttm) : '';
       norm.established = decodeEntities(f.establishedIn);
       norm.website = decodeEntities(f.webSite);
+      // Law-firm profiles can carry one MP4 followed by a gallery. The website
+      // stores gallery entries as bare CDN keys, while media URLs may already
+      // be absolute, so imageUrl safely normalizes both shapes.
+      norm.video = imageUrl(f.video);
+      norm.videoPoster = imageUrl(f.videoPoster);
+      norm.videoCaption = imageUrl(f.videoCaption);
+      norm.carouselImages = (f.carouselImages || []).map(function (url) {
+        return imageUrl(url);
+      }).filter(Boolean);
       norm.industries = (f.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean);
       // The website closes the profile with the client-supplied practice list.
       norm.industriesProvidedByClient = decodeEntities(f.industriesProvidedByClient);
+      norm.officesProvidedByClient = stripHtml(f.officesProvidedByClient);
+      norm.officesProvidedByClientHtml = richText.toRichHtml(f.officesProvidedByClient);
+      // Client-supplied LegalOne awards are separate from the generated
+      // lawyers' honours list shown in the data-and-insights section.
+      norm.awards = stripHtml(f.awards);
+      norm.awardsHtml = richText.toRichHtml(f.awards);
       // Offices carry their own practice lists on the website (city + areas).
       norm.offices = (f.lawFirmOffices || []).map(function (o) {
         const lastUpdated = o.lastUpdated && o.lastUpdated.indexOf('0001-') !== 0 ? monthYear(o.lastUpdated) : '';

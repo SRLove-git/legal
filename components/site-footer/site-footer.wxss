@@ -75,37 +75,3 @@
   text-align: left;
   text-decoration: underline;
 }
-
-.cookie-notice {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #ffffff;
-  color: #000000;
-  padding: 24rpx 28rpx;
-  display: flex;
-  align-items: flex-start;
-  gap: 20rpx;
-  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.12);
-  z-index: 9999;
-}
-
-.cookie-text {
-  flex: 1;
-  font-size: 24rpx;
-  line-height: 1.4;
-}
-
-.cookie-bold {
-  font-weight: 700;
-}
-
-.cookie-ok {
-  background: #0084ba;
-  color: #ffffff;
-  border-radius: 8rpx;
-  padding: 12rpx 24rpx;
-  font-size: 26rpx;
-  flex-shrink: 0;
-}

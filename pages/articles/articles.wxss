@@ -2,6 +2,11 @@
   background: #ffffff;
 }
 
+/* Give each article category a clearer visual break from the previous one. */
+.article-section + .article-section {
+  margin-top: 64rpx;
+}
+
 /* Website "SORT & FILTER" bar (article_list). */
 .article-filter-toggle {
   position: relative;

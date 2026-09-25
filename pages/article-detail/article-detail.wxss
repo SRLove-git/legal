@@ -77,7 +77,7 @@
 .detail-related-head {
   font-size: 34rpx;
   font-weight: 700;
-  color: #00558d;
+  color: #171717;
   padding-bottom: 12rpx;
   border-bottom: 2rpx solid #00558d;
   margin-bottom: 20rpx;
@@ -133,7 +133,7 @@
 }
 
 .award-region-head text {
-  color: #00558d;
+  color: #171717;
   font-size: 49rpx;
   font-weight: 700;
   line-height: 1.24;

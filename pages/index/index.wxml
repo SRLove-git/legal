@@ -32,7 +32,12 @@
         <view class="panel-body">
           <view class="deal-item" wx:for="{{deals}}" wx:key="id" bindtap="goDealDetail" data-id="{{item.id}}" data-title="{{item.title}}">
             <view class="deal-title">{{item.title}}</view>
-            <view class="deal-rank">{{item.rank}}</view>
+            <view class="deal-rank" wx:if="{{item.rank}}">
+              <image class="deal-rank-icon" wx:if="{{item.rank === 'Distinguished'}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon_Medium.png" mode="aspectFit" />
+              <image class="deal-rank-icon" wx:elif="{{item.rank === 'Exemplary'}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon_Medium.png" mode="aspectFit" />
+              <image class="deal-rank-icon" wx:elif="{{item.rank === 'Remarkable'}}" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon_Medium.png" mode="aspectFit" />
+              <text>{{item.rank}}</text>
+            </view>
             <view class="deal-date">{{item.date}}</view>
           </view>
           <view class="more-link" bindtap="goDeals">Other deals/cases</view>
@@ -94,7 +99,7 @@
             <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
           </view>
           <image class="article-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
-          <view class="article-title">{{item.title}}</view>
+          <view class="article-title is-link">{{item.title}}</view>
           <view class="article-meta">
             <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
             <text class="article-date">{{item.date}}</text>
@@ -110,7 +115,7 @@
             <text class="label" wx:for="{{item.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
           </view>
           <image class="article-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
-          <view class="article-title">{{item.title}}</view>
+          <view class="article-title is-link">{{item.title}}</view>
           <view class="article-meta">
             <text class="article-author" wx:if="{{item.author}}">{{item.author}}</text>
             <text class="article-date">{{item.date}}</text>
@@ -121,33 +126,41 @@
     </view>
   </view>
 
-  <view class="row-gradient">
+  <view class="row-carousel">
     <view class="container">
       <view class="section">
         <view class="section-heading"><text class="heading-dot"></text>Lawyers</view>
-        <view class="lawyer-card" wx:for="{{lawyers}}" wx:key="id" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">
-          <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
-          <view class="lawyer-photo placeholder" wx:else></view>
-          <view class="lawyer-detail">
-            <view class="lawyer-name">{{item.name}}</view>
-            <view class="position" wx:for="{{item.positions}}" wx:for-item="pos" wx:key="*this">{{pos}}</view>
-            <view class="lawyer-firm">{{item.firm}}</view>
-            <view class="lawyer-location">{{item.location}}</view>
-          </view>
-        </view>
+        <swiper class="profile-swiper lawyer-swiper" indicator-dots="{{lawyers.length > 1}}" indicator-color="#c7c7c7" indicator-active-color="#0084ba" autoplay="{{lawyers.length > 1}}" circular="{{lawyers.length > 1}}" interval="5000" duration="500">
+          <swiper-item wx:for="{{lawyers}}" wx:key="id">
+            <view class="lawyer-card" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">
+              <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
+              <view class="lawyer-photo placeholder" wx:else></view>
+              <view class="lawyer-detail">
+                <view class="lawyer-name">{{item.name}}</view>
+                <view class="position" wx:for="{{item.positions}}" wx:for-item="pos" wx:key="*this">{{pos}}</view>
+                <view class="lawyer-firm">{{item.firm}}</view>
+                <view class="lawyer-location">{{item.location}}</view>
+              </view>
+            </view>
+          </swiper-item>
+        </swiper>
         <view class="more-link" bindtap="goLawyers">Learn more</view>
       </view>
     </view>
   </view>
 
-  <view class="row-blue">
+  <view class="row-carousel">
     <view class="container">
       <view class="section">
-        <view class="section-heading light"><text class="heading-dot"></text>Law firms</view>
-        <view class="firm-card" wx:for="{{lawfirms}}" wx:key="id" bindtap="goLawfirmDetail" data-id="{{item.id}}" data-name="{{item.name}}">
-          <image class="firm-logo" src="{{item.image}}" mode="aspectFit" />
-          <view class="firm-name">{{item.name}}</view>
-        </view>
+        <view class="section-heading"><text class="heading-dot"></text>Law firms</view>
+        <swiper class="profile-swiper firm-swiper" indicator-dots="{{lawfirms.length > 1}}" indicator-color="#c7c7c7" indicator-active-color="#0084ba" autoplay="{{lawfirms.length > 1}}" circular="{{lawfirms.length > 1}}" interval="5000" duration="500">
+          <swiper-item wx:for="{{lawfirms}}" wx:key="id">
+            <view class="firm-card" bindtap="goLawfirmDetail" data-id="{{item.id}}" data-name="{{item.name}}">
+              <image class="firm-logo" src="{{item.image}}" mode="aspectFit" />
+              <view class="firm-name">{{item.name}}</view>
+            </view>
+          </swiper-item>
+        </swiper>
         <view class="more-link" bindtap="goLawfirms">Learn more</view>
       </view>
     </view>

@@ -23,13 +23,18 @@
     <view class="office-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</view>
 
     <view class="office-action-row">
-      <button class="office-share-button" open-type="share">
-        <text class="office-share-label">Share</text>
-        <view class="office-share-icon"><image class="office-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
-      </button>
-      <view class="office-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
-        <text class="office-save-label">{{saved ? 'Saved' : 'Save'}}</text>
-        <image class="office-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+      <view class="office-action-cluster">
+        <view class="office-share-control">
+          <view class="office-share-visual">
+            <text class="office-share-label">Share</text>
+            <view class="office-share-icon"><image class="office-share-sprite" src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" /></view>
+          </view>
+          <button class="office-share-button" open-type="share" aria-label="Share"></button>
+        </view>
+        <view class="office-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+          <text class="office-save-label">{{saved ? 'Saved' : 'Save'}}</text>
+          <image class="office-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+        </view>
       </view>
     </view>
 
