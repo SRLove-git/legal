@@ -70,10 +70,15 @@
         <view class="list-end" wx:if="{{!results.length && !loading}}">No articles found</view>
         <view class="list-end" wx:elif="{{!hasMore && !loading}}">No more results</view>
       </view>
+      <view class="article-learn-more-wrap" wx:if="{{hasMore}}">
+        <view class="article-learn-more {{loading ? 'loading' : ''}}" bindtap="loadMoreResults">
+          {{loading ? 'Loading...' : 'Learn more'}}
+        </view>
+      </view>
     </block>
 
     <block wx:else>
-      <view class="article-section" wx:for="{{sections}}" wx:for-item="sec" wx:key="title">
+      <view class="article-section" wx:for="{{sections}}" wx:for-item="sec" wx:for-index="sectionIndex" wx:key="title">
         <view class="list-heading"><view class="list-heading-dot"></view>{{sec.title}}</view>
         <view class="list">
           <view class="list-entry" wx:for="{{sec.items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
@@ -85,6 +90,13 @@
             <view class="entry-by" wx:if="{{item.author}}">By {{item.author}}</view>
             <view class="entry-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
           </view>
+        </view>
+        <view class="article-learn-more-wrap" wx:if="{{sec.hasMore}}">
+          <view
+            class="article-learn-more {{sec.loading ? 'loading' : ''}}"
+            bindtap="learnMore"
+            data-index="{{sectionIndex}}"
+          >{{sec.loading ? 'Loading...' : 'Learn more'}}</view>
         </view>
       </view>
     </block>

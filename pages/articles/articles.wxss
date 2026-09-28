@@ -7,6 +7,27 @@
   margin-top: 64rpx;
 }
 
+.article-learn-more-wrap {
+  padding: 30rpx 36rpx 8rpx;
+}
+
+.article-learn-more {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15rpx 40rpx;
+  border-radius: 40rpx;
+  background: #339dc8;
+  color: #ffffff;
+  font-size: 25rpx;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.article-learn-more.loading {
+  opacity: 0.65;
+}
+
 /* Website "SORT & FILTER" bar (article_list). */
 .article-filter-toggle {
   position: relative;

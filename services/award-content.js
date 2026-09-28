@@ -229,6 +229,30 @@ function parseFeatured(body) {
   };
 }
 
+// Some award landing pages contain only linked responsive banners. WeChat's
+// <rich-text> does not reliably render <picture>/<source>, and links inside it
+// cannot provide native mini-program navigation, so expose those banners as
+// structured data for WXML to render with <image>.
+function parseLinkedBanners(body) {
+  const banners = [];
+  const pattern = /<a\b[^>]*\bhref\s*=\s*(["'])(?:https?:\/\/[^/]+)?\/articles\/([^"'?#/]+)(?:[?#][^"']*)?\1[^>]*>([\s\S]*?)<\/a>/gi;
+  let match;
+  while ((match = pattern.exec(body))) {
+    const content = match[3];
+    const source = firstMatch(content, /<source\b[^>]*\bsrcset\s*=\s*["']([^"']+)["'][^>]*>/i);
+    const fallback = firstMatch(content, /<img\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*>/i);
+    const image = source ? source.split(',')[0].trim().split(/\s+/)[0] : fallback;
+    if (!image) continue;
+    banners.push({
+      id: 'banner-' + banners.length,
+      articleId: match[2],
+      title: toText(firstMatch(content, /<img\b[^>]*\balt\s*=\s*["']([^"']*)["'][^>]*>/i)),
+      image: richText.toAbsoluteAssetUrl(image)
+    });
+  }
+  return banners;
+}
+
 function parseAwardContent(html) {
   if (!html) return null;
   const resolved = resolvePlaceholders(html);
@@ -236,11 +260,21 @@ function parseAwardContent(html) {
     toText(firstMatch(resolved, /<label[^>]*>([\s\S]*?)<\/label>/i));
   const body = resolved.replace(/<div class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i, '');
 
-  const grouped = parseRegions(body);
+  const linkedBanners = parseLinkedBanners(body);
+  const bodyWithoutLinkedBanners = body.replace(
+    /<a\b[^>]*\bhref\s*=\s*(["'])(?:https?:\/\/[^/]+)?\/articles\/[^"']+\1[^>]*>[\s\S]*?<\/a>/gi,
+    ''
+  );
+  const bannerOnly = linkedBanners.length > 0 &&
+    !toText(bodyWithoutLinkedBanners) &&
+    !/<img\b/i.test(bodyWithoutLinkedBanners);
+
+  const grouped = bannerOnly ? { regions: [], before: '', after: '' } : parseRegions(body);
   const regions = grouped.regions;
-  const featured = regions.length ? null : parseFeatured(body);
+  const featured = bannerOnly || regions.length ? null : parseFeatured(body);
   const leadBlocks = featured ? parseBlocks(featured.before) : [];
-  const blocks = regions.length ? parseBlocks(grouped.before) : parseBlocks(featured ? featured.after : body);
+  const blocks = bannerOnly ? [] :
+    (regions.length ? parseBlocks(grouped.before) : parseBlocks(featured ? featured.after : body));
   const afterBlocks = regions.length ? parseBlocks(grouped.after) : [];
   const featuredBlocks = featured ? parseBlocks(featured.content) : [];
   const regionWinnerCount = regions.reduce(function (total, region) {
@@ -255,6 +289,7 @@ function parseAwardContent(html) {
     afterBlocks: afterBlocks,
     featured: featured ? { title: featured.title, blocks: featuredBlocks } : null,
     regions: regions,
+    linkedBanners: linkedBanners,
     winnerCount: winnerCount
   };
 }

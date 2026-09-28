@@ -97,6 +97,14 @@
   margin-top: 50rpx;
 }
 
+.award-linked-banner {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 0 30rpx;
+  background: #ffffff;
+}
+
 .award-title {
   display: flex;
   align-items: center;

@@ -60,6 +60,15 @@ module.exports = {
     return { id: lastSeg(x.link), name: x.name, image: img(x.image), positions: x.positions, firm: x.firm, location: x.location };
   }),
   lawfirms: d.lawfirms.map(function (x) {
-    return { id: lastSeg(x.link), name: x.name, image: img(x.image) || WATERMARK };
+    return {
+      id: lastSeg(x.link),
+      name: x.name,
+      nameLocal: '',
+      image: img(x.image) || WATERMARK,
+      numOfDeal: 0,
+      distinguished: 0,
+      exemplary: 0,
+      remarkable: 0
+    };
   })
 };

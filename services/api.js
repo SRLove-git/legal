@@ -285,7 +285,12 @@ function normalizeLawfirm(f) {
   return {
     id: f.id,
     name: decodeEntities(f.name),
+    nameLocal: decodeEntities(f.nameLocal),
     image: imageUrl(f.profileIcon, 'm'),
+    numOfDeal: Number(f.numOfDeal) || 0,
+    distinguished: Number(f.rank1Total) || 0,
+    exemplary: Number(f.rank2Total) || 0,
+    remarkable: Number(f.rank3Total) || 0,
     raw: f
   };
 }

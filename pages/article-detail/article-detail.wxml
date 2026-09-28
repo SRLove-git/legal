@@ -62,6 +62,17 @@
 
     <view class="award" wx:if="{{item.award}}">
       <view class="award-title" wx:if="{{item.award.title}}"><text>{{item.award.title}}</text></view>
+      <image
+        class="award-linked-banner"
+        wx:for="{{item.award.linkedBanners}}"
+        wx:key="articleId"
+        wx:for-item="banner"
+        src="{{banner.image}}"
+        mode="widthFix"
+        bindtap="goArticle"
+        data-id="{{banner.articleId}}"
+        data-title="{{banner.title}}"
+      />
       <block wx:for="{{item.award.leadBlocks}}" wx:key="id" wx:for-item="block" wx:for-index="blockIndex">
         <template is="award-block" data="{{block: block, blockIndex: blockIndex, regionIndex: -1}}" />
       </block>

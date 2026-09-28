@@ -70,6 +70,29 @@
           <image class="firm-row-logo" src="{{item.image}}" mode="aspectFit" />
         </view>
         <view class="firm-row-name">{{item.name}}</view>
+        <view class="firm-row-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
+
+        <view class="firm-merits-title">LegalOne Merits</view>
+        <view class="firm-merit-row merit-total">
+          <text>Total deals/cases</text>
+          <text class="firm-merit-value" wx:if="{{item.numOfDeal}}">{{item.numOfDeal}}</text>
+          <view class="firm-merit-value merit-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="firm-merit-row">
+          <view class="firm-merit-label"><image class="firm-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+          <text class="firm-merit-value" wx:if="{{item.distinguished}}">{{item.distinguished}}</text>
+          <view class="firm-merit-value merit-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="firm-merit-row">
+          <view class="firm-merit-label"><image class="firm-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+          <text class="firm-merit-value" wx:if="{{item.exemplary}}">{{item.exemplary}}</text>
+          <view class="firm-merit-value merit-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
+        <view class="firm-merit-row">
+          <view class="firm-merit-label"><image class="firm-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+          <text class="firm-merit-value" wx:if="{{item.remarkable}}">{{item.remarkable}}</text>
+          <view class="firm-merit-value merit-unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen.JPG" mode="aspectFit" /></view>
+        </view>
       </view>
       <view class="list-end" wx:if="{{!items.length && !loading}}">No law firms found</view>
       <view class="list-end" wx:elif="{{!hasMore && !loading}}">No more results</view>

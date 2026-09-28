@@ -65,13 +65,54 @@ Page({
       return api.getArticles({ max: PER_SECTION, start: 1, section: s.section }).catch(function () { return []; });
     })).then(function (lists) {
       const sections = lists.map(function (items, i) {
-        return { title: SECTIONS[i].title, items: items };
+        return {
+          title: SECTIONS[i].title,
+          section: SECTIONS[i].section || '',
+          items: items,
+          page: 1,
+          hasMore: items.length >= PER_SECTION,
+          loading: false
+        };
       }).filter(function (s) { return s.items.length; });
       if (!sections.length) {
-        sections.push({ title: 'Latest Articles', items: fb.latest.slice(0, PER_SECTION) });
+        sections.push({
+          title: 'Latest Articles',
+          section: '',
+          items: fb.latest.slice(0, PER_SECTION),
+          page: 1,
+          hasMore: false,
+          loading: false
+        });
       }
       self.setData({ sections: sections, loading: false });
     });
+  },
+
+  learnMore(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    const section = this.data.sections[index];
+    if (!section || section.loading || !section.hasMore) return;
+
+    const nextPage = section.page + 1;
+    const loadingKey = 'sections[' + index + '].loading';
+    this.setData({ [loadingKey]: true });
+    const self = this;
+    api.getArticles({ max: PER_SECTION, start: nextPage, section: section.section })
+      .then(function (items) {
+        const itemsKey = 'sections[' + index + '].items';
+        const pageKey = 'sections[' + index + '].page';
+        const moreKey = 'sections[' + index + '].hasMore';
+        const patch = {};
+        patch[itemsKey] = section.items.concat(items);
+        patch[pageKey] = nextPage;
+        patch[moreKey] = items.length >= PER_SECTION;
+        patch[loadingKey] = false;
+        self.setData(patch);
+      })
+      .catch(function () {
+        self.setData({ [loadingKey]: false });
+        wx.showToast({ title: 'Could not load more articles', icon: 'none' });
+      });
   },
 
   loadFilters() {
@@ -146,6 +187,11 @@ Page({
       page: 1,
       hasMore: false
     });
+  },
+
+  loadMoreResults() {
+    if (this.data.loading || !this.data.hasMore) return;
+    this.fetchResults(false);
   },
 
   // Mirrors the website: applying the panel replaces the sectioned layout with

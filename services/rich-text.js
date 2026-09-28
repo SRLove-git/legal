@@ -116,6 +116,27 @@ function absoluteUrls(html) {
   });
 }
 
+// Native mini-program rich text support for <picture>/<source> is incomplete.
+// Prefer the first responsive source (normally the CMS mobile artwork) and
+// retain the fallback image's alt text and other safe attributes.
+function normalizePictures(html) {
+  return html.replace(/<picture\b[^>]*>([\s\S]*?)<\/picture>/gi, function (whole, content) {
+    const imageMatch = content.match(/<img\b[^>]*>/i);
+    const sourceMatch = content.match(/<source\b[^>]*\bsrcset\s*=\s*(["'])([^"']+)\1[^>]*>/i);
+    let image = imageMatch ? imageMatch[0] : '';
+    const source = sourceMatch && sourceMatch[2]
+      ? sourceMatch[2].split(',')[0].trim().split(/\s+/)[0]
+      : '';
+    if (!image && source) return '<img src="' + source + '" />';
+    if (!image) return '';
+    if (!source) return image;
+    if (/\ssrc\s*=/i.test(image)) {
+      return image.replace(/\ssrc\s*=\s*(["'])[^"']*\1/i, ' src="' + source + '"');
+    }
+    return image.replace(/\s*\/?>$/, ' src="' + source + '" />');
+  });
+}
+
 function toRichHtml(value) {
   if (!value) return '';
   let html = String(value)
@@ -127,6 +148,7 @@ function toRichHtml(value) {
     .replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
     .replace(/\s(?:src|href)\s*=\s*(["'])\s*javascript:[\s\S]*?\1/gi, '');
 
+  html = normalizePictures(html);
   html = absoluteUrls(html);
   html = addStyle(html, 'p', 'margin:0 0 24px;text-align:justify;');
   html = addStyle(html, 'h1', 'font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:26px;line-height:1.25;font-weight:700;color:#303030;margin:28px 0 18px;');
