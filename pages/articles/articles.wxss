@@ -83,6 +83,7 @@
 }
 
 .article-filter-group {
+  position: relative;
   margin-bottom: 18rpx;
 }
 
@@ -118,12 +119,20 @@
 
 /* The countries list is long, so it scrolls inside the panel. */
 .article-filter-options-frame {
+  position: absolute;
+  z-index: 50;
+  top: 100%;
+  right: 0;
+  left: 0;
   margin-top: -2rpx;
   border: 2rpx solid #0084ba;
-  border-top: 0;
+  border-radius: 0 0 8rpx 8rpx;
   background: #ffffff;
   box-sizing: border-box;
+  box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  transform-origin: top center;
+  animation: filter-options-in 0.16s ease-out;
 }
 
 .article-filter-options {
@@ -149,7 +158,14 @@
 .article-filter-option-text {
   flex: 1;
   min-width: 0;
-  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes filter-options-in {
+  from { opacity: 0; transform: translateY(-8rpx) scaleY(0.96); }
+  to { opacity: 1; transform: translateY(0) scaleY(1); }
 }
 
 .article-search-field {

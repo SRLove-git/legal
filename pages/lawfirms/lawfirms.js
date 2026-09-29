@@ -84,7 +84,9 @@ Page({
   toggleGroup(e) {
     const group = e.currentTarget.dataset.group;
     const openGroups = Object.assign({}, this.data.openGroups);
-    openGroups[group] = !openGroups[group];
+    const willOpen = !openGroups[group];
+    Object.keys(openGroups).forEach(function (key) { openGroups[key] = false; });
+    openGroups[group] = willOpen;
     this.setData({ openGroups: openGroups });
   },
 
