@@ -258,21 +258,25 @@
 }
 
 .award-winner-contacts {
-  width: 78%;
+  width: 100%;
+  border-top: 2rpx solid #94642b;
+  border-bottom: 2rpx solid #94642b;
 }
 
 .award-winner-contact {
   margin: 0;
   padding: 8rpx 0;
-  border-bottom: 2rpx solid #94642b;
+  font-size: 26rpx;
+  white-space: nowrap;
+  word-break: normal;
 }
 
-.award-card-theme-blue-ribbon .award-winner-contact {
-  border-bottom-color: #4799e0;
+.award-card-theme-blue-ribbon .award-winner-contacts {
+  border-color: #4799e0;
 }
 
-.award-card-theme-fourty-five .award-winner-contact {
-  border-bottom-color: #eeeeee;
+.award-card-theme-fourty-five .award-winner-contacts {
+  border-color: #eeeeee;
 }
 
 .award-card-theme-elite-100 .award-winner-name,
@@ -281,8 +285,8 @@
   color: #dcaa71;
 }
 
-.award-card-theme-elite-100 .award-winner-contact {
-  border-bottom-color: #878787;
+.award-card-theme-elite-100 .award-winner-contacts {
+  border-color: #878787;
 }
 
 .award-view-profile {
