@@ -322,10 +322,6 @@
   flex-shrink: 0;
 }
 
-.lawyer-photo.placeholder {
-  background: #edebeb;
-}
-
 .lawyer-detail {
   flex: 1;
 }

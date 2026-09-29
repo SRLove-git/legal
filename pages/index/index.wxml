@@ -134,7 +134,6 @@
           <swiper-item wx:for="{{lawyers}}" wx:key="id">
             <view class="lawyer-card" bindtap="goLawyerDetail" data-id="{{item.id}}" data-name="{{item.name}}">
               <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
-              <view class="lawyer-photo placeholder" wx:else></view>
               <view class="lawyer-detail">
                 <view class="lawyer-name">{{item.name}}</view>
                 <view class="position" wx:for="{{item.positions}}" wx:for-item="pos" wx:key="*this">{{pos}}</view>

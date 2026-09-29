@@ -9,7 +9,7 @@
     <view class="certificate-copy">
       The verified person is featured on the platform of LegalOne Global Limited (LegalOne) as
       <text class="emphasis">{{verification.displayName}}</text>
-      (LegalOne reference: <text class="emphasis">{{verification.lawyerRef}}</text>).
+      (LegalOne reference:<text class="emphasis after-colon">{{verification.lawyerRef}}</text>).
       The verification is based on the official licence/certificate affirming the person's status as a legal practitioner qualified to practise in
       <text class="emphasis">{{verification.jurisdiction}}</text>.
     </view>
@@ -41,8 +41,8 @@
     <view class="verification-dates">
       <view class="verification-title">LegalOne Verification:</view>
       <view class="date-list">
-        <view>Date of issue: <text class="emphasis">{{verification.issueDate}}</text></view>
-        <view>Expiry date: <text class="emphasis">{{verification.expiryDate}}</text></view>
+        <view>Date of issue:<text class="emphasis after-colon">{{verification.issueDate}}</text></view>
+        <view>Expiry date:<text class="emphasis after-colon">{{verification.expiryDate}}</text></view>
       </view>
     </view>
 

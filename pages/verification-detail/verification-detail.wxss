@@ -6,13 +6,13 @@
 }
 
 .certificate {
-  width: calc(100% - 48rpx);
-  margin: 34rpx auto 70rpx;
+  width: 100%;
+  margin: 34rpx 0 70rpx;
   padding: 48rpx 34rpx 38rpx;
   box-sizing: border-box;
-  border: 2rpx solid #d6dfe3;
+  border-top: 2rpx solid #d6dfe3;
+  border-bottom: 2rpx solid #d6dfe3;
   background: #ffffff;
-  box-shadow: 0 8rpx 28rpx rgba(0, 43, 73, 0.08);
 }
 
 .certificate-icon {
@@ -30,6 +30,10 @@
 .emphasis {
   color: #00558d;
   font-weight: 700;
+}
+
+.after-colon {
+  padding-left: 0.3em;
 }
 
 .credential-card {
@@ -50,6 +54,7 @@
 .credential-row {
   display: flex;
   align-items: flex-start;
+  column-gap: 12rpx;
   padding: 16rpx 0;
   border-top: 1rpx solid #c9e4ef;
   font-size: 25rpx;
@@ -77,6 +82,7 @@
 .verification-dates {
   display: flex;
   align-items: flex-start;
+  column-gap: 12rpx;
   margin-top: 28rpx;
   padding: 24rpx;
   background: #eef7fa;

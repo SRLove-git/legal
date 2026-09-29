@@ -57,7 +57,14 @@
         <view class="dci-archive-copy">{{doty.archive.description}}</view>
         <image class="dci-archive-image" src="{{doty.archive.image}}" mode="widthFix" />
       </view>
-      <image class="dci-archive-map" src="{{doty.archive.map}}" mode="widthFix" />
+      <image
+        class="dci-archive-map"
+        src="{{doty.archive.map}}"
+        mode="widthFix"
+        bindtap="previewArchiveMap"
+        aria-role="button"
+        aria-label="Preview archive world map"
+      />
     </view>
   </view>
 
@@ -69,7 +76,7 @@
           <text class="dci-faq-group-title">{{group.title}}</text>
           <view class="dci-show-all" bindtap="toggleFaqGroup" data-index="{{groupIndex}}">
             <text>{{openFaqGroups[groupIndex] ? 'Hide All' : 'Show All'}}</text>
-            <text class="dci-show-all-arrow">{{openFaqGroups[groupIndex] ? '‹' : '›'}}</text>
+            <view class="dci-show-all-arrow {{openFaqGroups[groupIndex] ? 'is-open' : ''}}"></view>
           </view>
         </view>
         <view class="dci-faq-item" wx:for="{{group.items}}" wx:for-item="faqItem" wx:key="id">

@@ -66,6 +66,15 @@ Page({
     this.setData({ openFaq, openFaqGroups });
   },
 
+  previewArchiveMap() {
+    const mapUrl = this.data.doty && this.data.doty.archive && this.data.doty.archive.map;
+    if (!mapUrl) return;
+    wx.previewImage({
+      current: mapUrl,
+      urls: [mapUrl]
+    });
+  },
+
   goArticle(e) {
     const webUrl = e.currentTarget.dataset.url || '';
     const match = webUrl.match(/\/articles\/([^/?#]+)/);

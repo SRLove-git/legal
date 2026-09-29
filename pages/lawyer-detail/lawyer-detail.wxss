@@ -37,22 +37,6 @@
   background: #edebeb;
 }
 
-.lawyer-photo.placeholder {
-  position: relative;
-}
-
-.lawyer-photo.placeholder::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 94rpx;
-  height: 94rpx;
-  border-radius: 50%;
-  background: #d5d5d5;
-  transform: translate(-50%, -50%);
-}
-
 .lawyer-profile-info {
   flex: 1;
   min-width: 0;

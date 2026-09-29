@@ -17,7 +17,6 @@
 
     <view class="lawyer-profile">
       <image class="lawyer-photo" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}" />
-      <view class="lawyer-photo placeholder" wx:else></view>
       <view class="lawyer-profile-info">
         <view class="lawyer-name">{{item.name}}</view>
         <view class="lawyer-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
