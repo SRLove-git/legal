@@ -1,3 +1,5 @@
+@import "../../styles/content-actions.wxss";
+
 .detail {
   padding: 30rpx 36rpx 60rpx;
 }

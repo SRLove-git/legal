@@ -18,14 +18,16 @@
         <text>{{countriesLabel}}</text>
         <view class="field-chevron {{openGroups.countries ? 'up' : ''}}"></view>
       </view>
-      <scroll-view class="article-filter-options" scroll-y wx:if="{{openGroups.countries}}">
-        <checkbox-group bindchange="onCountriesChange">
-          <label class="article-filter-option" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value">
-            <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
-            <text class="article-filter-option-text">{{option.value}}</text>
-          </label>
-        </checkbox-group>
-      </scroll-view>
+      <view class="article-filter-options-frame" wx:if="{{openGroups.countries}}">
+        <scroll-view class="article-filter-options" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{countryOptions.length > 6 ? 520 : countryOptions.length * 68 + 16}}rpx;">
+          <checkbox-group bindchange="onCountriesChange">
+            <label class="article-filter-option" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value">
+              <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+              <text class="article-filter-option-text">{{option.value}}</text>
+            </label>
+          </checkbox-group>
+        </scroll-view>
+      </view>
     </view>
 
     <view class="article-filter-group">
@@ -33,14 +35,16 @@
         <text>{{areasLabel}}</text>
         <view class="field-chevron {{openGroups.areas ? 'up' : ''}}"></view>
       </view>
-      <scroll-view class="article-filter-options" scroll-y wx:if="{{openGroups.areas}}">
-        <checkbox-group bindchange="onAreasChange">
-          <label class="article-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
-            <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
-            <text class="article-filter-option-text">{{option.value}}</text>
-          </label>
-        </checkbox-group>
-      </scroll-view>
+      <view class="article-filter-options-frame" wx:if="{{openGroups.areas}}">
+        <scroll-view class="article-filter-options" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 6 ? 520 : areaOptions.length * 68 + 16}}rpx;">
+          <checkbox-group bindchange="onAreasChange">
+            <label class="article-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
+              <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+              <text class="article-filter-option-text">{{option.value}}</text>
+            </label>
+          </checkbox-group>
+        </scroll-view>
+      </view>
     </view>
 
     <view class="article-search-field">

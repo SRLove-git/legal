@@ -19,7 +19,7 @@
           <view class="announcement-content">
             <text class="announcement-headline">{{item.headline}}</text>
           </view>
-          <view class="announcement-more" bindtap="goAnnouncement" data-id="{{item.id}}">More detail</view>
+          <view class="announcement-more" bindtap="goAnnouncement" data-id="{{item.id}}" data-url="{{item.url}}" data-headline="{{item.headline}}">More detail</view>
         </view>
       </view>
     </swiper-item>

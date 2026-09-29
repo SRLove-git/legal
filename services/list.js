@@ -36,6 +36,10 @@ function createListPage(cfg) {
     },
 
     onReachBottom() {
+      if (!cfg.manualPaging) this.loadMore();
+    },
+
+    loadMore() {
       if (this.data.hasMore && !this.data.loading) this.fetch(false);
     },
 

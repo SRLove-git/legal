@@ -1,19 +1,30 @@
+<import src="../../templates/content-actions.wxml" />
 <site-header />
-<view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
     <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/announcements/announcements">Announcements</text>
-    <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-current">{{item.headline}}</text>
   </view>
-  <view class="detail">
-    <view class="ann-type">{{item.type}}</view>
-    <view class="ann-headline">{{item.headline}}</view>
-    <view class="ann-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
-    <rich-text class="ann-rich" wx:if="{{item.descriptHtml}}" nodes="{{item.descriptHtml}}"></rich-text>
-    <view class="ann-body" wx:elif="{{item.descript}}">{{item.descript}}</view>
-    <view class="ann-link" wx:if="{{item.url}}" bindtap="openUrl">Open link</view>
+
+  <view class="list-body">
+    <view class="list-heading"><view class="list-heading-dot"></view>Announcements</view>
+
+    <view class="announcement-state" wx:if="{{loading}}">Loading...</view>
+    <view class="announcement-state" wx:elif="{{error}}">{{error}}</view>
+
+    <view class="detail" wx:elif="{{item}}">
+      <view class="ann-type" wx:if="{{item.type}}">{{item.type}}</view>
+      <view class="ann-headline {{item.url ? 'ann-headline-link' : ''}}" bindtap="openUrl">{{item.headline}}</view>
+      <view class="ann-date" wx:if="{{item.date}}">Updated: {{item.date}}</view>
+
+      <template is="content-actions" data="{{saved: saved, saving: saving}}" />
+
+      <image class="ann-image" wx:if="{{item.image}}" src="{{item.image}}" mode="widthFix" bindtap="openUrl" />
+      <rich-text class="ann-rich" wx:if="{{item.descriptHtml}}" nodes="{{item.descriptHtml}}"></rich-text>
+      <view class="ann-body" wx:elif="{{item.descript}}">{{item.descript}}</view>
+      <view class="ann-original" wx:if="{{item.url}}" bindtap="openUrl">Read original</view>
+    </view>
   </view>
 </view>
 <site-footer />

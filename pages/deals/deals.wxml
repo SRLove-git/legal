@@ -32,28 +32,32 @@
       <view class="deal-filter-field {{jurisdictions.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="jurisdictions">
         <text>Jurisdiction{{jurisdictions.length ? ' (' + jurisdictions.length + ')' : ''}}</text><view class="field-chevron {{openGroups.jurisdictions ? 'open' : ''}}"></view>
       </view>
-      <scroll-view class="deal-filter-options" scroll-y wx:if="{{openGroups.jurisdictions}}">
-        <checkbox-group bindchange="onFilterChange" data-group="jurisdictions">
-          <label class="deal-filter-option" wx:for="{{jurisdictionOptions}}" wx:for-item="option" wx:key="value">
-            <checkbox class="deal-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
-            <text>{{option.value}}</text>
-          </label>
-        </checkbox-group>
-      </scroll-view>
+      <view class="deal-filter-options-frame" wx:if="{{openGroups.jurisdictions}}">
+        <scroll-view class="deal-filter-options" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{jurisdictionOptions.length > 5 ? 360 : jurisdictionOptions.length * 68}}rpx;">
+          <checkbox-group bindchange="onFilterChange" data-group="jurisdictions">
+            <label class="deal-filter-option" wx:for="{{jurisdictionOptions}}" wx:for-item="option" wx:key="value">
+              <checkbox class="deal-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+              <text>{{option.value}}</text>
+            </label>
+          </checkbox-group>
+        </scroll-view>
+      </view>
     </view>
 
     <view class="deal-filter-group">
       <view class="deal-filter-field {{areas.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="areas">
         <text>Practice areas and industries{{areas.length ? ' (' + areas.length + ')' : ''}}</text><view class="field-chevron {{openGroups.areas ? 'open' : ''}}"></view>
       </view>
-      <scroll-view class="deal-filter-options" scroll-y wx:if="{{openGroups.areas}}">
-        <checkbox-group bindchange="onFilterChange" data-group="areas">
-          <label class="deal-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
-            <checkbox class="deal-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
-            <text>{{option.value}}</text>
-          </label>
-        </checkbox-group>
-      </scroll-view>
+      <view class="deal-filter-options-frame" wx:if="{{openGroups.areas}}">
+        <scroll-view class="deal-filter-options" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;">
+          <checkbox-group bindchange="onFilterChange" data-group="areas">
+            <label class="deal-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
+              <checkbox class="deal-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
+              <text>{{option.value}}</text>
+            </label>
+          </checkbox-group>
+        </scroll-view>
+      </view>
     </view>
 
     <picker class="deal-filter-picker" mode="selector" range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange">

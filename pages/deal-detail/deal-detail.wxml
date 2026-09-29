@@ -1,3 +1,4 @@
+<import src="../../templates/content-actions.wxml" />
 <site-header />
 <view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
@@ -16,6 +17,7 @@
     <view class="detail-meta">
       <text class="detail-date" wx:if="{{item.updated}}">Updated: {{item.updated}}</text>
     </view>
+    <template is="content-actions" data="{{saved: saved, saving: saving}}" />
     <image class="detail-banner" src="{{item.banner}}" mode="widthFix" wx:if="{{item.banner}}" />
     <view class="detail-score" wx:if="{{item.score}}">{{item.score}}</view>
     <rich-text class="detail-rich" wx:if="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>

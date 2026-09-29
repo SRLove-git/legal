@@ -118,6 +118,12 @@ function parseWinner(chunk) {
   const bio = firstMatch(chunk, /class="stellarAccoladeContent[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
   const bioText = toText(bio);
   const photo = richText.toAbsoluteAssetUrl(parseWinnerPhoto(chunk));
+  let theme = '';
+  if (/\belite-100\b/i.test(chunk)) theme = 'elite-100';
+  else if (/\bfourty-five\b/i.test(chunk)) theme = 'fourty-five';
+  else if (/\bstellar-accolaide\b/i.test(chunk)) theme = 'stellar-accolaide';
+  else if (/\bspecial-award\b/i.test(chunk)) theme = 'special-award';
+  else if (/\bblue-ribbon\b/i.test(chunk)) theme = 'blue-ribbon';
   return {
     name: toText(firstMatch(chunk, /class="sa-lawyer-detail-name[^"]*"[^>]*>([\s\S]*?)<\/div>/i)),
     secondName: toText(firstMatch(chunk, /class="[^"]*second-name[^"]*"[^>]*>([\s\S]*?)<\/div>/i)),
@@ -127,6 +133,7 @@ function parseWinner(chunk) {
     // The 396x592 Stellar Team artwork reserves its lower portion for text.
     // WXML uses this flag to start details one line below the team photo.
     photoTall: /\/396-592\.png(?:[?#]|$)/i.test(photo),
+    theme: theme,
     profileImg: richText.toAbsoluteAssetUrl(firstMatch(profileBlock, /<img[^>]+src="([^"]+)"/i)),
     profileKind: profile ? profile[1].toLowerCase() : '',
     profileId: profile ? profile[2] : '',
@@ -256,6 +263,12 @@ function parseLinkedBanners(body) {
 function parseAwardContent(html) {
   if (!html) return null;
   const resolved = resolvePlaceholders(html);
+  let theme = '';
+  if (/\belite-100\b/i.test(resolved)) theme = 'elite-100';
+  else if (/\bfourty-five\b/i.test(resolved)) theme = 'fourty-five';
+  else if (/\bstellar-accolaide\b/i.test(resolved)) theme = 'stellar-accolaide';
+  else if (/\bspecial-award\b/i.test(resolved)) theme = 'special-award';
+  else if (/\bblue-ribbon\b/i.test(resolved)) theme = 'blue-ribbon';
   const title = toText(firstMatch(resolved, /class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i)) ||
     toText(firstMatch(resolved, /<label[^>]*>([\s\S]*?)<\/label>/i));
   const body = resolved.replace(/<div class="blue-ribbon-title[^"]*"[^>]*>([\s\S]*?)<\/div>/i, '');
@@ -284,6 +297,7 @@ function parseAwardContent(html) {
     blocks.concat(featuredBlocks).filter(function (block) { return block.type === 'winner'; }).length;
   return {
     title: title,
+    theme: theme,
     leadBlocks: leadBlocks,
     blocks: blocks,
     afterBlocks: afterBlocks,

@@ -76,11 +76,16 @@
   color: #0084ba;
 }
 
-.deal-filter-options {
-  max-height: 360rpx;
-  border: 2rpx solid #d7d7d7;
+.deal-filter-options-frame {
+  border: 2rpx solid #0084ba;
   border-top: 0;
   background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.deal-filter-options {
+  max-height: 360rpx;
   box-sizing: border-box;
 }
 

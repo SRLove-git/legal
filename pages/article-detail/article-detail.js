@@ -2,6 +2,7 @@ const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
+const contentActions = require('../../services/content-actions.js');
 
 // The website shows "Awards" in the crumb for award write-ups and "Articles" for
 // everything else; it decides this from the article's section.
@@ -15,7 +16,7 @@ function crumbFor(item) {
 }
 
 Page({
-  behaviors: [safeArea, breadcrumb],
+  behaviors: [safeArea, breadcrumb, contentActions],
   data: { item: null, related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles', relatedHeading: 'Related articles' },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
@@ -30,16 +31,23 @@ Page({
         item.body = 'This article is published by the LegalOne Editorial Team. The full piece is available on the LegalOne Global website.';
       }
       self.setData(Object.assign({ item: item || null }, crumbFor(item)));
+      if (item) self.configureContentActions('article', item.id || id,
+        '/articles/' + encodeURIComponent(item.id || id), 'article');
     };
     if (id) {
       api.getArticleDetail(id).then(function (item) {
         self.setData(Object.assign({ item: item || null }, crumbFor(item)));
+        if (item) self.configureContentActions('article', item.id || id,
+          '/articles/' + encodeURIComponent(item.id || id), 'article');
         const relatedRequest = item && item.section === 'Awards' ? api.getRelatedAwards(id) : api.getRelatedArticles(id);
         relatedRequest.then(function (r) { self.setData({ related: (r || []).slice(0, 5) }); }).catch(function () {});
       }).catch(fallback);
     } else {
       fallback();
     }
+  },
+  onShow() {
+    if (this.data.saveContentId) this.refreshSavedStatus();
   },
   goArticle(e) {
     const d = e.currentTarget.dataset;
@@ -88,5 +96,21 @@ Page({
       data: url,
       success: function () { wx.showToast({ title: 'DOI link copied', icon: 'none' }); }
     });
+  },
+  onShareAppMessage() {
+    const item = this.data.item || {};
+    return {
+      title: item.title || 'LegalOne article',
+      path: '/pages/article-detail/article-detail?id=' + encodeURIComponent(item.id || this.data.saveContentId || ''),
+      imageUrl: item.image || undefined
+    };
+  },
+  onShareTimeline() {
+    const item = this.data.item || {};
+    return {
+      title: item.title || 'LegalOne article',
+      query: 'id=' + encodeURIComponent(item.id || this.data.saveContentId || ''),
+      imageUrl: item.image || undefined
+    };
   }
 });

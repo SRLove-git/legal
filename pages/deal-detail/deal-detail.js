@@ -2,9 +2,10 @@ const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
+const contentActions = require('../../services/content-actions.js');
 
 Page({
-  behaviors: [safeArea, breadcrumb],
+  behaviors: [safeArea, breadcrumb, contentActions],
   data: { item: null, related: [], insights: [] },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
@@ -25,10 +26,14 @@ Page({
         item.briefs = item.briefs || [];
       }
       self.setData({ item: item || null });
+      if (item) self.configureContentActions('deal', item.id || id,
+        '/deal/' + encodeURIComponent(item.id || id), 'deal/case');
     };
     if (id) {
       api.getDealDetail(id).then(function (item) {
         self.setData({ item: item || null });
+        if (item) self.configureContentActions('deal', item.id || id,
+          '/deal/' + encodeURIComponent(item.id || id), 'deal/case');
         // The website closes the page with "Expert insights" (the deal's related
         // articles) and "Related deals/cases", both from the tops endpoints.
         api.getDealTopArticles(id).then(function (r) {
@@ -43,6 +48,9 @@ Page({
     } else {
       fallback();
     }
+  },
+  onShow() {
+    if (this.data.saveContentId) this.refreshSavedStatus();
   },
   goDeal(e) {
     const d = e.currentTarget.dataset;
@@ -61,5 +69,21 @@ Page({
     const d = e.currentTarget.dataset;
     if (!d.id) return;
     wx.navigateTo({ url: '/pages/lawyer-detail/lawyer-detail?id=' + encodeURIComponent(d.id) + '&name=' + encodeURIComponent(d.name || '') });
+  },
+  onShareAppMessage() {
+    const item = this.data.item || {};
+    return {
+      title: item.title || 'LegalOne deal/case',
+      path: '/pages/deal-detail/deal-detail?id=' + encodeURIComponent(item.id || this.data.saveContentId || ''),
+      imageUrl: item.banner || undefined
+    };
+  },
+  onShareTimeline() {
+    const item = this.data.item || {};
+    return {
+      title: item.title || 'LegalOne deal/case',
+      query: 'id=' + encodeURIComponent(item.id || this.data.saveContentId || ''),
+      imageUrl: item.banner || undefined
+    };
   }
 });

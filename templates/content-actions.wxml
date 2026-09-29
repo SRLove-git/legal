@@ -1,0 +1,17 @@
+<template name="content-actions">
+  <view class="content-action-row">
+    <view class="content-share-control">
+      <view class="content-action-button">
+        <text>Share</text>
+        <view class="content-share-icon">
+          <image src="https://www.legaloneglobal.com/images/icon-sprite-share@2x.png" mode="widthFix" />
+        </view>
+      </view>
+      <button class="content-share-button" open-type="share" aria-label="Share this page"></button>
+    </view>
+    <view class="content-action-button content-save-button {{saved ? 'is-saved' : ''}} {{saving ? 'is-loading' : ''}}" bindtap="onSave">
+      <text>{{saved ? 'Saved' : 'Save'}}</text>
+      <image class="content-save-icon" src="{{saved ? 'https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png' : 'https://www.legaloneglobal.com/images/dashboard/Saved.png'}}" mode="aspectFit" />
+    </view>
+  </view>
+</template>

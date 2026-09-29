@@ -117,13 +117,19 @@
 }
 
 /* The countries list is long, so it scrolls inside the panel. */
-.article-filter-options {
-  max-height: 520rpx;
+.article-filter-options-frame {
   margin-top: -2rpx;
-  padding: 8rpx 24rpx;
   border: 2rpx solid #0084ba;
   border-top: 0;
   background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.article-filter-options {
+  max-height: 520rpx;
+  padding: 8rpx 24rpx;
+  box-sizing: border-box;
 }
 
 .article-filter-option {

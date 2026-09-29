@@ -74,15 +74,14 @@ function remove(path, options) {
   return request('DELETE', path, options);
 }
 
-// The API only accepts the literal brace form. Percent-encoded braces
-// ("page=%7Bmax:12,start:1%7D") are rejected with HTTP 500, which is what the
-// website sends too, so the query keeps the braces verbatim.
+// The API requires the entire paging object value to be percent-encoded,
+// including its colons and comma; partial encoding is rejected with HTTP 500.
 function encodePage(max, start) {
-  return 'page={max:' + max + ',start:' + start + '}';
+  return 'page=' + encodeURIComponent('{max:' + max + ',start:' + start + '}');
 }
 
 function encodePageCapital(max, start) {
-  return 'Page={Max:' + max + ',Start:' + start + '}';
+  return 'Page=' + encodeURIComponent('{Max:' + max + ',Start:' + start + '}');
 }
 
 // Multi-value list filters (countries / categories) travel as one
@@ -403,8 +402,8 @@ function normalizeAnnouncement(n) {
   const updated = n.moddttm || n.publishDate;
   return {
     id: n.id,
-    type: n.title || (n.type === 0 ? 'Deal Announcement' : 'Announcement'),
-    headline: n.headline || '',
+    type: decodeEntities(n.title || (n.type === 0 ? 'Deal Announcement' : 'Announcement')),
+    headline: decodeEntities(n.headline),
     image: imageUrl(n.image, 'x'),
     url: n.url || '',
     date: fullDate(updated),

@@ -1,5 +1,6 @@
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
+const announcementTarget = require('../../services/announcement-target.js');
 
 function use(promise, fallback) {
   return promise
@@ -47,8 +48,12 @@ Page({
   },
 
   goAnnouncement(e) {
-    const id = e.currentTarget.dataset.id;
-    if (id) wx.navigateTo({ url: '/pages/announcement-detail/announcement-detail?id=' + encodeURIComponent(id) });
+    const item = e.currentTarget.dataset;
+    if (!item.id) return;
+    wx.navigateTo({
+      url: announcementTarget.detailUrl(item) ||
+        '/pages/announcement-detail/announcement-detail?id=' + encodeURIComponent(item.id)
+    });
   },
 
   goDealDetail(e) {

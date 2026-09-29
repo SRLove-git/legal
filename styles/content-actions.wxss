@@ -1,0 +1,69 @@
+.content-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 62rpx;
+  padding: 6rpx 0 24rpx;
+}
+
+.content-share-control {
+  position: relative;
+}
+
+.content-action-button {
+  display: flex;
+  align-items: center;
+  min-height: 42rpx;
+  color: #636363;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 42rpx;
+  white-space: nowrap;
+}
+
+.content-share-icon {
+  width: 42rpx;
+  height: 34rpx;
+  margin-left: 6rpx;
+  overflow: hidden;
+}
+
+.content-share-icon image {
+  display: block;
+  width: 42rpx;
+  height: auto;
+}
+
+.content-share-button {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.content-save-button {
+  margin-left: 8rpx;
+}
+
+.content-save-icon {
+  display: block;
+  width: 42rpx;
+  height: 42rpx;
+  margin-left: 6rpx;
+}
+
+.content-save-button.is-saved {
+  color: #00558d;
+}
+
+.content-save-button.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
