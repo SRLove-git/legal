@@ -137,6 +137,23 @@ function normalizePictures(html) {
   });
 }
 
+// CMS editors sometimes leave a field containing only spaces, non-breaking
+// spaces or empty wrapper tags. The website treats that as absent content;
+// returning an empty string here prevents a heading with a blank rich-text
+// block (most visibly the Awards section on law-firm profiles).
+function hasRenderableContent(html) {
+  if (/<(?:img|video|audio|table|hr)\b/i.test(html) || /background(?:-image)?\s*:[^;]*url\s*\(/i.test(html)) {
+    return true;
+  }
+  const text = html
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;|&#0*160;|&#x0*a0;/gi, ' ')
+    .replace(/[\u00a0\u200b\ufeff]/g, ' ')
+    .trim();
+  return !!text;
+}
+
 function toRichHtml(value) {
   if (!value) return '';
   let html = String(value)
@@ -149,6 +166,7 @@ function toRichHtml(value) {
     .replace(/\s(?:src|href)\s*=\s*(["'])\s*javascript:[\s\S]*?\1/gi, '');
 
   html = normalizePictures(html);
+  if (!hasRenderableContent(html)) return '';
   html = absoluteUrls(html);
   html = addStyle(html, 'p', 'margin:0 0 24px;text-align:justify;');
   html = addStyle(html, 'h1', 'font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:26px;line-height:1.25;font-weight:700;color:#303030;margin:28px 0 18px;');

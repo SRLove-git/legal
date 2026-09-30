@@ -493,6 +493,37 @@
   white-space: pre-wrap;
 }
 
+.firm-award-item {
+  position: relative;
+  padding: 16rpx 0 16rpx 25rpx;
+}
+
+.firm-award-item::before {
+  content: "";
+  position: absolute;
+  top: 29rpx;
+  left: 3rpx;
+  width: 7rpx;
+  height: 7rpx;
+  border-radius: 50%;
+  background: #0084ba;
+}
+
+.firm-award-heading {
+  color: #2d2d2d;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.firm-award-year {
+  margin-top: 4rpx;
+  color: #666666;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
 .firm-ad-list {
   margin: 58rpx 0 14rpx;
 }

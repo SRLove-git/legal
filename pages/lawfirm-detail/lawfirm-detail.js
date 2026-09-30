@@ -38,7 +38,7 @@ function completeDetail(item) {
     industriesProvidedByClient: '',
     officesProvidedByClient: '',
     officesProvidedByClientHtml: '',
-    awards: '',
+    awards: [],
     awardsHtml: '',
     video: '',
     videoPoster: '',

@@ -205,10 +205,17 @@
       <view class="firm-overview" wx:else>{{item.officesProvidedByClient}}</view>
     </view>
 
-    <view class="firm-section" wx:if="{{item.awards || item.awardsHtml}}">
+    <view class="firm-section" wx:if="{{item.awards.length || item.awardsHtml}}">
       <view class="firm-section-title profile-blue-line">Awards</view>
-      <rich-text class="firm-overview-rich" wx:if="{{item.awardsHtml}}" nodes="{{item.awardsHtml}}"></rich-text>
-      <view class="firm-overview" wx:else>{{item.awards}}</view>
+      <view wx:if="{{item.awards.length}}">
+        <view class="firm-award-item" wx:for="{{item.awards}}" wx:for-item="award" wx:key="title">
+          <view class="firm-award-heading">
+            <text wx:if="{{award.organization}}">{{award.organization}}</text><text wx:if="{{award.organization && award.title}}"> - </text><text wx:if="{{award.title}}">{{award.title}}</text>
+          </view>
+          <view class="firm-award-year" wx:if="{{award.year}}">{{award.year}}</view>
+        </view>
+      </view>
+      <rich-text class="firm-overview-rich" wx:elif="{{item.awardsHtml}}" nodes="{{item.awardsHtml}}"></rich-text>
     </view>
 
     <image class="firm-bottom-banner" src="https://www.legaloneglobal.com/images/inHouseAdv/Large_Leaderboard_970x90_Fireside_Chat_202501.gif" mode="widthFix" bindtap="goCrumb" data-url="/pages/articles/articles" />

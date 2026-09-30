@@ -725,10 +725,24 @@ const api = {
       norm.industriesProvidedByClient = decodeEntities(f.industriesProvidedByClient);
       norm.officesProvidedByClient = stripHtml(f.officesProvidedByClient);
       norm.officesProvidedByClientHtml = richText.toRichHtml(f.officesProvidedByClient);
-      // Client-supplied LegalOne awards are separate from the generated
-      // lawyers' honours list shown in the data-and-insights section.
-      norm.awards = stripHtml(f.awards);
-      norm.awardsHtml = richText.toRichHtml(f.awards);
+      // Client-supplied awards are structured rows on current profiles. The
+      // website prints "organization - title" with the year underneath.
+      // Keep legacy HTML support for older CMS records.
+      if (Array.isArray(f.awards)) {
+        norm.awards = f.awards.map(function (award) {
+          return {
+            title: decodeEntities(award && award.title),
+            year: decodeEntities(award && award.year),
+            organization: decodeEntities(award && award.organization)
+          };
+        }).filter(function (award) {
+          return award.title || award.organization || award.year;
+        });
+        norm.awardsHtml = '';
+      } else {
+        norm.awards = [];
+        norm.awardsHtml = richText.toRichHtml(f.awards);
+      }
       // Offices carry their own practice lists on the website (city + areas).
       norm.offices = (f.lawFirmOffices || []).map(function (o) {
         const lastUpdated = o.lastUpdated && o.lastUpdated.indexOf('0001-') !== 0 ? monthYear(o.lastUpdated) : '';
