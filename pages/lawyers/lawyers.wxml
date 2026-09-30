@@ -13,25 +13,40 @@
   </view>
 
   <view class="lawyer-filter-panel" wx:if="{{filtersOpen}}">
-    <picker class="lawyer-filter-picker" mode="selector" range="{{admissionOptions}}" value="{{admissionIndex}}" data-filter="admission" bindchange="onFilterChange">
-      <view class="lawyer-filter-field {{admissionIndex ? 'active' : ''}}">{{admissionOptions[admissionIndex]}}<view class="field-chevron"></view></view>
-    </picker>
-    <picker class="lawyer-filter-picker" mode="selector" range="{{positionOptions}}" value="{{positionIndex}}" data-filter="position" bindchange="onFilterChange">
-      <view class="lawyer-filter-field {{positionIndex ? 'active' : ''}}">{{positionOptions[positionIndex]}}<view class="field-chevron"></view></view>
-    </picker>
-    <picker class="lawyer-filter-picker" mode="selector" range="{{languageOptions}}" value="{{languageIndex}}" data-filter="language" bindchange="onFilterChange">
-      <view class="lawyer-filter-field {{languageIndex ? 'active' : ''}}">{{languageOptions[languageIndex]}}<view class="field-chevron"></view></view>
-    </picker>
-    <picker class="lawyer-filter-picker" mode="selector" range="{{areaOptions}}" value="{{areaIndex}}" data-filter="area" bindchange="onFilterChange">
-      <view class="lawyer-filter-field {{areaIndex ? 'active' : ''}}">{{areaOptions[areaIndex]}}<view class="field-chevron"></view></view>
-    </picker>
+    <view class="lawyer-filter-picker filter-dropdown-group">
+      <view class="lawyer-filter-field filter-dropdown-field {{admissionIndex ? 'active is-active' : ''}} {{openSelect === 'admission' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="admission">
+        <text class="filter-dropdown-field-label">{{admissionOptions[admissionIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'admission' ? 'is-open' : ''}}"></view>
+      </view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'admission'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{admissionOptions.length > 5 ? 360 : admissionOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === admissionIndex ? 'is-selected' : ''}}" wx:for="{{admissionOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="admission" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+    </view>
+    <view class="lawyer-filter-picker filter-dropdown-group">
+      <view class="lawyer-filter-field filter-dropdown-field {{positionIndex ? 'active is-active' : ''}} {{openSelect === 'position' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="position">
+        <text class="filter-dropdown-field-label">{{positionOptions[positionIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'position' ? 'is-open' : ''}}"></view>
+      </view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'position'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{positionOptions.length > 5 ? 360 : positionOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === positionIndex ? 'is-selected' : ''}}" wx:for="{{positionOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="position" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+    </view>
+    <view class="lawyer-filter-picker filter-dropdown-group">
+      <view class="lawyer-filter-field filter-dropdown-field {{languageIndex ? 'active is-active' : ''}} {{openSelect === 'language' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="language">
+        <text class="filter-dropdown-field-label">{{languageOptions[languageIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'language' ? 'is-open' : ''}}"></view>
+      </view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'language'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{languageOptions.length > 5 ? 360 : languageOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === languageIndex ? 'is-selected' : ''}}" wx:for="{{languageOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="language" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+    </view>
+    <view class="lawyer-filter-picker filter-dropdown-group">
+      <view class="lawyer-filter-field filter-dropdown-field {{areaIndex ? 'active is-active' : ''}} {{openSelect === 'area' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="area">
+        <text class="filter-dropdown-field-label">{{areaOptions[areaIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'area' ? 'is-open' : ''}}"></view>
+      </view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'area'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === areaIndex ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="area" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+    </view>
     <view class="lawyer-search-field">
       <input placeholder="Search by name / keyword" value="{{keyword}}" bindinput="onInput" bindconfirm="onSearch" confirm-type="search" />
       <view class="search-icon" bindtap="onSearch"></view>
     </view>
-    <picker class="lawyer-filter-picker" mode="selector" range="{{sortOptions}}" value="{{sortIndex}}" bindchange="onSortChange">
-      <view class="lawyer-filter-field {{sortIndex ? 'active' : ''}}">{{sortOptions[sortIndex]}}<view class="field-chevron"></view></view>
-    </picker>
+    <view class="lawyer-filter-picker filter-dropdown-group">
+      <view class="lawyer-filter-field filter-dropdown-field {{sortIndex ? 'active is-active' : ''}} {{openSelect === 'sort' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="sort">
+        <text class="filter-dropdown-field-label">{{sortOptions[sortIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'sort' ? 'is-open' : ''}}"></view>
+      </view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'sort'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{sortOptions.length > 5 ? 360 : sortOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === sortIndex ? 'is-selected' : ''}}" wx:for="{{sortOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="sort" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+    </view>
     <view class="lawyer-filter-actions">
       <view class="lawyer-filter-button primary" bindtap="onApply">Apply</view>
       <view class="lawyer-filter-button" bindtap="onReset">Reset</view>

@@ -13,36 +13,30 @@
   </view>
 
   <view class="article-filter-panel" wx:if="{{filtersOpen}}">
-    <view class="article-filter-group">
-      <view class="article-filter-field {{countries.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="countries">
-        <text>{{countriesLabel}}</text>
-        <view class="field-chevron {{openGroups.countries ? 'up' : ''}}"></view>
+    <view class="article-filter-group filter-dropdown-group">
+      <view class="article-filter-field filter-dropdown-field {{countries.length ? 'active is-active' : ''}} {{openGroups.countries ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="countries">
+        <text class="filter-dropdown-field-label">{{countriesLabel}}</text>
+        <view class="filter-dropdown-chevron {{openGroups.countries ? 'is-open' : ''}}"></view>
       </view>
-      <view class="article-filter-options-frame" wx:if="{{openGroups.countries}}">
-        <scroll-view class="article-filter-options" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{countryOptions.length > 6 ? 520 : countryOptions.length * 68 + 16}}rpx;">
-          <checkbox-group bindchange="onCountriesChange">
-            <label class="article-filter-option" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value">
-              <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
-              <text class="article-filter-option-text">{{option.value}}</text>
-            </label>
-          </checkbox-group>
+      <view class="article-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.countries}}">
+        <scroll-view class="article-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{countryOptions.length > 5 ? 360 : countryOptions.length * 68}}rpx;">
+          <view class="article-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleCountryOption" data-value="{{option.value}}">
+            <text class="article-filter-option-text filter-dropdown-option-text">{{option.value}}</text>
+          </view>
         </scroll-view>
       </view>
     </view>
 
-    <view class="article-filter-group">
-      <view class="article-filter-field {{areas.length ? 'active' : ''}}" bindtap="toggleGroup" data-group="areas">
-        <text>{{areasLabel}}</text>
-        <view class="field-chevron {{openGroups.areas ? 'up' : ''}}"></view>
+    <view class="article-filter-group filter-dropdown-group">
+      <view class="article-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="areas">
+        <text class="filter-dropdown-field-label">{{areasLabel}}</text>
+        <view class="filter-dropdown-chevron {{openGroups.areas ? 'is-open' : ''}}"></view>
       </view>
-      <view class="article-filter-options-frame" wx:if="{{openGroups.areas}}">
-        <scroll-view class="article-filter-options" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 6 ? 520 : areaOptions.length * 68 + 16}}rpx;">
-          <checkbox-group bindchange="onAreasChange">
-            <label class="article-filter-option" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value">
-              <checkbox class="article-filter-check" value="{{option.value}}" checked="{{option.checked}}" color="#0084ba" />
-              <text class="article-filter-option-text">{{option.value}}</text>
-            </label>
-          </checkbox-group>
+      <view class="article-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.areas}}">
+        <scroll-view class="article-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;">
+          <view class="article-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleAreaOption" data-value="{{option.value}}">
+            <text class="article-filter-option-text filter-dropdown-option-text">{{option.value}}</text>
+          </view>
         </scroll-view>
       </view>
     </view>

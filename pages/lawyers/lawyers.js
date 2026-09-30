@@ -4,6 +4,41 @@ const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 
 const PER_PAGE = 12;
+// Current website filter codes. These also act as a complete offline baseline
+// while the public code endpoints are loading or temporarily unavailable.
+const ADMISSION_OPTIONS = [
+  'China', 'England and Wales - Solicitor', 'Hong Kong SAR',
+  'India - Bar Council of West Bengal', 'Japan (Attorney at Law (Bengoshi))',
+  'Singapore (Foreign Practitioner Certificate)', 'Singapore (FPC)', 'South Africa',
+  'United Arab Emirates - ADGM Courts', 'United States - California',
+  'United States - Illinois', 'United States - New Jersey', 'United States - New York'
+];
+const POSITION_OPTIONS = [
+  'Associate', 'Attorney', 'Barrister', 'CEO', 'Consultant', 'Coordinator', 'Counsel',
+  'Foreign Attorney', 'Foreign Legal Consultant', 'Founder', 'Founding Partner',
+  'Global Vice-Chair', 'Head of Office', 'Junior Associate', 'Legal Adviser',
+  'Legal Associate', 'Managing Partner', 'Of Counsel', 'Partner', 'Principal Associate',
+  'Senior Advisor', 'Senior Associate', 'Senior Chair', 'Senior Partner', 'Trainee Lawyer'
+];
+const LANGUAGE_OPTIONS = [
+  'Chinese', 'Dutch', 'English', 'French', 'German', 'Hindi', 'Indonesian', 'Italian',
+  'Japanese', 'Khmer', 'Lao', 'Mandarin', 'Thai', 'Vietnamese'
+];
+const AREA_OPTIONS = [
+  'Administrative Litigation', 'Antitrust and Competition', 'Aviation', 'Banking and Finance',
+  'Business Crime', 'Capital Markets (Debt)', 'Capital Markets (Equity)',
+  'Corporate and Commercial', 'Corporate Compliance', 'Corporate Finance', 'Data and Privacy',
+  'Digital Assets', 'Dispute Resolution', 'Education', 'Employment and Labour',
+  'Energy and Natural Resources', 'Entertainment and Sports', 'Environmental Law',
+  'Family Wealth/Private Wealth', 'Fintech', 'Healthcare, Pharma and Life Sciences',
+  'Hospitality and Tourism', 'Industrials and Manufacturing', 'Infrastructure',
+  'Insurance and Reinsurance', 'International Trade', 'Investment Funds', 'IP (Copyright)',
+  'IP (Patent)', 'IP (Trade Secrets)', 'IP (Trademark)', 'IP and Unfair Competition',
+  'Islamic Finance', 'Joint Venture', 'M&A', 'New Energy Vehicle', 'PE/VC', 'Project Finance',
+  'Real Estate and Construction', 'REITs', 'Restructuring and Insolvency',
+  'Retail and Consumer', 'Securitisation and Structured Finance', 'Shipping and Maritime Affairs',
+  'Taxation', 'TMT and Internet', 'White-Collar Crime', 'International Sanction'
+];
 const SORT_VALUES = [
   '',
   'numOfDeal desc',
@@ -15,6 +50,14 @@ const SORT_VALUES = [
   'name desc',
   'name asc'
 ];
+
+function mergeOptions(baseline, live) {
+  const values = baseline.slice();
+  (live || []).forEach(function (value) {
+    if (value && values.indexOf(value) < 0) values.push(value);
+  });
+  return values;
+}
 
 function completeLawyer(item) {
   return Object.assign({
@@ -46,11 +89,12 @@ Page({
     hasMore: true,
     loading: false,
     filtersOpen: false,
+    openSelect: '',
     activeFilterCount: 0,
-    admissionOptions: ['Admission'],
-    positionOptions: ['Positions'],
-    languageOptions: ['Languages'],
-    areaOptions: ['Practice areas and industries'],
+    admissionOptions: ['Admission'].concat(ADMISSION_OPTIONS),
+    positionOptions: ['Positions'].concat(POSITION_OPTIONS),
+    languageOptions: ['Languages'].concat(LANGUAGE_OPTIONS),
+    areaOptions: ['Practice areas and industries'].concat(AREA_OPTIONS),
     sortOptions: [
       'Sort',
       'No. of deals ▼',
@@ -87,41 +131,43 @@ Page({
     const self = this;
     api.getLawyerFilters().then(function (filters) {
       self.setData({
-        admissionOptions: ['Admission'].concat(filters.admissions || []),
-        positionOptions: ['Positions'].concat(filters.positions || []),
-        languageOptions: ['Languages'].concat(filters.languages || []),
-        areaOptions: ['Practice areas and industries'].concat(filters.areas || [])
+        admissionOptions: ['Admission'].concat(mergeOptions(ADMISSION_OPTIONS, filters.admissions)),
+        positionOptions: ['Positions'].concat(mergeOptions(POSITION_OPTIONS, filters.positions)),
+        languageOptions: ['Languages'].concat(mergeOptions(LANGUAGE_OPTIONS, filters.languages)),
+        areaOptions: ['Practice areas and industries'].concat(mergeOptions(AREA_OPTIONS, filters.areas))
       });
     }).catch(function () {});
   },
 
   toggleFilters() {
-    this.setData({ filtersOpen: !this.data.filtersOpen });
+    const filtersOpen = !this.data.filtersOpen;
+    this.setData({ filtersOpen: filtersOpen, openSelect: filtersOpen ? this.data.openSelect : '' });
   },
 
   onInput(e) {
     this.setData({ keyword: e.detail.value });
   },
 
-  onFilterChange(e) {
+  toggleSelect(e) {
+    const filter = e.currentTarget.dataset.filter;
+    this.setData({ openSelect: this.data.openSelect === filter ? '' : filter });
+  },
+
+  onSelectOption(e) {
     const filter = e.currentTarget.dataset.filter;
     const keyMap = {
       admission: 'admissionIndex',
       position: 'positionIndex',
       language: 'languageIndex',
-      area: 'areaIndex'
+      area: 'areaIndex',
+      sort: 'sortIndex'
     };
     const key = keyMap[filter];
     if (!key) return;
     const update = {};
-    update[key] = Number(e.detail.value);
-    this.setData(update);
-    this.updateFilterCount();
-  },
-
-  onSortChange(e) {
-    this.setData({ sortIndex: Number(e.detail.value) });
-    this.updateFilterCount();
+    update[key] = Number(e.currentTarget.dataset.index);
+    update.openSelect = '';
+    this.setData(update, () => this.updateFilterCount());
   },
 
   updateFilterCount() {
@@ -136,7 +182,7 @@ Page({
   },
 
   onApply() {
-    this.setData({ filtersOpen: false });
+    this.setData({ filtersOpen: false, openSelect: '' });
     this.fetch(true);
   },
 
@@ -153,7 +199,8 @@ Page({
       areaIndex: 0,
       sortIndex: 0,
       activeFilterCount: 0,
-      filtersOpen: false
+      filtersOpen: false,
+      openSelect: ''
     });
     this.fetch(true);
   },

@@ -53,7 +53,11 @@ Page({
   },
 
   toggleFilters() {
-    this.setData({ filtersOpen: !this.data.filtersOpen });
+    const filtersOpen = !this.data.filtersOpen;
+    this.setData({
+      filtersOpen: filtersOpen,
+      openGroups: filtersOpen ? this.data.openGroups : { countries: false, areas: false }
+    });
   },
 
   toggleGroup(e) {
@@ -71,8 +75,12 @@ Page({
     return count;
   },
 
-  onCountriesChange(e) {
-    const countries = e.detail.value || [];
+  toggleCountryOption(e) {
+    const value = e.currentTarget.dataset.value;
+    const countries = this.data.countries.slice();
+    const index = countries.indexOf(value);
+    if (index >= 0) countries.splice(index, 1);
+    else countries.push(value);
     this.setData({
       countries: countries,
       countryOptions: withChecked(this.data.countryOptions.map(function (o) { return o.value; }), countries),
@@ -80,8 +88,12 @@ Page({
     });
   },
 
-  onAreasChange(e) {
-    const areas = e.detail.value || [];
+  toggleAreaOption(e) {
+    const value = e.currentTarget.dataset.value;
+    const areas = this.data.areas.slice();
+    const index = areas.indexOf(value);
+    if (index >= 0) areas.splice(index, 1);
+    else areas.push(value);
     this.setData({
       areas: areas,
       areaOptions: withChecked(this.data.areaOptions.map(function (o) { return o.value; }), areas),

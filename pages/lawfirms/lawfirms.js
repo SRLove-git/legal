@@ -36,6 +36,7 @@ Page({
     items: [],
     keyword: '',
     filtersOpen: false,
+    openSelect: '',
     sortFilterLabel: 'SORT & FILTER',
     activeFilterCount: 0,
     countryOptions: ['Countries and regions'],
@@ -78,7 +79,28 @@ Page({
   },
 
   toggleFilters() {
-    this.setData({ filtersOpen: !this.data.filtersOpen });
+    const filtersOpen = !this.data.filtersOpen;
+    this.setData({
+      filtersOpen: filtersOpen,
+      openSelect: filtersOpen ? this.data.openSelect : '',
+      openGroups: filtersOpen ? this.data.openGroups : { offices: false, areas: false }
+    });
+  },
+
+  toggleSelect(e) {
+    const filter = e.currentTarget.dataset.filter;
+    this.setData({
+      openSelect: this.data.openSelect === filter ? '' : filter,
+      openGroups: { offices: false, areas: false }
+    });
+  },
+
+  onSelectOption(e) {
+    const filter = e.currentTarget.dataset.filter;
+    const index = Number(e.currentTarget.dataset.index);
+    this.setData({ openSelect: '' });
+    if (filter === 'country') this.onCountryChange({ detail: { value: index } });
+    if (filter === 'sort') this.onSortChange({ detail: { value: index } });
   },
 
   toggleGroup(e) {
@@ -87,7 +109,7 @@ Page({
     const willOpen = !openGroups[group];
     Object.keys(openGroups).forEach(function (key) { openGroups[key] = false; });
     openGroups[group] = willOpen;
-    this.setData({ openGroups: openGroups });
+    this.setData({ openGroups: openGroups, openSelect: '' });
   },
 
   countFilters(countryIndex, offices, areas, keyword, sortIndex) {
@@ -123,22 +145,23 @@ Page({
     });
   },
 
-  onOfficesChange(e) {
-    const offices = e.detail.value || [];
-    this.setData({
-      offices: offices,
-      officeOptions: withChecked(this.data.officeOptions.map(function (o) { return o.value; }), offices),
-      activeFilterCount: this.countFilters(this.data.countryIndex, offices, this.data.areas, this.data.keyword, this.data.sortIndex)
-    });
-  },
-
-  onAreasChange(e) {
-    const areas = e.detail.value || [];
-    this.setData({
-      areas: areas,
-      areaOptions: withChecked(this.data.areaOptions.map(function (o) { return o.value; }), areas),
-      activeFilterCount: this.countFilters(this.data.countryIndex, this.data.offices, areas, this.data.keyword, this.data.sortIndex)
-    });
+  toggleMultiOption(e) {
+    const group = e.currentTarget.dataset.group;
+    const value = e.currentTarget.dataset.value;
+    const values = this.data[group].slice();
+    const index = values.indexOf(value);
+    if (index >= 0) values.splice(index, 1);
+    else values.push(value);
+    const optionsKey = group === 'offices' ? 'officeOptions' : 'areaOptions';
+    const patch = {};
+    patch[group] = values;
+    patch[optionsKey] = withChecked(this.data[optionsKey].map(function (o) { return o.value; }), values);
+    if (group === 'offices') {
+      patch.activeFilterCount = this.countFilters(this.data.countryIndex, values, this.data.areas, this.data.keyword, this.data.sortIndex);
+    } else {
+      patch.activeFilterCount = this.countFilters(this.data.countryIndex, this.data.offices, values, this.data.keyword, this.data.sortIndex);
+    }
+    this.setData(patch);
   },
 
   onInput(e) {
@@ -157,7 +180,7 @@ Page({
   },
 
   onApply() {
-    this.setData({ filtersOpen: false });
+    this.setData({ filtersOpen: false, openSelect: '', openGroups: { offices: false, areas: false } });
     this.fetch(true);
   },
 
@@ -177,7 +200,8 @@ Page({
       areaOptions: withChecked(this.data.areaOptions.map(function (o) { return o.value; }), []),
       openGroups: { offices: false, areas: false },
       activeFilterCount: 0,
-      filtersOpen: false
+      filtersOpen: false,
+      openSelect: ''
     });
     this.fetch(true);
   },

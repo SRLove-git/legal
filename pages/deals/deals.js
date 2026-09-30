@@ -31,6 +31,7 @@ Page({
     hasMore: true,
     loading: false,
     filtersOpen: false,
+    openSelect: '',
     openGroups: { jurisdictions: false, areas: false },
     years: ['Year'],
     yearIndex: 0,
@@ -75,7 +76,29 @@ Page({
   },
 
   toggleFilters() {
-    this.setData({ filtersOpen: !this.data.filtersOpen });
+    const filtersOpen = !this.data.filtersOpen;
+    this.setData({
+      filtersOpen: filtersOpen,
+      openSelect: filtersOpen ? this.data.openSelect : '',
+      openGroups: filtersOpen ? this.data.openGroups : { jurisdictions: false, areas: false }
+    });
+  },
+
+  toggleSelect(e) {
+    const filter = e.currentTarget.dataset.filter;
+    this.setData({
+      openSelect: this.data.openSelect === filter ? '' : filter,
+      openGroups: { jurisdictions: false, areas: false }
+    });
+  },
+
+  onSelectOption(e) {
+    const filter = e.currentTarget.dataset.filter;
+    const index = Number(e.currentTarget.dataset.index);
+    const patch = { openSelect: '' };
+    if (filter === 'year') patch.yearIndex = index;
+    if (filter === 'sort') patch.sortIndex = index;
+    this.setData(patch, () => this.updateFilterCount());
   },
 
   toggleGroup(e) {
@@ -84,7 +107,7 @@ Page({
     const willOpen = !openGroups[group];
     Object.keys(openGroups).forEach(function (key) { openGroups[key] = false; });
     openGroups[group] = willOpen;
-    this.setData({ openGroups: openGroups });
+    this.setData({ openGroups: openGroups, openSelect: '' });
   },
 
   onYearChange(e) {
@@ -95,9 +118,13 @@ Page({
     this.setData({ sortIndex: Number(e.detail.value) }, () => this.updateFilterCount());
   },
 
-  onFilterChange(e) {
+  toggleMultiOption(e) {
     const group = e.currentTarget.dataset.group;
-    const values = e.detail.value || [];
+    const value = e.currentTarget.dataset.value;
+    const values = this.data[group].slice();
+    const index = values.indexOf(value);
+    if (index >= 0) values.splice(index, 1);
+    else values.push(value);
     const patch = {};
     patch[group] = values;
     patch[group === 'jurisdictions' ? 'jurisdictionOptions' : 'areaOptions'] = withChecked(
@@ -118,7 +145,7 @@ Page({
   },
 
   onApply() {
-    this.setData({ filtersOpen: false });
+    this.setData({ filtersOpen: false, openSelect: '', openGroups: { jurisdictions: false, areas: false } });
     this.fetch(true);
   },
 
@@ -130,6 +157,8 @@ Page({
       jurisdictionOptions: withChecked(this.data.jurisdictionOptions.map(function (item) { return item.value; }), []),
       areaOptions: withChecked(this.data.areaOptions.map(function (item) { return item.value; }), []),
       sortIndex: 0,
+      openSelect: '',
+      openGroups: { jurisdictions: false, areas: false },
       activeFilterCount: 0,
       filtersOpen: false
     }, () => this.fetch(true));

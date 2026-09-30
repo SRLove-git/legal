@@ -1,3 +1,5 @@
+@import "../../styles/filter-dropdown.wxss";
+
 .lawfirms-page {
   background: #ffffff;
 }
