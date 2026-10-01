@@ -31,16 +31,24 @@
 
   <view class="subpage-section">
     <view class="subpage-section-heading">Awards & Recognitions</view>
-    <view class="about-block" wx:for="{{awards}}" wx:key="desc">
-      <view class="about-block-title">{{item.title}}</view>
-      <view class="about-block-desc">{{item.desc}}</view>
-      <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
+    <view class="about-awards-list">
+      <view class="about-award-card" wx:for="{{awards}}" wx:key="image">
+        <view class="about-award-logo-wrap">
+          <image class="about-award-logo" src="{{item.image}}" mode="aspectFit" />
+        </view>
+        <view class="about-block-title">{{item.title}}</view>
+        <view class="about-block-desc">{{item.desc}}</view>
+        <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
+      </view>
     </view>
   </view>
 
   <view class="subpage-section">
     <view class="subpage-section-heading">Standards & Identifiers</view>
     <view class="about-block" wx:for="{{standards}}" wx:key="title">
+      <view class="about-card-logo-wrap">
+        <image class="about-card-logo" src="{{item.image}}" mode="aspectFit" lazy-load="true" />
+      </view>
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
       <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
@@ -50,6 +58,9 @@
   <view class="subpage-section">
     <view class="subpage-section-heading">Signatories</view>
     <view class="about-block" wx:for="{{signatories}}" wx:key="title">
+      <view class="about-card-logo-wrap">
+        <image class="about-card-logo" src="{{item.image}}" mode="aspectFit" lazy-load="true" />
+      </view>
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
       <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
@@ -59,6 +70,10 @@
   <view class="subpage-section">
     <view class="subpage-section-heading">Advisory Appointments & Memberships</view>
     <view class="about-block" wx:for="{{memberships}}" wx:key="title">
+      <view class="about-card-logo-wrap {{membershipImages[index].image2 ? 'about-card-logo-wrap-multi' : ''}}">
+        <image class="about-card-logo {{membershipImages[index].image2 ? 'about-card-logo-half' : ''}}" src="{{membershipImages[index].image}}" mode="aspectFit" lazy-load="true" />
+        <image class="about-card-logo about-card-logo-half" wx:if="{{membershipImages[index].image2}}" src="{{membershipImages[index].image2}}" mode="aspectFit" lazy-load="true" />
+      </view>
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-block-desc">{{item.desc}}</view>
       <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
@@ -68,6 +83,9 @@
   <view class="subpage-section">
     <view class="subpage-section-heading">ESG Commitments</view>
     <view class="about-block" wx:for="{{esg}}" wx:key="title">
+      <view class="about-card-logo-wrap">
+        <image class="about-card-logo" src="{{esgImages[index]}}" mode="aspectFit" lazy-load="true" />
+      </view>
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
     </view>
@@ -76,6 +94,9 @@
   <view class="subpage-section">
     <view class="subpage-section-heading">Official Partnerships & Strategic Affiliations</view>
     <view class="about-block" wx:for="{{partnerships}}" wx:key="title">
+      <view class="about-card-logo-wrap">
+        <image class="about-card-logo" src="{{item.image}}" mode="aspectFit" lazy-load="true" />
+      </view>
       <view class="about-block-title">{{item.title}}</view>
       <view class="about-bullet" wx:for="{{item.items}}" wx:for-item="it" wx:key="*this">{{it}}</view>
       <view class="about-explore" hover-class="about-explore-hover" wx:if="{{item.link}}" bindtap="onExplore" data-link="{{item.link}}" data-title="{{item.title}}">Explore more</view>
@@ -85,6 +106,14 @@
   <view class="subpage-section">
     <view class="subpage-section-heading">LegalOne Deals of the Year in Libraries Worldwide</view>
     <view class="subpage-section-text">{{libraries}}</view>
+    <image class="about-library-map" src="{{libraryMap}}" mode="widthFix" lazy-load="true" bindtap="previewLibraryMap" />
+    <scroll-view class="about-library-logos" scroll-x="true" enhanced="true" show-scrollbar="{{false}}">
+      <view class="about-library-logos-row">
+        <view class="about-library-logo-item" wx:for="{{libraryLogos}}" wx:key="*this">
+          <image class="about-library-logo" src="{{item}}" mode="aspectFit" lazy-load="true" />
+        </view>
+      </view>
+    </scroll-view>
   </view>
 
   <view class="subpage-section contact">

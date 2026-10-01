@@ -373,6 +373,29 @@ function normalizeAdvertisement(ad) {
   };
 }
 
+// Mini-program <rich-text> renders anchor styling but does not reliably expose
+// link taps. Surface third-party article links as native buttons on the detail
+// page so magazine/flip-book links can still use the page's native navigation.
+function extractExternalArticleLinks(value) {
+  const html = String(value || '');
+  const links = [];
+  const seen = {};
+  html.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, function (_, attributes, content) {
+    const hrefMatch = attributes.match(/\bhref\s*=\s*(["'])([^"']+)\1/i);
+    const url = decodeEntities(hrefMatch && hrefMatch[2]).trim();
+    if (!/^https?:\/\//i.test(url) || /^https?:\/\/(?:www\.)?legaloneglobal\.com(?:\/|$)/i.test(url) || seen[url]) {
+      return '';
+    }
+    seen[url] = true;
+    links.push({
+      url: url,
+      label: stripHtml(content) || url
+    });
+    return '';
+  });
+  return links;
+}
+
 function normalizeArticle(a) {
   const authors = (a.authors || []).map(function (x) {
     return [x.firstName, x.name].filter(Boolean).map(decodeEntities).join(' ').trim();
@@ -668,6 +691,7 @@ const api = {
       const articleContent = o.content || o.descript;
       norm.bodyHtml = richText.toRichHtml(articleContent);
       norm.body = norm.bodyHtml ? '' : stripHtml(articleContent);
+      norm.externalLinks = extractExternalArticleLinks(articleContent);
       // Award write-ups carry their "LIST OF WINNERS" block in awardContent;
       // the website renders it below the article body.
       norm.award = awardContent.parseAwardContent(o.awardContent);

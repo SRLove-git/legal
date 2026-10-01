@@ -72,6 +72,41 @@
   white-space: pre-wrap;
 }
 
+.detail-external-links {
+  margin-top: 34rpx;
+  margin-bottom: 34rpx;
+}
+
+.detail-external-links-title {
+  margin-bottom: 16rpx;
+  color: #303030;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.detail-external-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 22rpx 26rpx;
+  border: 2rpx solid #0084ba;
+  border-radius: 12rpx;
+  color: #0084ba;
+  font-size: 29rpx;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.detail-external-link-hover {
+  opacity: 0.72;
+}
+
+.detail-external-link-arrow {
+  flex: none;
+  font-size: 34rpx;
+}
+
 .detail-related-block {
   margin-top: 56rpx;
 }

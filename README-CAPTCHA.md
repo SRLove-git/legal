@@ -16,7 +16,7 @@ Login has **no** captcha. The website web-JS captcha widget must **not** be embe
 3. Confirmation that token auth works without cookies.
 4. WeChat console configuration:
    - `request` 合法域名: `https://www.legaloneglobal.com`
-   - `downloadFile` 合法域名: `https://legaloneglobal.azureedge.net`
+   - `downloadFile` 合法域名: `https://legaloneglobal.azureedge.net`, `https://cdnm.heyzine.com`
    - 业务域名 (for `<web-view>`): the H5 host, e.g. `https://www.legaloneglobal.com`
 5. Verification / website-only URLs that the mini program opens read-only.
 6. Test accounts (multiple sectors, incomplete + complete profile).

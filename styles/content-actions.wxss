@@ -57,10 +57,15 @@
   width: 42rpx;
   height: 42rpx;
   margin-left: 6rpx;
+  filter: brightness(0) saturate(100%) invert(39%) sepia(6%) saturate(547%) hue-rotate(169deg) brightness(93%) contrast(86%);
 }
 
 .content-save-button.is-saved {
   color: #00558d;
+}
+
+.content-save-button.is-saved .content-save-icon {
+  filter: brightness(0) saturate(100%) invert(25%) sepia(89%) saturate(1546%) hue-rotate(182deg) brightness(92%) contrast(101%);
 }
 
 .content-save-button.is-loading {

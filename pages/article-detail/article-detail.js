@@ -3,6 +3,7 @@ const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 const contentActions = require('../../services/content-actions.js');
+const h5 = require('../../services/h5.js');
 
 // The website shows "Awards" in the crumb for award write-ups and "Articles" for
 // everything else; it decides this from the article's section.
@@ -96,6 +97,11 @@ Page({
       data: url,
       success: function () { wx.showToast({ title: 'DOI link copied', icon: 'none' }); }
     });
+  },
+  openExternalLink(e) {
+    const d = e.currentTarget.dataset || {};
+    if (!d.url) return;
+    h5.openWebView(d.url, d.title || 'Open external link');
   },
   onShareAppMessage() {
     const item = this.data.item || {};

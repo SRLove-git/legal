@@ -118,10 +118,15 @@
   width: 42rpx;
   height: 42rpx;
   flex: 0 0 42rpx;
+  filter: brightness(0) saturate(100%) invert(39%) sepia(6%) saturate(547%) hue-rotate(169deg) brightness(93%) contrast(86%);
 }
 
 .office-save-button.is-saved {
   color: #00558d;
+}
+
+.office-save-button.is-saved .office-save-icon {
+  filter: brightness(0) saturate(100%) invert(25%) sepia(89%) saturate(1546%) hue-rotate(182deg) brightness(92%) contrast(101%);
 }
 
 .office-save-button.is-loading {

@@ -72,11 +72,114 @@
 }
 
 .subpage .subpage-section-heading {
+  position: relative;
+  padding-left: 31rpx;
+  box-sizing: border-box;
   font-size: 69rpx;
   line-height: 1.2;
   color: #0284c7;
   margin-top: 60rpx;
   margin-bottom: 30rpx;
+}
+
+.subpage .subpage-section-heading::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5rpx;
+  bottom: 5rpx;
+  width: 9rpx;
+  background: #0284c7;
+}
+
+.about-awards-list {
+  padding-top: 8rpx;
+}
+
+.about-award-card {
+  margin-bottom: 32rpx;
+  padding: 28rpx;
+  border-radius: 14rpx;
+  background: #ffffff;
+  box-shadow: 0 5rpx 24rpx rgba(0, 0, 0, 0.08);
+}
+
+.about-award-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 320rpx;
+  margin-bottom: 28rpx;
+  overflow: hidden;
+}
+
+.about-award-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.about-card-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 240rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.about-card-logo-wrap-multi {
+  gap: 24rpx;
+}
+
+.about-card-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.about-card-logo-half {
+  width: calc(50% - 12rpx);
+}
+
+.about-library-map {
+  display: block;
+  width: 100%;
+  margin-top: 30rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 5rpx 24rpx rgba(0, 0, 0, 0.08);
+}
+
+.about-library-logos {
+  width: 100%;
+  margin-top: 30rpx;
+  white-space: nowrap;
+}
+
+.about-library-logos-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 10rpx 4rpx 22rpx;
+}
+
+.about-library-logo-item {
+  flex: none;
+  width: 230rpx;
+  height: 150rpx;
+  padding: 16rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  background: #ffffff;
+  box-shadow: 0 3rpx 14rpx rgba(0, 0, 0, 0.08);
+}
+
+.about-library-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .about-block-title {

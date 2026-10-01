@@ -12,7 +12,7 @@ Page({
     // so fall back to the copy-link panel unless the page reports a load.
     this.timer = setTimeout(() => {
       if (!this.loaded) this.setData({ failed: true });
-    }, 4000);
+    }, 12000);
   },
   onUnload() {
     if (this.timer) clearTimeout(this.timer);
@@ -34,6 +34,6 @@ Page({
     if (this.timer) clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       if (!this.loaded) this.setData({ failed: true });
-    }, 4000);
+    }, 12000);
   }
 });

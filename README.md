@@ -46,6 +46,7 @@
    `https://www.legaloneglobal.com`
 2. 添加「downloadFile 合法域名」：
    `https://legaloneglobal.azureedge.net`
+   `https://cdnm.heyzine.com`（LegalOne Pulse Heyzine 杂志的原始 PDF）
    `https://www.legaloneglobal.com`（页面里的图片直接引用官网图片地址，必须一起加）
 3. 本地开发可在 DevTools「详情 → 本地设置」勾选「不校验合法域名」，或保持 `project.config.json` 中 `urlCheck: false`。
 

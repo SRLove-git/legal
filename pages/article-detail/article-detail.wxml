@@ -61,6 +61,21 @@
     </view>
     <template is="content-actions" data="{{saved: saved, saving: saving}}" />
     <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
+    <view class="detail-external-links" wx:if="{{item.externalLinks && item.externalLinks.length}}">
+      <view class="detail-external-links-title">Open in mini program</view>
+      <view
+        class="detail-external-link"
+        hover-class="detail-external-link-hover"
+        wx:for="{{item.externalLinks}}"
+        wx:key="url"
+        bindtap="openExternalLink"
+        data-url="{{item.url}}"
+        data-title="{{item.label}}"
+      >
+        <text>{{item.label}}</text>
+        <text class="detail-external-link-arrow">↗</text>
+      </view>
+    </view>
     <rich-text class="detail-rich" wx:if="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
     <view class="detail-body" wx:elif="{{item.body}}">{{item.body}}</view>
 
