@@ -381,8 +381,8 @@ function normalizeAdvertisement(ad) {
 }
 
 // Mini-program <rich-text> renders anchor styling but does not reliably expose
-// link taps. Surface third-party article links as native buttons on the detail
-// page so magazine/flip-book links can still use the page's native navigation.
+// link taps. Surface article web links as native controls on the detail page,
+// including LegalOne's own e-magazine pages and third-party flip-books.
 function extractExternalArticleLinks(value) {
   const html = String(value || '');
   const links = [];
@@ -390,7 +390,9 @@ function extractExternalArticleLinks(value) {
   html.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, function (_, attributes, content) {
     const hrefMatch = attributes.match(/\bhref\s*=\s*(["'])([^"']+)\1/i);
     const url = decodeEntities(hrefMatch && hrefMatch[2]).trim();
-    if (!/^https?:\/\//i.test(url) || /^https?:\/\/(?:www\.)?legaloneglobal\.com(?:\/|$)/i.test(url) || seen[url]) {
+    const isLegalOne = /^https?:\/\/(?:www\.)?legaloneglobal\.com(?:\/|$)/i.test(url);
+    const isEmagazine = /^https?:\/\/(?:www\.)?legaloneglobal\.com\/emagazine\//i.test(url);
+    if (!/^https?:\/\//i.test(url) || (isLegalOne && !isEmagazine) || seen[url]) {
       return '';
     }
     seen[url] = true;
