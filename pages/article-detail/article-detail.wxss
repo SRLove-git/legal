@@ -107,6 +107,90 @@
   font-size: 34rpx;
 }
 
+.detail-inline-link-row {
+  margin: 0 0 48rpx;
+  color: #303030;
+  font-size: 32rpx;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.detail-inline-link-prefix-bold {
+  font-weight: 700;
+}
+
+.detail-inline-link {
+  color: #0084ba;
+  word-break: break-word;
+}
+
+.detail-inline-link-hover {
+  opacity: 0.72;
+}
+
+.detail-promoted-block {
+  margin-top: 54rpx;
+  padding-top: 34rpx;
+  border-top: 6rpx solid #d7d7d7;
+}
+
+.detail-promoted-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 68rpx;
+  margin-bottom: 28rpx;
+  background: #00689a;
+  color: #ffffff;
+  font-size: 29rpx;
+  font-weight: 700;
+}
+
+.detail-promoted-info {
+  width: 25rpx;
+  height: 25rpx;
+  margin-left: 12rpx;
+  border: 2rpx solid #ffffff;
+  border-radius: 50%;
+  font-size: 18rpx;
+  font-weight: 500;
+  line-height: 23rpx;
+  text-align: center;
+}
+
+.detail-promoted-entry {
+  padding-bottom: 28rpx;
+  margin-bottom: 28rpx;
+  border-bottom: 2rpx solid #0084ba;
+}
+
+.detail-promoted-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 18rpx;
+  background: #eef4f8;
+}
+
+.detail-promoted-title {
+  color: #0084ba;
+  font-size: 29rpx;
+  font-weight: 500;
+  line-height: 1.22;
+}
+
+.detail-promoted-by {
+  margin-top: 12rpx;
+  color: #303030;
+  font-size: 24rpx;
+}
+
+.detail-promoted-date {
+  margin-top: 6rpx;
+  color: #303030;
+  font-size: 22rpx;
+}
+
 .detail-related-block {
   margin-top: 56rpx;
 }

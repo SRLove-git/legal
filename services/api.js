@@ -205,6 +205,13 @@ function fullDate(iso) {
   return MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
 }
 
+function dayMonthYear(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+}
+
 // Website window.distinguished / exemplary / remarkable (app.js showRankingLabel).
 const RANK_LABELS = { 3: 'Remarkable', 2: 'Exemplary', 1: 'Distinguished' };
 
@@ -396,6 +403,65 @@ function extractExternalArticleLinks(value) {
   return links;
 }
 
+// A mini-program <rich-text> anchor looks like a link but does not provide a
+// dependable external-link tap event. Split paragraphs containing third-party
+// anchors into native text blocks so the link stays in its original position
+// and can call the page handler normally.
+function buildArticleBodyBlocks(value, externalLinks) {
+  const html = String(value || '');
+  if (!html || !externalLinks || !externalLinks.length) return [];
+  const blocks = [];
+  const matched = {};
+  const paragraphPattern = /<p\b[^>]*>[\s\S]*?<\/p>/gi;
+  let cursor = 0;
+  let paragraph;
+
+  while ((paragraph = paragraphPattern.exec(html))) {
+    const paragraphHtml = paragraph[0];
+    const anchorPattern = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
+    let anchor;
+    let linkIndex = -1;
+    let url = '';
+
+    while ((anchor = anchorPattern.exec(paragraphHtml))) {
+      const hrefMatch = anchor[1].match(/\bhref\s*=\s*(["'])([^"']+)\1/i);
+      url = decodeEntities(hrefMatch && hrefMatch[2]).trim();
+      linkIndex = externalLinks.findIndex(function (link) { return link.url === url; });
+      if (linkIndex >= 0) break;
+    }
+    if (linkIndex < 0 || !anchor) continue;
+
+    const before = paragraphHtml.slice(0, anchor.index);
+    const after = paragraphHtml.slice(anchor.index + anchor[0].length);
+    const beforeHtml = html.slice(cursor, paragraph.index);
+    const renderedBefore = richText.toRichHtml(beforeHtml);
+    if (renderedBefore) blocks.push({ id: 'html-' + blocks.length, type: 'html', html: renderedBefore });
+
+    let prefix = stripHtml(before);
+    let suffix = stripHtml(after);
+    if (prefix) prefix += ' ';
+    if (suffix) suffix = ' ' + suffix;
+    blocks.push({
+      id: 'link-' + linkIndex,
+      type: 'externalLink',
+      prefix: prefix,
+      prefixBold: /<strong\b/i.test(before),
+      label: externalLinks[linkIndex].label,
+      suffix: suffix,
+      linkIndex: linkIndex
+    });
+    matched[linkIndex] = true;
+    cursor = paragraph.index + paragraphHtml.length;
+  }
+
+  // Keep the existing standalone native-link card if any external anchor
+  // could not be positioned safely inside a complete paragraph.
+  if (Object.keys(matched).length !== externalLinks.length) return [];
+  const renderedAfter = richText.toRichHtml(html.slice(cursor));
+  if (renderedAfter) blocks.push({ id: 'html-' + blocks.length, type: 'html', html: renderedAfter });
+  return blocks;
+}
+
 function normalizeArticle(a) {
   const authors = (a.authors || []).map(function (x) {
     return [x.firstName, x.name].filter(Boolean).map(decodeEntities).join(' ').trim();
@@ -413,6 +479,7 @@ function normalizeArticle(a) {
     author: authors.join(', '),
     date: fullDate(updated),
     publishedDate: fullDate(a.publishDate),
+    promotedDate: dayMonthYear(a.publishDate),
     updatedDate: fullDate(updated),
     publishedISO: a.publishDate ? dateOnly(a.publishDate) : '',
     doi: a.doi || '',
@@ -692,6 +759,10 @@ const api = {
       norm.bodyHtml = richText.toRichHtml(articleContent);
       norm.body = norm.bodyHtml ? '' : stripHtml(articleContent);
       norm.externalLinks = extractExternalArticleLinks(articleContent);
+      norm.bodyBlocks = buildArticleBodyBlocks(articleContent, norm.externalLinks);
+      // Do not keep a duplicate copy of large embedded article images in
+      // Page.data after the body has been split into renderable blocks.
+      if (norm.bodyBlocks.length) norm.bodyHtml = '';
       // Award write-ups carry their "LIST OF WINNERS" block in awardContent;
       // the website renders it below the article body.
       norm.award = awardContent.parseAwardContent(o.awardContent);

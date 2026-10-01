@@ -61,22 +61,35 @@
     </view>
     <template is="content-actions" data="{{saved: saved, saving: saving}}" />
     <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
-    <view class="detail-external-links" wx:if="{{item.externalLinks && item.externalLinks.length}}">
+    <view class="detail-external-links" wx:if="{{item.externalLinks && item.externalLinks.length && !(item.bodyBlocks && item.bodyBlocks.length)}}">
       <view class="detail-external-links-title">Open in mini program</view>
       <view
         class="detail-external-link"
         hover-class="detail-external-link-hover"
         wx:for="{{item.externalLinks}}"
         wx:key="url"
+        wx:for-index="linkIndex"
         bindtap="openExternalLink"
-        data-url="{{item.url}}"
-        data-title="{{item.label}}"
+        data-index="{{linkIndex}}"
       >
         <text>{{item.label}}</text>
-        <text class="detail-external-link-arrow">↗</text>
+        <text class="detail-external-link-arrow">→</text>
       </view>
     </view>
-    <rich-text class="detail-rich" wx:if="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
+    <block wx:if="{{item.bodyBlocks && item.bodyBlocks.length}}">
+      <block wx:for="{{item.bodyBlocks}}" wx:key="id" wx:for-item="block">
+        <rich-text class="detail-rich" wx:if="{{block.type === 'html'}}" nodes="{{block.html}}"></rich-text>
+        <view class="detail-inline-link-row" wx:elif="{{block.type === 'externalLink'}}">
+          <text class="{{block.prefixBold ? 'detail-inline-link-prefix-bold' : ''}}">{{block.prefix}}</text><text
+            class="detail-inline-link"
+            hover-class="detail-inline-link-hover"
+            bindtap="openExternalLink"
+            data-index="{{block.linkIndex}}"
+          >{{block.label}}</text><text>{{block.suffix}}</text>
+        </view>
+      </block>
+    </block>
+    <rich-text class="detail-rich" wx:elif="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
     <view class="detail-body" wx:elif="{{item.body}}">{{item.body}}</view>
 
     <view class="award award-theme-{{item.award.theme}}" wx:if="{{item.award}}">
@@ -122,6 +135,26 @@
       <block wx:for="{{item.award.afterBlocks}}" wx:key="id" wx:for-item="block" wx:for-index="blockIndex">
         <template is="award-block" data="{{block: block, blockIndex: blockIndex, regionIndex: -1}}" />
       </block>
+    </view>
+
+    <view class="detail-promoted-block" wx:if="{{promoted.length}}">
+      <view class="detail-promoted-head">
+        <text>Promoted</text>
+        <text class="detail-promoted-info">i</text>
+      </view>
+      <view
+        class="detail-promoted-entry"
+        wx:for="{{promoted}}"
+        wx:key="id"
+        bindtap="goArticle"
+        data-id="{{item.id}}"
+        data-title="{{item.title}}"
+      >
+        <image class="detail-promoted-image" wx:if="{{item.image}}" src="{{item.image}}" mode="widthFix" />
+        <view class="detail-promoted-title">{{item.title}}</view>
+        <view class="detail-promoted-by" wx:if="{{item.author}}">By {{item.author}}</view>
+        <view class="detail-promoted-date" wx:if="{{item.promotedDate}}">{{item.promotedDate}}</view>
+      </view>
     </view>
 
     <view class="detail-related-block" wx:if="{{related.length}}">

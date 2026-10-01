@@ -18,7 +18,7 @@ function crumbFor(item) {
 
 Page({
   behaviors: [safeArea, breadcrumb, contentActions],
-  data: { item: null, related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles', relatedHeading: 'Related articles' },
+  data: { item: null, promoted: [], related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles', relatedHeading: 'Related articles' },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
     const title = decodeURIComponent(options.title || '');
@@ -42,6 +42,11 @@ Page({
           '/articles/' + encodeURIComponent(item.id || id), 'article');
         const relatedRequest = item && item.section === 'Awards' ? api.getRelatedAwards(id) : api.getRelatedArticles(id);
         relatedRequest.then(function (r) { self.setData({ related: (r || []).slice(0, 5) }); }).catch(function () {});
+        if (item && item.section !== 'Awards') {
+          api.getPromotedArticles(id).then(function (r) {
+            self.setData({ promoted: r || [] });
+          }).catch(function () {});
+        }
       }).catch(fallback);
     } else {
       fallback();
@@ -100,8 +105,13 @@ Page({
   },
   openExternalLink(e) {
     const d = e.currentTarget.dataset || {};
-    if (!d.url) return;
-    h5.openWebView(d.url, d.title || 'Open external link');
+    const links = (this.data.item && this.data.item.externalLinks) || [];
+    const link = links[Number(d.index)];
+    if (!link || !link.url) {
+      wx.showToast({ title: 'Link unavailable', icon: 'none' });
+      return;
+    }
+    h5.openWebView(link.url, link.label || 'Open external link');
   },
   onShareAppMessage() {
     const item = this.data.item || {};

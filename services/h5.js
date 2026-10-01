@@ -12,52 +12,6 @@ function isOwnHost(url) {
   return !!h && String(url).indexOf(h + '/') === 0;
 }
 
-// Heyzine's flip-book page cannot be used in a real-device <web-view> unless
-// Heyzine can complete WeChat's business-domain ownership verification. The
-// publisher exposes the original PDF, which WeChat can open natively after its
-// CDN is added to the mini program's downloadFile domains.
-const nativeDocuments = {
-  'https://heyzine.com/flip-book/24f5a17079.html':
-    'https://cdnm.heyzine.com/files/uploaded/v2/24f5a17079857c9173d42f57a99690b6c0cec36c-5.pdf'
-};
-
-function documentUrl(url) {
-  return nativeDocuments[String(url || '').replace(/[?#].*$/, '')] || '';
-}
-
-function openDocument(url, title) {
-  wx.showLoading({ title: 'Opening...', mask: true });
-  wx.downloadFile({
-    url: url,
-    success: function (res) {
-      if (res.statusCode !== 200 || !res.tempFilePath) {
-        wx.hideLoading();
-        wx.showToast({ title: 'Download failed', icon: 'none' });
-        return;
-      }
-      wx.openDocument({
-        filePath: res.tempFilePath,
-        fileType: 'pdf',
-        showMenu: true,
-        success: function () { wx.hideLoading(); },
-        fail: function () {
-          wx.hideLoading();
-          wx.showToast({ title: 'Cannot open PDF', icon: 'none' });
-        }
-      });
-    },
-    fail: function () {
-      wx.hideLoading();
-      wx.showModal({
-        title: title || 'Open document',
-        content: 'Please add https://cdnm.heyzine.com to the mini program downloadFile domains, then try again.',
-        confirmText: 'Copy link',
-        success: function (res) { if (res.confirm) copy(url); }
-      });
-    }
-  });
-}
-
 // Open an absolute or site-relative H5 URL inside the mini program.
 function open(url, title) {
   if (!url) {
@@ -80,11 +34,6 @@ function open(url, title) {
 function openWebView(url, title) {
   if (!/^https?:\/\//i.test(url || '')) {
     wx.showToast({ title: 'No link available', icon: 'none' });
-    return;
-  }
-  const pdfUrl = documentUrl(url);
-  if (pdfUrl) {
-    openDocument(pdfUrl, title);
     return;
   }
   wx.navigateTo({
@@ -118,7 +67,6 @@ module.exports = {
   isOwnHost: isOwnHost,
   open: open,
   openWebView: openWebView,
-  openDocument: openDocument,
   openExternal: offerCopy,
   copy: copy
 };
