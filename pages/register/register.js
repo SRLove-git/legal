@@ -54,9 +54,6 @@ Page({
     const self = this;
     this.setData({ loading: true, error: '' });
     captcha.verify({ purpose: 'register' }).then(function (param) {
-      if (!param && !captcha.configured()) {
-        wx.showToast({ title: 'Captcha not configured', icon: 'none' });
-      }
       return api.checkAvailableAndOTP(email, param);
     }).then(function (res) {
       self.setData({ loading: false });

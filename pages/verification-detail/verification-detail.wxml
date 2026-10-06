@@ -8,10 +8,10 @@
 
     <view class="certificate-copy">
       The verified person is featured on the platform of LegalOne Global Limited (LegalOne) as
-      <text class="emphasis">{{verification.displayName}}</text>
+      <text class="emphasis after-word">{{verification.displayName}}</text>
       (LegalOne reference:<text class="emphasis after-colon">{{verification.lawyerRef}}</text>).
       The verification is based on the official licence/certificate affirming the person's status as a legal practitioner qualified to practise in
-      <text class="emphasis">{{verification.jurisdiction}}</text>.
+      <text class="emphasis after-word">{{verification.jurisdiction}}</text>.
     </view>
 
     <view class="credential-card">

@@ -11,6 +11,10 @@
     <view class="logo-wrap" bindtap="goHome">
       <image class="logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
     </view>
+
+    <view class="platform-notice">
+      WeChat mini program only provides limited function. For full function, please log in our official platform.
+    </view>
   </view>
 </view>
 
@@ -59,7 +63,7 @@
         bindtap="onNav"
       >{{navItem.label}}</view>
     </block>
-    <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goAccount">Account</view>
+    <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goDashboard">Dashboard</view>
     <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goLogout">Logout</view>
     <view class="drawer-nav-item" wx:else bindtap="goLogin">Login</view>
   </view>

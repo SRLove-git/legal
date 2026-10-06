@@ -22,12 +22,20 @@ function configured() {
   return pluginConfigured() || !!c.h5Url;
 }
 
+function configurationError() {
+  const error = new Error('Captcha is not configured. Please configure Aliyun Captcha before sending a verification code.');
+  error.code = 'CAPTCHA_NOT_CONFIGURED';
+  return error;
+}
+
 // Open the captcha page and resolve with the captchaVerifyParam.
-// Resolves with '' when the caller may proceed without a captcha (not configured).
+// Production API calls must never receive an empty captchaVerifyParam: the
+// server rejects it as "Captcha verification failed". An explicit
+// allowUnconfigured option is kept only for the documented DevTools flow.
 function verify(options) {
   options = options || {};
   if (!configured() && !options.allowUnconfigured) {
-    return Promise.resolve('');
+    return Promise.reject(configurationError());
   }
   const mode = pluginConfigured() ? 'plugin' : (settings().h5Url ? 'h5' : 'unconfigured');
   const url = '/pages/captcha/captcha?mode=' + mode + '&purpose=' + encodeURIComponent(options.purpose || '');

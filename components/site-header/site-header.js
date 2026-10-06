@@ -70,7 +70,7 @@ Component({
       this.setData({ menuOpen: false });
       wx.navigateTo({ url: '/pages/login/login' });
     },
-    goAccount() {
+    goDashboard() {
       this.setData({ menuOpen: false });
       wx.navigateTo({ url: '/pages/dashboard/dashboard' });
     },
