@@ -1,69 +1,233 @@
 <site-header />
-<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="breadcrumb">
-    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
-    <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text">Member Dashboard</text>
-  </view>
 
-  <view class="dash">
-    <view wx:if="{{loading}}" class="dash-note">Loading...</view>
+<view class="md-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="md-body">
+    <view class="md-loading" wx:if="{{loading}}">Loading dashboard...</view>
     <block wx:else>
-      <view class="dash-hello">Welcome, {{greeting}}</view>
-      <view class="dash-sub" wx:if="{{subline}}">{{subline}}</view>
+      <view class="md-welcome">{{greeting}}</view>
 
-      <view class="dash-alert" wx:if="{{incomplete}}" bindtap="goCompleteProfile">
-        <text class="dash-alert-text">Your profile is incomplete. Complete it to unlock deal/case submissions.</text>
-        <text class="dash-alert-cta">Complete now</text>
+      <view class="md-notice" wx:if="{{incomplete}}" bindtap="goCompleteProfile">
+        <text class="md-notice-text">Your profile is incomplete. Complete it to unlock deal/case submissions.</text>
+        <text class="md-notice-cta">Complete now</text>
       </view>
 
-      <view class="dash-section">
-        <view class="dash-section-head">Account services</view>
-        <view class="dash-service" bindtap="goFormDownload">
-          <view class="dash-service-title">Award applications</view>
-          <view class="dash-service-sub">Download award PDF forms and start E-form submissions</view>
+      <!-- Upcoming schedule -->
+      <view class="md-card" wx:if="{{hasUpcoming}}">
+        <view class="md-card-title">Upcoming schedule</view>
+
+        <view class="md-section" wx:if="{{upcomingSurveys.length}}">
+          <view class="md-section-title">Survey</view>
+          <view class="md-table">
+            <view class="md-row" wx:for="{{upcomingSurveys}}" wx:key="key">
+              <view class="md-cell">
+                <text class="md-cell-label">Survey</text>
+                <text class="md-cell-value">{{item.title}}</text>
+              </view>
+              <view class="md-cell">
+                <text class="md-cell-label">Available until</text>
+                <text class="md-cell-value">{{item.availableUntil}}</text>
+              </view>
+              <view class="md-cell" wx:if="{{item.draftSaved}}">
+                <text class="md-cell-label">Status</text>
+                <text class="md-cell-value">Draft saved</text>
+              </view>
+              <view class="md-cell">
+                <text class="md-cell-label">Submit</text>
+                <text class="md-cell-value md-link" bindtap="openSurvey" data-id="{{item.id}}">E-form</text>
+              </view>
+            </view>
+          </view>
+          <view class="md-more" wx:if="{{upcomingSurveysMore}}" bindtap="openSurveyMore">More >></view>
         </view>
-        <view class="dash-service" bindtap="startDealSubmission">
-          <view class="dash-service-title">Deal/case submission for rating</view>
-          <view class="dash-service-sub">Start a submission and continue in the LegalOne form</view>
-        </view>
-        <view class="dash-service" bindtap="openVerification">
-          <view class="dash-service-title">LegalOne Verification</view>
-          <view class="dash-service-sub">Opens the LegalOne website. Applications and payment are handled there.</view>
-        </view>
-        <view class="dash-service" bindtap="goSettings">
-          <view class="dash-service-title">Account Settings</view>
-          <view class="dash-service-sub">Account access, password, sector and profile</view>
+
+        <view class="md-section" wx:if="{{awardPanels.length}}">
+          <view class="md-section-title">Award</view>
+          <view class="md-filters">
+            <view class="md-filter {{awardRegion === 'all' ? 'is-active' : ''}}" data-region="all" bindtap="onAwardRegion">All</view>
+            <view class="md-filter {{awardRegion === 'asia' ? 'is-active' : ''}}" wx:if="{{awardCounts.asia}}" data-region="asia" bindtap="onAwardRegion">Asia</view>
+            <view class="md-filter {{awardRegion === 'china' ? 'is-active' : ''}}" wx:if="{{awardCounts.china}}" data-region="china" bindtap="onAwardRegion">China</view>
+          </view>
+          <block wx:for="{{awardPanels}}" wx:for-item="panel" wx:key="region">
+            <view class="md-table" wx:if="{{awardRegion === 'all' || awardRegion === panel.region}}">
+              <view class="md-row" wx:for="{{panel.rows}}" wx:for-item="row" wx:key="key">
+                <view class="md-cell">
+                  <text class="md-cell-label">Award</text>
+                  <text class="md-cell-value">{{row.name}}</text>
+                </view>
+                <view class="md-cell">
+                  <text class="md-cell-label">Jurisdiction</text>
+                  <text class="md-cell-value">{{row.jurisdiction}}</text>
+                </view>
+                <view class="md-cell">
+                  <text class="md-cell-label">Deadline</text>
+                  <text class="md-cell-value">{{row.deadline}}</text>
+                </view>
+                <view class="md-cell">
+                  <text class="md-cell-label">Status</text>
+                  <text class="md-cell-value">{{row.status}}</text>
+                </view>
+                <view class="md-cell">
+                  <text class="md-cell-label">Apply</text>
+                  <text
+                    wx:if="{{row.applyType === 'eform'}}"
+                    class="md-cell-value md-link"
+                    bindtap="applyAward"
+                    data-id="{{row.id}}"
+                    data-name="{{row.name}}"
+                    data-formid="{{row.id}}"
+                    data-type="{{row.type}}"
+                    data-jurisdiction="{{row.jurisdiction}}"
+                  >E-form</text>
+                  <text
+                    wx:elif="{{row.applyType === 'pdf'}}"
+                    class="md-cell-value md-link"
+                    bindtap="downloadAwardPdf"
+                    data-path="{{row.pdfForm}}"
+                  >Download</text>
+                </view>
+              </view>
+            </view>
+          </block>
+          <view class="md-more" bindtap="openAwardForms">More >></view>
         </view>
       </view>
 
-      <view class="dash-section">
-        <view class="dash-section-head">My verifications</view>
-        <view class="dash-item" wx:for="{{verifications}}" wx:key="orderId" bindtap="openVerification">
-          <view class="dash-item-title">{{item.title}}</view>
-          <view class="dash-item-meta">{{item.meta}}</view>
-        </view>
-        <view class="dash-empty" wx:if="{{emptyVerifications}}">No verifications yet.</view>
+      <!-- Saved items -->
+      <view class="md-card">
+        <view class="md-card-title">Saved items</view>
+        <block wx:if="{{savedItems.length}}">
+          <view class="md-saved-row" wx:for="{{savedItems}}" wx:key="id">
+            <view class="md-saved-main">
+              <view
+                class="md-saved-headline md-link"
+                bindtap="openSaved"
+                data-url="{{item.url}}"
+              >{{item.headline}}</view>
+              <view class="md-saved-date">{{item.savedDate}}</view>
+            </view>
+            <view class="md-saved-side">
+              <view class="md-saved-action">
+                <image
+                  class="md-saved-unsave"
+                  src="https://www.legaloneglobal.com/images/dashboard/Saved_Pressing.png"
+                  mode="aspectFit"
+                  bindtap="unsaveSaved"
+                  data-id="{{item.id}}"
+                />
+              </view>
+              <view class="md-saved-type">{{item.typeLabel}}</view>
+            </view>
+          </view>
+          <view class="md-more" wx:if="{{savedItemsTotal >= 3}}" bindtap="openSavedMore">More >></view>
+        </block>
+        <view class="md-empty" wx:else>You currently have no saved items.</view>
       </view>
 
-      <view class="dash-section">
-        <view class="dash-section-head">My deal submissions</view>
-        <view class="dash-item" wx:for="{{dealSubs}}" wx:key="id" bindtap="openDeal" data-id="{{item.id}}">
-          <view class="dash-item-title">{{item.title}}</view>
-          <view class="dash-item-meta">{{item.meta}}</view>
-        </view>
-        <view class="dash-empty" wx:if="{{emptyDeals}}">No deal submissions yet.</view>
+      <!-- My verification(s) -->
+      <view class="md-card">
+        <view class="md-card-title">My verification(s)</view>
+        <block wx:if="{{verifications.length}}">
+          <view class="md-table">
+            <view class="md-row" wx:for="{{verifications}}" wx:key="key">
+              <view class="md-cell">
+                <text class="md-cell-label">Order ID</text>
+                <text class="md-cell-value">{{item.orderId}}</text>
+              </view>
+              <view class="md-cell">
+                <text class="md-cell-label">Verification number</text>
+                <text class="md-cell-value">{{item.number}}</text>
+              </view>
+              <view class="md-cell">
+                <text class="md-cell-label">Status</text>
+                <text class="md-cell-value status-{{item.color}}">{{item.status}}</text>
+              </view>
+              <view class="md-cell">
+                <text class="md-cell-label">Submitted date</text>
+                <text class="md-cell-value">{{item.submittedDate}}</text>
+              </view>
+              <view class="md-cell" wx:if="{{item.expiry}}">
+                <text class="md-cell-label">Expiry</text>
+                <text class="md-cell-value">{{item.expiry}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="md-more" wx:if="{{verificationsTotal >= 3}}" bindtap="openVerificationsMore">More >></view>
+        </block>
+        <view class="md-empty" wx:else>You currently have no verification submissions.</view>
       </view>
 
-      <view class="dash-section">
-        <view class="dash-section-head">My award submissions</view>
-        <view class="dash-item" wx:for="{{awardSubs}}" wx:key="id" bindtap="openAward" data-id="{{item.id}}" data-sub="{{item.sub}}">
-          <view class="dash-item-title">{{item.title}}</view>
-          <view class="dash-item-meta">{{item.meta}}</view>
+      <!-- My award submission(s) -->
+      <view class="md-card" wx:if="{{awardSubs.length}}">
+        <view class="md-card-title">My award submission(s)</view>
+        <view class="md-table">
+          <view
+            class="md-row"
+            wx:for="{{awardSubs}}"
+            wx:key="id"
+            bindtap="openAward"
+            data-id="{{item.id}}"
+            data-sub="{{item.subType}}"
+          >
+            <view class="md-cell">
+              <text class="md-cell-label">Award name</text>
+              <text class="md-cell-value md-link">{{item.name}}</text>
+            </view>
+            <view class="md-cell" wx:if="{{item.remark}}">
+              <text class="md-cell-label">Remark</text>
+              <text class="md-cell-value">{{item.remark}}</text>
+            </view>
+            <view class="md-cell">
+              <text class="md-cell-label">Submitted date</text>
+              <text class="md-cell-value">{{item.submittedDate}}</text>
+            </view>
+            <view class="md-cell">
+              <text class="md-cell-label">Status</text>
+              <text class="md-cell-value">{{item.status}}</text>
+            </view>
+          </view>
         </view>
-        <view class="dash-empty" wx:if="{{emptyAwards}}">No award submissions yet.</view>
+        <view class="md-more" wx:if="{{awardSubsTotal >= 3}}" bindtap="openAwardsMore">More >></view>
+      </view>
+
+      <!-- My account -->
+      <view class="md-card">
+        <view class="md-card-title">My account</view>
+        <view class="md-card-group">
+          <view class="md-text">Personal information can be updated via Account Settings, where user profile details (name, email, etc.) can be edited and passwords can be changed.</view>
+          <view class="md-btn" bindtap="goSettings">Account Settings</view>
+        </view>
+      </view>
+
+      <!-- My profile -->
+      <view class="md-card" wx:if="{{profile.show}}">
+        <view class="md-card-title">My profile</view>
+        <view class="md-profile">
+          <image class="md-profile-img" src="https://www.legaloneglobal.com/images/defaultProfileIcon.png" mode="aspectFit" />
+          <view class="md-profile-body">
+            <view class="md-profile-name">{{profile.name}}</view>
+            <view class="md-profile-position" wx:if="{{profile.position}}">{{profile.position}}</view>
+            <view class="md-profile-firm" wx:if="{{profile.firm}}">{{profile.firm}}</view>
+          </view>
+        </view>
+        <view class="md-profile-contact">If this profile is not you, please <text class="md-link" bindtap="goSettings">click here</text> to contact us.</view>
+      </view>
+
+      <!-- Welcome panel -->
+      <view class="md-card">
+        <view class="md-card-group">
+          <view class="md-card-subtitle">Welcome</view>
+          <view class="md-text">Thank you for your interest in LegalOne. This portal enables you to receive essential updates and editorial schedules, allows the download of award submission forms, enables the online submission of notable deals/cases, and offers other services.</view>
+        </view>
+        <view class="md-card-group">
+          <image class="md-about-logo" src="https://www.legaloneglobal.com/images/Logo2.s.png" mode="widthFix" />
+        </view>
+        <view class="md-card-group">
+          <view class="md-card-subtitle">About Us</view>
+          <view class="md-text">Learn more <text class="md-link" bindtap="goAbout">about us</text>.</view>
+        </view>
       </view>
     </block>
   </view>
 </view>
+
 <site-footer />

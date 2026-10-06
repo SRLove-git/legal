@@ -1,72 +1,317 @@
 const safeArea = require('../../services/safe-area.js');
-const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const auth = require('../../services/auth.js');
 const h5 = require('../../services/h5.js');
 const config = require('../../config.js');
 
+// The website dashboard previews at most 3 rows per card, then adds "More >>".
+const PREVIEW = 3;
+
+// WXML text nodes do not decode HTML entities (the website's browser does), so
+// CMS values must be decoded before they are rendered.
+function text(value) {
+  return api.decodeEntities(value);
+}
+
+// Website helper statusColor(status, paymentStatus) -> green / red / default.
+function verificationColor(status, paymentStatus) {
+  const st = status ? String(status).toUpperCase() : null;
+  const ps = paymentStatus ? String(paymentStatus).toUpperCase() : null;
+  if (st === 'VERIFIED') return 'green';
+  if ((st === 'PENDING' && ps == null) || ps === 'FAILED' || ps === 'REJECTED' || ps === 'EXPIRED') return 'red';
+  return '';
+}
+
+// Website "Upcoming schedule" award rules: keep application forms whose deadline
+// sits inside the [today - 1 month, today + 1 month] window, then split them into
+// Asia and China (China + Hong Kong) and sort by deadline.
+const CHINA_JURISDICTIONS = ['china', 'hong kong'];
+const AWARD_PREVIEW = 3;
+
+function isUpcomingAward(form) {
+  const deadline = new Date(form && form.applicationDeadline);
+  if (isNaN(deadline.getTime())) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const deadlineDay = new Date(deadline);
+  deadlineDay.setHours(0, 0, 0, 0);
+  const deadlinePlusMonth = new Date(deadlineDay);
+  deadlinePlusMonth.setMonth(deadlinePlusMonth.getMonth() + 1);
+  const inAMonth = new Date(today);
+  inAMonth.setMonth(inAMonth.getMonth() + 1);
+  return deadlinePlusMonth >= today && deadlineDay <= inAMonth;
+}
+
+function isChinaForm(form) {
+  const jurisdiction = ((form && form.jurisdiction) || '').toLowerCase();
+  return CHINA_JURISDICTIONS.some(function (key) { return jurisdiction.indexOf(key) !== -1; });
+}
+
+function awardRow(form, region) {
+  return {
+    key: region + '-' + (form.id || form.name || ''),
+    id: form.id || '',
+    name: text(form.name),
+    type: form.type || '',
+    jurisdiction: text(form.jurisdiction),
+    deadline: api.dayMonthYear(form.applicationDeadline),
+    status: api.awardStatus(form.applicationDeadline),
+    applyType: form.eFormAvailable ? 'eform' : (form.pdfForm ? 'pdf' : ''),
+    pdfForm: form.pdfForm || ''
+  };
+}
+
 Page({
-  behaviors: [safeArea, breadcrumb],
+  behaviors: [safeArea],
   data: {
-    member: null,
-    greeting: '',
-    subline: '',
     loading: true,
+    greeting: '',
     incomplete: false,
-    emptyVerifications: true,
-    emptyDeals: true,
-    emptyAwards: true,
+    profile: { show: false, name: '', position: '', firm: '' },
+    savedItems: [],
+    savedItemsTotal: 0,
     verifications: [],
-    dealSubs: [],
-    awardSubs: []
+    verificationsTotal: 0,
+    awardSubs: [],
+    awardSubsTotal: 0,
+    hasUpcoming: false,
+    upcomingSurveys: [],
+    upcomingSurveysMore: false,
+    awardPanels: [],
+    awardCounts: { asia: 0, china: 0 },
+    awardRegion: 'all'
   },
+
   onShow() {
     if (!auth.requireLogin()) return;
     this.load();
   },
+
   load() {
     const self = this;
     const memberId = auth.getMemberId();
     api.getMember(memberId).then(function (m) {
       const member = m || {};
-      const parts = [member.position, member.firmName].filter(Boolean);
+      const name = [member.salutation, member.firstName, member.lastName].map(text).filter(Boolean).join(' ');
       self.setData({
-        member: member,
-        greeting: [member.salutation, member.firstName, member.lastName].filter(Boolean).join(' '),
-        subline: parts.join(' - '),
         loading: false,
-        incomplete: !auth.isProfileComplete(member)
+        greeting: name ? 'Welcome, ' + name : 'Welcome',
+        incomplete: !auth.isProfileComplete(member),
+        profile: {
+          show: !!name,
+          name: name,
+          position: text(member.position),
+          firm: text(member.firmName)
+        }
       });
+      self.loadSavedItems(memberId);
       self.loadActivity(memberId);
+      self.loadUpcoming(memberId);
     }).catch(function () {
       self.setData({ loading: false });
     });
   },
-  // Schedule 2 §3.6.3 — at most 3 rows each, status labels from Annex B §8.
+
+  // Website "Saved items" card: GET .../saved-items?limit=3&sortBy=savedDate&sortDir=desc
+  loadSavedItems(memberId) {
+    const self = this;
+    api.getSavedItems(memberId, { limit: PREVIEW, sortBy: 'savedDate', sortDir: 'desc' }).then(function (res) {
+      const items = (res && res.items) || [];
+      self.setData({
+        savedItems: items.map(function (item) {
+          return {
+            id: item.id,
+            headline: text(item.headline || item.title),
+            url: item.url || '',
+            savedDate: api.dayMonthYear(item.savedDate),
+            typeLabel: api.savedItemTypeLabel(item.contentType)
+          };
+        }),
+        savedItemsTotal: (res && res.total) || items.length
+      });
+    }).catch(function () {});
+  },
+
+  // Website cards "My verification(s)" and "My award submission(s)".
   loadActivity(memberId) {
     const self = this;
     api.getVerifications(memberId).then(function (list) {
-      const rows = (list || []).slice(0, 3).map(function (v) {
-        return {
-          orderId: v.orderId,
-          title: api.showVerificationNumber(v.status, v.id) || v.orderId || 'Verification',
-          meta: [api.verificationStatus(v.status, v.paymentStatus), v.submittedDate].filter(Boolean).join(' - ')
-        };
+      const all = list || [];
+      self.setData({
+        verifications: all.slice(0, PREVIEW).map(function (v) {
+          return {
+            key: v.id || v.orderId || '',
+            orderId: text(v.orderId),
+            number: api.showVerificationNumber(v.status, v.id),
+            status: api.verificationStatus(v.status, v.paymentStatus),
+            color: verificationColor(v.status, v.paymentStatus),
+            submittedDate: api.dayMonthYear(v.submittedDate),
+            expiry: api.dayMonthYear(v.expiry)
+          };
+        }),
+        verificationsTotal: all.length
       });
-      self.setData({ verifications: rows, emptyVerifications: rows.length === 0 });
     }).catch(function () {});
-    api.getDealSubmissions(memberId).then(function (list) {
-      const rows = (list || []).slice(0, 3).map(function (s) {
-        return { id: s.id, title: s.dealName || 'Deal submission', meta: [api.submissionStatus(s.status), s.creationDate].filter(Boolean).join(' - ') };
-      });
-      self.setData({ dealSubs: rows, emptyDeals: rows.length === 0 });
-    }).catch(function () {});
+
     api.getAwardSubmissions(memberId).then(function (list) {
-      const rows = (list || []).slice(0, 3).map(function (s) {
-        return { id: s.id, title: s.awardName || 'Award submission', meta: [api.submissionStatus(s.status), s.creationDate].filter(Boolean).join(' - ') };
+      const all = list || [];
+      self.setData({
+        awardSubs: all.slice(0, PREVIEW).map(function (s) {
+          return {
+            id: s.id,
+            subType: s.formSubType || '',
+            name: text(s.awardName),
+            remark: text(s.clientRemark),
+            submittedDate: api.dayMonthYear(s.creationDate),
+            status: api.submissionStatus(s.status)
+          };
+        }),
+        awardSubsTotal: all.length
       });
-      self.setData({ awardSubs: rows, emptyAwards: rows.length === 0 });
     }).catch(function () {});
+  },
+
+  // Website "Upcoming schedule" card — surveys plus award forms with a deadline
+  // in the upcoming window.
+  loadUpcoming(memberId) {
+    const self = this;
+    api.getSurveys(memberId).then(function (res) {
+      const all = (res && res.upcoming) || [];
+      self.setData({
+        upcomingSurveys: all.slice(0, PREVIEW).map(function (s) {
+          return {
+            key: s.id || s.title || '',
+            id: s.id || '',
+            title: text(s.title),
+            availableUntil: api.dayMonthYear(s.endDate),
+            draftSaved: !!s.responseStatus
+          };
+        }),
+        upcomingSurveysMore: all.length > PREVIEW
+      });
+      self.updateUpcomingFlag();
+    }).catch(function () {});
+
+    api.getApplicationForms().then(function (forms) {
+      const upcoming = (forms || []).filter(isUpcomingAward);
+      const byDeadline = function (a, b) {
+        return new Date(a.applicationDeadline) - new Date(b.applicationDeadline);
+      };
+      const asia = upcoming.filter(function (f) { return !isChinaForm(f); }).sort(byDeadline);
+      const china = upcoming.filter(isChinaForm).sort(byDeadline);
+      const panels = [];
+      if (asia.length) {
+        panels.push({ region: 'asia', rows: asia.slice(0, AWARD_PREVIEW).map(function (f) { return awardRow(f, 'asia'); }) });
+      }
+      if (china.length) {
+        panels.push({ region: 'china', rows: china.slice(0, AWARD_PREVIEW).map(function (f) { return awardRow(f, 'china'); }) });
+      }
+      self.setData({
+        awardPanels: panels,
+        awardCounts: { asia: asia.length, china: china.length }
+      });
+      self.updateUpcomingFlag();
+    }).catch(function () {});
+  },
+
+  updateUpcomingFlag() {
+    const has = this.data.upcomingSurveys.length > 0 || this.data.awardPanels.length > 0;
+    if (has !== this.data.hasUpcoming) this.setData({ hasUpcoming: has });
+  },
+
+  onAwardRegion(e) {
+    const region = e.currentTarget.dataset.region;
+    if (region) this.setData({ awardRegion: region });
+  },
+
+  openSurvey(e) {
+    const id = e.currentTarget.dataset.id;
+    if (id) h5.open('/member_survey/' + encodeURIComponent(id), 'Survey');
+  },
+  openSurveyMore() {
+    h5.open('/member_survey', 'Survey');
+  },
+  openAwardForms() {
+    wx.navigateTo({ url: '/pages/form-download/form-download' });
+  },
+  downloadAwardPdf(e) {
+    const path = e.currentTarget.dataset.path;
+    if (!path) return;
+    const url = /^https?:\/\//i.test(path) ? path : api.CDN + String(path).replace(/^\/+/, '');
+    wx.downloadFile({
+      url: url,
+      success: function (res) {
+        if (res.statusCode !== 200) {
+          wx.showToast({ title: 'Download failed', icon: 'none' });
+          return;
+        }
+        wx.openDocument({
+          filePath: res.tempFilePath,
+          showMenu: true,
+          fail: function () { wx.showToast({ title: 'Cannot open PDF', icon: 'none' }); }
+        });
+      },
+      fail: function () { wx.showToast({ title: 'Download failed', icon: 'none' }); }
+    });
+  },
+  // Same flow as pages/form-download: create the submission, then open the H5 E-form.
+  applyAward(e) {
+    const d = e.currentTarget.dataset;
+    const subType = [d.type, (d.jurisdiction || '').toLowerCase().replace(/ /g, '-')].filter(Boolean).join('-');
+    api.getMember(auth.getMemberId()).then(function (m) {
+      return api.createSubmission({
+        awardName: d.name || '',
+        clientRemark: '',
+        email: (m && (m.businessEmail || m.personalEmail)) || '',
+        lawFirmName: (m && m.firmName) || '',
+        formId: d.formid || '',
+        formType: 'award-submission',
+        formSubType: subType,
+        memberId: auth.getMemberId()
+      });
+    }).then(function (res) {
+      const id = res && res.id;
+      if (!id) throw new Error('No submission id');
+      h5.open(api.formUrl(config.h5Host, 'award-submission', subType, id), d.name || 'Award application');
+    }).catch(function (err) {
+      wx.showModal({
+        title: 'Award application',
+        content: (err && (err.description || err.message)) || 'Could not start the application.',
+        showCancel: false
+      });
+    });
+  },
+
+  openSaved(e) {
+    const url = e.currentTarget.dataset.url;
+    if (url) h5.open(url, 'Saved item');
+  },
+  unsaveSaved(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    const memberId = auth.getMemberId();
+    const self = this;
+    api.unsaveItem(memberId, id).then(function () {
+      self.loadSavedItems(memberId);
+    }).catch(function () {
+      wx.showToast({ title: 'Unable to update saved items', icon: 'none' });
+    });
+  },
+  openSavedMore() {
+    h5.open('/member_saved_items', 'Saved items');
+  },
+  openVerification() {
+    h5.open('/member_verification', 'LegalOne Verification');
+  },
+  openVerificationsMore() {
+    h5.open('/member_verification_history', 'Verification history');
+  },
+  openAward(e) {
+    const d = e.currentTarget.dataset;
+    h5.open(api.formUrl(config.h5Host, 'award-submission', d.sub || '', d.id), 'Award submission');
+  },
+  openAwardsMore() {
+    h5.open('/member_award_submission_history', 'Award submission history');
   },
   goSettings() {
     wx.navigateTo({ url: '/pages/account/account' });
@@ -74,50 +319,7 @@ Page({
   goCompleteProfile() {
     wx.navigateTo({ url: '/pages/profile-edit/profile-edit?mode=complete' });
   },
-  // Verification is display-only in the mini program — open the website URL.
-  openVerification() {
-    h5.open('/member_verification', 'LegalOne Verification');
-  },
-  // Schedule 2 §3.6.2 — create via API then open the existing mobile H5 form.
-  startDealSubmission() {
-    if (this.data.incomplete) return this.goCompleteProfile();
-    const self = this;
-    const m = this.data.member || {};
-    const isLawyerFirm = (m.sector || '').toLowerCase().indexOf('law firm (lawyer)') === 0;
-    const body = {
-      dealName: '',
-      email: m.businessEmail || m.personalEmail || '',
-      lawFirmName: m.firmName || '',
-      formId: 'deal-submission',
-      formType: 'deal-submission',
-      formSubType: '',
-      memberId: auth.getMemberId()
-    };
-    if (isLawyerFirm) body.isNominatingPartner = true;
-    api.createSubmission(body).then(function (res) {
-      const id = res && res.id;
-      if (!id) throw new Error('No submission id');
-      h5.open(api.formUrl(config.h5Host, 'deal-submission', '', id), 'Deal/case submission');
-    }).catch(function (err) {
-      wx.showModal({
-        title: 'Deal/case submission',
-        content: (err && (err.description || err.message)) || 'Could not start the submission.',
-        showCancel: false
-      });
-    });
-  },
-  goFormDownload() {
-    wx.navigateTo({ url: '/pages/form-download/form-download' });
-  },
-  openDeal(e) {
-    const id = e.currentTarget.dataset.id;
-    h5.open(api.formUrl(config.h5Host, 'deal-submission', '', id), 'Deal/case submission');
-  },
-  openAward(e) {
-    const d = e.currentTarget.dataset;
-    h5.open(api.formUrl(config.h5Host, 'award-submission', d.sub || '', d.id), 'Award submission');
-  },
-  goLogin() {
-    wx.redirectTo({ url: '/pages/login/login' });
+  goAbout() {
+    wx.navigateTo({ url: '/pages/about/about' });
   }
 });

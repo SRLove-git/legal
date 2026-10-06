@@ -1,90 +1,295 @@
-.dash {
-  padding: 40rpx 36rpx 80rpx;
+/* Member dashboard — mirrors the website's post-login member page
+   (body.memberpage: light grey canvas, white cards, fixed member nav). */
+page {
+  background: #f0f1f2;
 }
 
-.dash-note {
-  font-size: 27rpx;
-  color: #777777;
+.md-page {
+  background: #f0f1f2;
+  min-height: 100vh;
 }
 
-.dash-hello {
-  font-size: 44rpx;
+.md-body {
+  padding: 32rpx 36rpx 0;
+}
+
+.md-loading {
+  font-size: 28rpx;
+  color: #636363;
+}
+
+.md-welcome {
+  font-size: 56rpx;
+  line-height: 56rpx;
   font-weight: 700;
-  color: #00558d;
+  color: #2d2d2d;
+  margin: 4rpx 0 48rpx;
 }
 
-.dash-sub {
-  margin-top: 10rpx;
-  font-size: 27rpx;
-  color: #555555;
-}
-
-.dash-alert {
-  margin-top: 30rpx;
-  background: #fff8e1;
-  border: 2rpx solid #f0d58c;
-  border-radius: 12rpx;
-  padding: 24rpx;
-  font-size: 27rpx;
-  color: #7a5c00;
+.md-notice {
+  margin-bottom: 64rpx;
+  padding: 50rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  color: #2d2d2d;
   line-height: 1.5;
 }
 
-.dash-alert-cta {
+.md-notice-cta {
+  margin-left: 10rpx;
   color: #0084ba;
   font-weight: 700;
 }
 
-.dash-section {
+.md-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  margin-bottom: 64rpx;
+  padding: 50rpx;
+}
+
+.md-card-title {
+  font-size: 44rpx;
+  line-height: 56rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-bottom: 48rpx;
+}
+
+.md-card-subtitle {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+  padding-bottom: 32rpx;
+}
+
+.md-text {
+  font-size: 32rpx;
+  line-height: 1.5;
+  color: #2d2d2d;
+}
+
+.md-card-group {
+  margin-bottom: 40rpx;
+}
+
+.md-card-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Upcoming schedule sub-sections (Survey / Award) and their region filter pills */
+.md-section + .md-section {
   margin-top: 48rpx;
 }
 
-.dash-section-head {
-  font-size: 34rpx;
+.md-section-title {
+  font-size: 32rpx;
   font-weight: 700;
-  color: #00558d;
-  padding-bottom: 12rpx;
-  border-bottom: 2rpx solid #00558d;
-  margin-bottom: 16rpx;
+  line-height: 1.3;
+  color: #434142;
+  margin: 0 0 32rpx;
 }
 
-.dash-service {
-  padding: 22rpx 0;
-  border-bottom: 1rpx solid #f1f1f1;
+.md-filters {
+  display: flex;
+  gap: 24rpx;
+  margin-bottom: 40rpx;
 }
 
-.dash-service-title {
-  font-size: 29rpx;
-  font-weight: 600;
-  color: #2d2d2d;
-}
-
-.dash-service-sub {
-  margin-top: 6rpx;
-  font-size: 24rpx;
-  color: #777777;
-  line-height: 1.45;
-}
-
-.dash-item {
-  padding: 18rpx 0;
-  border-bottom: 1rpx solid #f1f1f1;
-}
-
-.dash-item-title {
+.md-filter {
   font-size: 28rpx;
+  line-height: 1;
+  padding: 18rpx 44rpx;
+  border: 2rpx solid #434142;
+  border-radius: 44rpx;
+  background: #ffffff;
+  color: #434142;
+}
+
+.md-filter.is-active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+}
+
+.md-link {
+  color: #0084ba;
+}
+
+.md-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40rpx;
+  height: 80rpx;
+  padding: 0 32rpx;
+  border-radius: 14rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.md-empty {
+  font-size: 32rpx;
+  line-height: 1.5;
   color: #2d2d2d;
-  line-height: 1.4;
 }
 
-.dash-item-meta {
-  margin-top: 6rpx;
+/* Mobile website tables: header hidden, each record is a bordered block whose
+   fields show a bold fixed-width label on the left. */
+.md-table {
+  font-size: 28rpx;
+}
+
+.md-row {
+  border: 2rpx solid #cccccc;
+  margin-bottom: 20rpx;
+}
+
+.md-cell {
+  position: relative;
+  min-height: 1em;
+  padding: 22rpx 16rpx 22rpx 260rpx;
+}
+
+.md-cell-label {
+  position: absolute;
+  top: 22rpx;
+  left: 12rpx;
+  width: 240rpx;
+  padding-right: 20rpx;
+  font-weight: 700;
+  color: #2d2d2d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.md-cell-value {
+  display: block;
+  color: #2d2d2d;
+  word-break: break-word;
+}
+
+/* Keep tappable cell values blue: .md-cell-value alone would win on source order. */
+.md-cell-value.md-link {
+  color: #0084ba;
+}
+
+.status-green {
+  color: green;
+}
+
+.status-red {
+  color: red;
+}
+
+.md-more {
+  padding: 22rpx 16rpx;
+  color: #0084ba;
+  font-size: 28rpx;
+}
+
+/* Saved items: the website drops the table labels on phones and shows a compact
+   card instead — headline + muted saved date on the left, unsave + muted type right. */
+.md-saved-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  border: 2rpx solid #dfe2e6;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.md-saved-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.md-saved-headline {
+  font-size: 30rpx;
+  line-height: 1.45;
+  color: #0084ba;
+  word-break: break-word;
+}
+
+.md-saved-date {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #636363;
+}
+
+.md-saved-side {
+  flex: 0 0 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.md-saved-action {
+  display: flex;
+  justify-content: center;
+}
+
+.md-saved-unsave {
+  width: 42rpx;
+  height: 42rpx;
+}
+
+.md-saved-type {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #636363;
+  text-align: center;
+}
+
+/* My profile card */
+.md-profile {
+  display: flex;
+}
+
+.md-profile-img {
+  width: 180rpx;
+  height: 180rpx;
+  flex: 0 0 auto;
+}
+
+.md-profile-body {
+  margin-left: 30rpx;
+  min-width: 0;
+}
+
+.md-profile-name {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #0084ba;
+}
+
+.md-profile-position {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 10rpx 16rpx;
+  border-radius: 10rpx;
+  background: #0084ba;
+  color: #ffffff;
   font-size: 24rpx;
-  color: #777777;
 }
 
-.dash-empty {
-  font-size: 25rpx;
-  color: #999999;
-  padding: 12rpx 0;
+.md-profile-firm {
+  margin-top: 12rpx;
+  font-size: 28rpx;
+  color: #0084ba;
+}
+
+.md-profile-contact {
+  padding-top: 20rpx;
+  font-size: 24rpx;
+  color: #2d2d2d;
+}
+
+.md-about-logo {
+  width: 400rpx;
 }

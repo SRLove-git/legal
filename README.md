@@ -7,9 +7,12 @@
 
 1. 安装并打开「微信开发者工具」，用微信扫码登录。
 2. 选择「导入项目」。
-3. 「目录」选择本文件夹（包含 `app.json` 的根目录）：
+3. 「目录」选择本仓库根目录（也就是包含 `app.json` 的那一层），例如：
 
-   `/Users/srlove/Documents/Code/legaloneglob`
+   `/Users/yangyongze/Desktop/legalone/legal`
+
+   注意：不要选它的上一层目录，否则开发者工具会报
+   `app.json: 在项目根目录未找到 app.json`。
 
 4. AppID 使用「测试号」（或保持 `touristappid`）。
 5. 点击「导入」，工具会自动编译，左侧模拟器即可看到页面。
@@ -73,7 +76,7 @@
 - `pages/reset-password/reset-password` — 重置密码（邮件链接 → 新密码）
 - `pages/login/login` — 登录（无验证码）
 - `pages/captcha/captcha` — 阿里云验证码页（插件 / H5 / 未配置三种状态）
-- `pages/dashboard/dashboard` — 会员仪表盘（欢迎语、账号服务、三张活动摘要）
+- `pages/dashboard/dashboard` — 会员仪表盘，按官网登录后个人主页还原：欢迎语、Upcoming schedule（Survey + Award，含 All / Asia / China 筛选与 E-form / PDF 入口）、Saved items / My verification(s) / My award submission(s) / My account / My profile / Welcome 卡片（底部会员导航按需求未保留）
 - `pages/account/account` — Account Settings 菜单
 - `pages/account-access/account-access` — 修改邮箱（captcha → Get Code → OTP → Submit）
 - `pages/change-password/change-password` — 修改密码

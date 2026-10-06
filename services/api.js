@@ -534,6 +534,31 @@ function showVerificationNumber(status, id) {
   return (status || '').toString().toUpperCase() === 'VERIFIED' ? (id || '') : '';
 }
 
+// Website dashboard saved-items type labels (Saved items card).
+const SAVED_ITEM_TYPES = {
+  article: 'Article',
+  award: 'Award',
+  deal: 'Deal/case',
+  lawyer: 'Lawyer',
+  lawfirm: 'Law Firm',
+  lawfirmoffice: 'Office'
+};
+function savedItemTypeLabel(type) {
+  const key = (type || '').toString().toLowerCase();
+  return SAVED_ITEM_TYPES[key] || type || '';
+}
+
+// Website helper awardStatus(applicationDeadline): "Open" until the deadline
+// (day granularity), then "Closed".
+function awardStatus(deadline) {
+  const d = new Date(deadline);
+  if (isNaN(d.getTime())) return 'error';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return d < today ? 'Closed' : 'Open';
+}
+
 // Annex B §9.4 — H5 form URL for a created submission
 function formUrl(host, formType, formSubType, id) {
   const base = (host || BASE).replace(/\/+$/, '');
@@ -549,6 +574,7 @@ const api = {
   imageUrl: imageUrl,
   decodeEntities: decodeEntities,
   stripHtml: stripHtml,
+  dayMonthYear: dayMonthYear,
 
   // Phase 1 — home
   getAnnouncements: function (opts) {
@@ -933,6 +959,20 @@ const api = {
     return remove('api/crm/member/' + encodeURIComponent(memberId) + '/saved-items/' +
       encodeURIComponent(savedItemId), { auth: true });
   },
+  // Member dashboard "Saved items" card. Mirrors the website's
+  // GET /api/crm/member/{id}/saved-items?limit&sortBy&sortDir request.
+  getSavedItems: function (memberId, options) {
+    const opts = options || {};
+    const query = [];
+    if (opts.limit) query.push('limit=' + encodeURIComponent(opts.limit));
+    if (opts.sortBy) query.push('sortBy=' + encodeURIComponent(opts.sortBy));
+    if (opts.sortDir) query.push('sortDir=' + encodeURIComponent(opts.sortDir));
+    if (opts.contentType) query.push('contentType=' + encodeURIComponent(opts.contentType));
+    if (opts.search) query.push('search=' + encodeURIComponent(opts.search));
+    const qs = query.length ? '?' + query.join('&') : '';
+    return get('api/crm/member/' + encodeURIComponent(memberId) + '/saved-items' + qs, { auth: true })
+      .then(function (r) { return r || { items: [], total: 0 }; });
+  },
 
   // Phase 1 — law firm sub-lists (Annex A §4.1)
   getLawfirmOffices: function (id) {
@@ -1187,6 +1227,11 @@ const api = {
     return get('api/crm/verification/' + encodeURIComponent(verificationId))
       .then(function (r) { return (Array.isArray(r) ? r[0] : r) || null; });
   },
+  // Member dashboard "Upcoming schedule" card — surveys.
+  getSurveys: function (memberId) {
+    return get('api/crm/member/' + encodeURIComponent(memberId) + '/surveys', { auth: true })
+      .then(function (r) { return r || { upcoming: [], history: [] }; });
+  },
   getDealSubmissions: function (memberId) {
     return get('api/crm/member/submissionHistory/' + encodeURIComponent(memberId) + '/deal-submission', { auth: true })
       .then(function (r) { return r || []; });
@@ -1212,6 +1257,8 @@ const api = {
   submissionStatus: submissionStatus,
   verificationStatus: verificationStatus,
   showVerificationNumber: showVerificationNumber,
+  savedItemTypeLabel: savedItemTypeLabel,
+  awardStatus: awardStatus,
   formUrl: formUrl,
   // Phase 2 — member email/password rules (Annex B §3)
   passwordValid: function (pw) {
