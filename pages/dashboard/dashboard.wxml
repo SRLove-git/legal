@@ -3,7 +3,7 @@
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text">Dashboard</text>
+    <text class="breadcrumb-text">Member Dashboard</text>
   </view>
 
   <view class="dash">

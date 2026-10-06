@@ -3,7 +3,7 @@
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
-    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/dashboard/dashboard">Dashboard</text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="/pages/dashboard/dashboard">Member Dashboard</text>
   </view>
   <view class="form">
     <view class="form-title">Form download</view>

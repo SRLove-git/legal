@@ -38,7 +38,7 @@
         <view class="account-menu-item" bindtap="goPassword">Change password</view>
         <view class="account-menu-item" bindtap="goSector">Change sector</view>
         <view class="account-menu-item" bindtap="goProfile">Update profile</view>
-        <view class="account-menu-item" bindtap="goDashboard">Dashboard</view>
+        <view class="account-menu-item" bindtap="goDashboard">Member Dashboard</view>
       </view>
 
       <button class="logout-btn" bindtap="doLogout">Sign out</button>

@@ -63,7 +63,7 @@
         bindtap="onNav"
       >{{navItem.label}}</view>
     </block>
-    <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goDashboard">Dashboard</view>
+    <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goDashboard">Member Dashboard</view>
     <view class="drawer-nav-item" wx:if="{{loggedIn}}" bindtap="goLogout">Logout</view>
     <view class="drawer-nav-item" wx:else bindtap="goLogin">Login</view>
   </view>
