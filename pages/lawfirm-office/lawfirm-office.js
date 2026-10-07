@@ -12,7 +12,15 @@ const RANK_SMALL_ICONS = {
 };
 // The website shows the first five rows of each embed plus a "More" button.
 const EMBED_MAX = 5;
-const MORE_MAX = 48;
+// Those "More" buttons are links to office-scoped list pages carrying the parent
+// firm id, the office id and the office name; the mini program renders the same
+// lists in its own entity-list page.
+const MORE_TYPES = {
+  cases: 'office-cases',
+  articles: 'office-articles',
+  lawyers: 'office-lawyers',
+  partners: 'office-partners'
+};
 
 function completeDetail(item) {
   return Object.assign({
@@ -139,26 +147,23 @@ Page({
       self.setData({ topAds: (ads && ads.top) || [], downAds: (ads && ads.down) || [] });
     }).catch(function () {});
   },
+  // "More" opens that section's own office-scoped list page, rendered by the
+  // mini program itself.
   showMore(e) {
     const kind = e.currentTarget.dataset.kind;
+    const type = MORE_TYPES[kind];
+    const item = this.data.item || {};
     const firmId = this.data.firmId;
-    const officeId = this.data.officeId;
-    const self = this;
-    const done = function (rows, key, moreKey, decorate) {
-      const patch = {};
-      patch[key] = (rows || []).map(decorate || function (x) { return x; });
-      patch[moreKey] = false;
-      self.setData(patch);
-    };
-    if (kind === 'cases') {
-      api.getOfficeCases(officeId, { max: MORE_MAX }).then(function (r) { done(r, 'cases', 'moreCases', decorateDeal); }).catch(function () {});
-    } else if (kind === 'articles') {
-      api.getOfficeArticles(officeId, { max: MORE_MAX }).then(function (r) { done(r, 'articles', 'moreArticles', decorateArticle); }).catch(function () {});
-    } else if (kind === 'lawyers') {
-      api.getOfficeLawyers(firmId, officeId, { max: MORE_MAX }).then(function (r) { done(r, 'lawyers', 'moreLawyers'); }).catch(function () {});
-    } else if (kind === 'partners') {
-      api.getOfficePartners(firmId, officeId, { max: MORE_MAX }).then(function (r) { done(r, 'partners', 'morePartners'); }).catch(function () {});
-    }
+    const officeId = this.data.officeId || item.id;
+    const officeName = item.name || item.city || '';
+    if (!type || !firmId || !officeId) return;
+    wx.navigateTo({
+      url: '/pages/entity-list/entity-list?type=' + encodeURIComponent(type) +
+        '&id=' + encodeURIComponent(officeId) +
+        '&parentId=' + encodeURIComponent(firmId) +
+        '&name=' + encodeURIComponent(officeName) +
+        '&parentName=' + encodeURIComponent(this.data.firmName || '')
+    });
   },
   loadSavedStatus(id) {
     const token = wx.getStorageSync('X-ACCESS-TOKEN');

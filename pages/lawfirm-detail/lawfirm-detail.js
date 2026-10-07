@@ -14,7 +14,18 @@ const RANK_SMALL_ICONS = {
 };
 // The website shows the first five rows of each profile embed plus a "More" button.
 const EMBED_MAX = 5;
-const MORE_MAX = 48;
+// Every "More" button on the website is a link to a firm-scoped list page
+// (/deals_list_lawfirm/{id}/{name}, /lawfirm_lawyer_list/{id}/{name}, ...). The
+// mini program shows the same lists in its own entity-list page so the header
+// and rows stay in the app's current style.
+const MORE_TYPES = {
+  cases: 'lawfirm-cases',
+  articles: 'lawfirm-articles',
+  honours: 'lawfirm-honours',
+  offices: 'lawfirm-offices',
+  lawyers: 'lawfirm-lawyers',
+  partners: 'lawfirm-partners'
+};
 
 function completeDetail(item) {
   return Object.assign({
@@ -135,12 +146,13 @@ Page({
       data.mediaItems.push({ type: 'image', url: url });
       data.mediaImageUrls.push(url);
     });
+    // The website prints "More" once a section holds five rows or more.
     data.offices = detail.offices.slice(0, EMBED_MAX);
-    data.moreOffices = detail.offices.length > EMBED_MAX;
+    data.moreOffices = detail.offices.length >= EMBED_MAX;
     // The honours endpoint is the website's source; the profile payload keeps a
     // copy so the section still renders when that request fails.
     data.honours = detail.honours.slice(0, EMBED_MAX);
-    data.moreHonours = detail.honours.length > EMBED_MAX;
+    data.moreHonours = detail.honours.length >= EMBED_MAX;
     this.setData(data);
   },
   previewMediaImage(e) {
@@ -178,44 +190,18 @@ Page({
       self.setData({ topAds: (ads && ads.top) || [], downAds: (ads && ads.down) || [] });
     }).catch(function () {});
   },
-  // "More" reveals the rest of the embed in place; the mini program has no
-  // law-firm scoped list pages to hand off to.
+  // "More" follows the website's links: each one opens that section's own list
+  // page (firm-scoped), rendered by the mini program itself.
   showMore(e) {
     const kind = e.currentTarget.dataset.kind;
     const item = this.data.item || {};
-    const id = item.id;
-    const self = this;
-    if (kind === 'offices') {
-      // Keep any office the reader has already expanded open.
-      const open = {};
-      (this.data.offices || []).forEach(function (office) {
-        if (office.open) open[office.id || office.city] = true;
-      });
-      const offices = (item.offices || []).map(function (office) {
-        return Object.assign({}, office, { open: !!open[office.id || office.city] });
-      });
-      this.setData({ offices: offices, moreOffices: false });
-      return;
-    }
-    if (!id) return;
-    const done = function (rows, key, moreKey, decorate) {
-      const list = (rows || []).map(decorate || function (x) { return x; });
-      const patch = {};
-      patch[key] = list;
-      patch[moreKey] = false;
-      self.setData(patch);
-    };
-    if (kind === 'cases') {
-      api.getLawfirmCases(id, { max: MORE_MAX }).then(function (r) { done(r, 'cases', 'moreCases', decorateDeal); }).catch(function () {});
-    } else if (kind === 'articles') {
-      api.getLawfirmArticles(id, { max: MORE_MAX }).then(function (r) { done(r, 'articles', 'moreArticles', decorateArticle); }).catch(function () {});
-    } else if (kind === 'honours') {
-      api.getLawfirmHonours(id, { max: MORE_MAX }).then(function (r) { done(r, 'honours', 'moreHonours'); }).catch(function () {});
-    } else if (kind === 'lawyers') {
-      api.getLawfirmLawyers(id, { max: MORE_MAX }).then(function (r) { done(r, 'lawyers', 'moreLawyers'); }).catch(function () {});
-    } else if (kind === 'partners') {
-      api.getLawfirmPartners(id, { max: MORE_MAX }).then(function (r) { done(r, 'partners', 'morePartners'); }).catch(function () {});
-    }
+    const type = MORE_TYPES[kind];
+    if (!type || !item.id) return;
+    wx.navigateTo({
+      url: '/pages/entity-list/entity-list?type=' + encodeURIComponent(type) +
+        '&id=' + encodeURIComponent(item.id) +
+        '&name=' + encodeURIComponent(item.name || '')
+    });
   },
   // The website lists each office's practice areas behind a toggle.
   toggleOffice(e) {

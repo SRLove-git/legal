@@ -302,6 +302,22 @@
   line-height: 1.35;
 }
 
+/* Same "More" pill the website prints under each profile embed (and that the
+   law firm / office profile pages already use). */
+.lawyer-more {
+  display: table;
+  margin: 28rpx auto 0;
+  padding: 12rpx 60rpx;
+  border-radius: 40rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
 .lawyer-biography,
 .lawyer-biography-rich {
   display: block;

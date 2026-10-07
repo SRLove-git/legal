@@ -1,0 +1,175 @@
+<site-header />
+<view class="el-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+  <view class="breadcrumb">
+    <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
+    <text class="breadcrumb-sep">></text>
+    <text class="breadcrumb-text" bindtap="goCrumb" data-url="{{crumbUrl}}">{{crumbLabel}}</text>
+    <block wx:if="{{parentLabel}}">
+      <text class="breadcrumb-sep">></text>
+      <text class="breadcrumb-text" bindtap="goCrumb" data-url="{{parentUrl}}">{{parentLabel}}</text>
+    </block>
+    <block wx:if="{{subtitle}}">
+      <text class="breadcrumb-sep">></text>
+      <text class="breadcrumb-text" bindtap="goCrumb" data-url="{{backUrl}}">{{subtitle}}</text>
+    </block>
+  </view>
+
+  <view class="el-head">{{title}}</view>
+
+  <view class="el-list">
+    <block wx:for="{{rows}}" wx:key="id" wx:for-item="row">
+      <view
+        class="list-entry"
+        wx:if="{{rowKind === 'deal'}}"
+        bindtap="goRow"
+        data-kind="deal"
+        data-id="{{row.id}}"
+        data-title="{{row.title}}"
+      >
+        <view class="entry-labels" wx:if="{{row.labels.length}}">
+          <text class="entry-label" wx:for="{{row.labels}}" wx:for-item="label" wx:key="*this">{{label}}</text>
+        </view>
+        <view class="entry-title">{{row.title}}</view>
+        <view class="el-rank" wx:if="{{row.rank}}">
+          <image class="rank-icon-small" wx:if="{{row.rankIcon}}" src="{{row.rankIcon}}" mode="aspectFit" />
+          <text>{{row.rank}}</text>
+        </view>
+        <view class="entry-date" wx:if="{{row.date}}">Date: {{row.date}}</view>
+        <view class="entry-date" wx:if="{{row.jurisdictionText}}">Jurisdictions: {{row.jurisdictionText}}</view>
+      </view>
+
+      <view
+        class="list-entry"
+        wx:elif="{{rowKind === 'article'}}"
+        bindtap="goRow"
+        data-kind="article"
+        data-id="{{row.id}}"
+        data-title="{{row.title}}"
+      >
+        <image class="entry-image" wx:if="{{row.image}}" src="{{row.image}}" mode="aspectFill" />
+        <view class="entry-title">{{row.title}}</view>
+        <view class="entry-date" wx:if="{{row.publishedDate}}">Updated: {{row.publishedDate}}</view>
+      </view>
+
+      <view
+        class="list-entry"
+        wx:elif="{{rowKind === 'honour'}}"
+        bindtap="goRow"
+        data-kind="article"
+        data-id="{{row.articleId}}"
+        data-title="{{row.awardName}}"
+      >
+        <image class="entry-image" wx:if="{{row.image}}" src="{{row.image}}" mode="aspectFill" />
+        <view class="entry-title">{{row.awardName}}</view>
+        <view class="entry-by" wx:if="{{row.name}}">{{row.name}}</view>
+        <view class="entry-date" wx:if="{{row.date}}">{{row.date}}</view>
+      </view>
+
+      <!-- Lawyer / partner rows mirror the website's lawyer card: portrait,
+           verified badge, positions, firm, office, contacts and the merits
+           table with its rank icons. -->
+      <view
+        class="el-lawyer-card"
+        wx:elif="{{rowKind === 'lawyer'}}"
+        bindtap="goRow"
+        data-kind="lawyer"
+        data-id="{{row.id}}"
+        data-title="{{row.name}}"
+      >
+        <view class="el-lawyer-profile">
+          <image class="el-lawyer-photo" wx:if="{{row.image}}" src="{{row.image}}" mode="aspectFill" />
+          <view class="el-lawyer-detail">
+            <view class="el-lawyer-name">{{row.name}}</view>
+            <view class="el-lawyer-local" wx:if="{{row.nameLocal}}">{{row.nameLocal}}</view>
+            <image class="el-lawyer-verified" wx:if="{{row.verified}}" src="https://www.legaloneglobal.com/images/Verilegal_logo_3_upper.png" mode="widthFix" />
+            <view class="el-positions" wx:if="{{row.positions.length}}">
+              <text class="el-position" wx:for="{{row.positions}}" wx:for-item="position" wx:key="*this">{{position}}</text>
+            </view>
+            <view class="el-lawyer-meta" wx:if="{{row.firm}}">{{row.firm}}</view>
+            <view class="el-lawyer-meta" wx:if="{{row.location}}">{{row.location}}</view>
+            <view class="el-lawyer-meta contact" wx:for="{{row.contacts}}" wx:for-item="contact" wx:key="detail"><text>{{contact.type}}: </text>{{contact.detail}}</view>
+          </view>
+        </view>
+        <view class="el-metrics-title">LegalOne Merits</view>
+        <view class="el-metric-row total">
+          <text>Total deals/cases</text>
+          <text class="el-metric-value" wx:if="{{row.numOfDeal}}">{{row.numOfDeal}}</text>
+          <view class="el-metric-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+        </view>
+        <view class="el-metric-row">
+          <view class="el-metric-label"><image class="el-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+          <text class="el-metric-value" wx:if="{{row.distinguished}}">{{row.distinguished}}</text>
+          <view class="el-metric-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+        </view>
+        <view class="el-metric-row">
+          <view class="el-metric-label"><image class="el-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+          <text class="el-metric-value" wx:if="{{row.exemplary}}">{{row.exemplary}}</text>
+          <view class="el-metric-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+        </view>
+        <view class="el-metric-row">
+          <view class="el-metric-label"><image class="el-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+          <text class="el-metric-value" wx:if="{{row.remarkable}}">{{row.remarkable}}</text>
+          <view class="el-metric-value unavailable" wx:else><image src="{{hyphenIcon}}" mode="aspectFit" /></view>
+        </view>
+        <view class="el-testimonials-title">LegalOne Testimonials</view>
+        <view class="el-metric-row">
+          <text>No. of Testimonials</text>
+          <text class="el-metric-value testimonial" wx:if="{{row.testimonials}}">{{row.testimonials}}</text>
+          <view class="el-metric-value testimonial unavailable" wx:else><image src="https://www.legaloneglobal.com/images/hyphen-blue.JPG" mode="aspectFit" /></view>
+        </view>
+      </view>
+
+      <!-- Offices: the website prints the office card (logo or watermark, name,
+           location and the LegalOne Merits table) on this list page too. -->
+      <view class="el-office" wx:elif="{{rowKind === 'office'}}">
+        <image
+          class="el-office-logo"
+          src="{{row.image || 'https://www.legaloneglobal.com/images/Logo-watermark.s.png'}}"
+          mode="aspectFit"
+          bindtap="goOffice"
+          data-id="{{row.id}}"
+        />
+        <view class="el-office-body">
+          <view class="el-office-name" bindtap="goOffice" data-id="{{row.id}}">{{row.name}}</view>
+          <view class="el-office-location" wx:if="{{row.city || row.country}}">{{row.city}}<text wx:if="{{row.city && row.country}}">, </text>{{row.country}}</view>
+          <view class="el-office-merits">
+            <view class="el-office-merits-label">LegalOne Merits</view>
+            <view class="el-office-merit-row">
+              <text class="el-office-merit-name">Total deals/cases</text>
+              <text class="el-office-merit-value" wx:if="{{row.numOfDeal}}">{{row.numOfDeal}}</text>
+              <image class="el-office-merit-value" wx:else src="{{hyphenIcon}}" mode="aspectFit" />
+            </view>
+            <view class="el-office-merit-row">
+              <view class="el-office-merit-name"><image class="el-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Distinguished_Icon.png" mode="aspectFit" /><text>Distinguished</text></view>
+              <text class="el-office-merit-value" wx:if="{{row.distinguished}}">{{row.distinguished}}</text>
+              <image class="el-office-merit-value" wx:else src="{{hyphenIcon}}" mode="aspectFit" />
+            </view>
+            <view class="el-office-merit-row">
+              <view class="el-office-merit-name"><image class="el-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Exemplary_Icon.png" mode="aspectFit" /><text>Exemplary</text></view>
+              <text class="el-office-merit-value" wx:if="{{row.exemplary}}">{{row.exemplary}}</text>
+              <image class="el-office-merit-value" wx:else src="{{hyphenIcon}}" mode="aspectFit" />
+            </view>
+            <view class="el-office-merit-row">
+              <view class="el-office-merit-name"><image class="el-merit-icon" src="https://www.legaloneglobal.com/images/LegalOne_Merits_Remarkable_Icon.png" mode="aspectFit" /><text>Remarkable</text></view>
+              <text class="el-office-merit-value" wx:if="{{row.remarkable}}">{{row.remarkable}}</text>
+              <image class="el-office-merit-value" wx:else src="{{hyphenIcon}}" mode="aspectFit" />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="el-testimonial dot" wx:elif="{{rowKind === 'testimonial'}}">
+        <view class="el-quote">“{{row.comment}}”</view>
+        <view class="el-author" wx:if="{{row.author}}">{{row.author}}</view>
+        <view class="el-company" wx:if="{{row.company}}">{{row.company}}</view>
+        <view class="el-date italic" wx:if="{{row.date}}">{{row.date}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="el-disclaimer" wx:if="{{rowKind === 'lawyer' && rows.length}}">*The records are based on lawyers and law offices featured in LegalOne</view>
+  <view class="el-empty" wx:if="{{!rows.length && !loading}}">No records found.</view>
+  <view class="el-end" wx:elif="{{!hasMore && !loading}}">No more results</view>
+  <view class="el-loading" wx:if="{{loading}}">Loading...</view>
+</view>
+<site-footer />

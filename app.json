@@ -35,7 +35,8 @@
     "pages/lawyer-detail/lawyer-detail",
     "pages/verification-detail/verification-detail",
     "pages/lawfirm-detail/lawfirm-detail",
-    "pages/lawfirm-office/lawfirm-office"
+    "pages/lawfirm-office/lawfirm-office",
+    "pages/entity-list/entity-list"
   ],
   "window": {
     "navigationStyle": "custom",

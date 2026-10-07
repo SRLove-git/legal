@@ -4,6 +4,17 @@ const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 const h5 = require('../../services/h5.js');
 
+// The website shows the first five rows of each profile embed plus a "More"
+// button, and that button links to a lawyer-scoped list page
+// (/deals_list_lawyer/{id}/{name}, ...); the mini program renders the same list
+// in its own entity-list page.
+const EMBED_MAX = 5;
+const MORE_TYPES = {
+  cases: 'lawyer-cases',
+  articles: 'lawyer-articles',
+  testimonials: 'lawyer-testimonials'
+};
+
 function completeDetail(item) {
   return Object.assign({
     positions: [],
@@ -28,6 +39,9 @@ Page({
     cases: [],
     articles: [],
     testimonials: [],
+    moreCases: false,
+    moreArticles: false,
+    moreTestimonials: false,
     topAds: [],
     downAds: [],
     loading: true,
@@ -63,9 +77,31 @@ Page({
   },
   loadSub(id) {
     const self = this;
-    api.getLawyerCases(id, { max: 5 }).then(function (r) { self.setData({ cases: (r || []).slice(0, 5) }); }).catch(function () {});
-    api.getLawyerArticles(id, { max: 5 }).then(function (r) { self.setData({ articles: (r || []).slice(0, 5) }); }).catch(function () {});
-    api.getLawyerTestimonials(id, { max: 5 }).then(function (r) { self.setData({ testimonials: (r || []).slice(0, 5) }); }).catch(function () {});
+    api.getLawyerCases(id, { max: EMBED_MAX }).then(function (r) {
+      const rows = (r || []).slice(0, EMBED_MAX);
+      self.setData({ cases: rows, moreCases: (r || []).length >= EMBED_MAX });
+    }).catch(function () {});
+    api.getLawyerArticles(id, { max: EMBED_MAX }).then(function (r) {
+      const rows = (r || []).slice(0, EMBED_MAX);
+      self.setData({ articles: rows, moreArticles: (r || []).length >= EMBED_MAX });
+    }).catch(function () {});
+    api.getLawyerTestimonials(id, { max: EMBED_MAX }).then(function (r) {
+      const rows = (r || []).slice(0, EMBED_MAX);
+      self.setData({ testimonials: rows, moreTestimonials: (r || []).length >= EMBED_MAX });
+    }).catch(function () {});
+  },
+  // "More" opens that section's own lawyer-scoped list page, rendered by the
+  // mini program itself.
+  showMore(e) {
+    const kind = e.currentTarget.dataset.kind;
+    const type = MORE_TYPES[kind];
+    const item = this.data.item || {};
+    if (!type || !item.id) return;
+    wx.navigateTo({
+      url: '/pages/entity-list/entity-list?type=' + encodeURIComponent(type) +
+        '&id=' + encodeURIComponent(item.id) +
+        '&name=' + encodeURIComponent(item.name || '')
+    });
   },
   loadAdvertisements() {
     const self = this;

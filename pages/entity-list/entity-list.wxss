@@ -1,0 +1,357 @@
+/* Firm / office / lawyer list pages opened from a profile "More" button. They
+   reuse the profile embeds' row styling so the reader stays inside the mini
+   program (same header, same rows) instead of handing over to the website. */
+.el-page {
+  padding: 0 36rpx 60rpx;
+  background: #ffffff;
+}
+
+.el-head {
+  margin: 28rpx 0 6rpx;
+  padding-bottom: 14rpx;
+  border-bottom: 2rpx solid #339dc8;
+  color: #171717;
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.el-list {
+  font-size: 28rpx;
+}
+
+/* The shared .list-entry card carries its own side padding for the directory
+   pages; here the page already supplies it. */
+.el-list .list-entry {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.el-testimonial {
+  padding: 16rpx 0;
+}
+
+.el-testimonial.dot {
+  position: relative;
+  padding-left: 25rpx;
+}
+
+.el-testimonial.dot::before {
+  content: "";
+  position: absolute;
+  left: 3rpx;
+  top: 29rpx;
+  width: 7rpx;
+  height: 7rpx;
+  border-radius: 50%;
+  background: #0084ba;
+}
+
+.el-rank {
+  display: flex;
+  align-items: center;
+  margin: 4rpx 0;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.rank-icon-small {
+  width: 32rpx;
+  height: 42rpx;
+  margin-right: 4rpx;
+  flex: 0 0 32rpx;
+}
+
+/* Lawyer / partner rows keep the website's lawyer card (same as the lawyer
+   directory): portrait, verified badge, positions, firm, office, contacts and
+   the merits table with its rank icons. */
+.el-lawyer-card {
+  overflow: hidden;
+  margin: 24rpx 0;
+  padding: 28rpx 24rpx 20rpx;
+  border: 3rpx solid #c8c8c8;
+  border-radius: 10rpx;
+  background: #ffffff;
+  color: #171717;
+}
+
+.el-lawyer-profile {
+  display: flex;
+  align-items: flex-start;
+  gap: 28rpx;
+}
+
+.el-lawyer-photo {
+  width: 258rpx;
+  height: 386rpx;
+  flex: 0 0 258rpx;
+  background: #edebeb;
+}
+
+.el-lawyer-detail {
+  flex: 1;
+  min-width: 0;
+  padding-top: 4rpx;
+}
+
+.el-lawyer-name {
+  color: #0084ba;
+  font-size: 31rpx;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.el-lawyer-local {
+  margin-top: 8rpx;
+  color: #0084ba;
+  font-size: 29rpx;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.el-lawyer-verified {
+  display: block;
+  width: 170rpx;
+  height: auto;
+  margin-top: 16rpx;
+}
+
+.el-positions {
+  margin: 14rpx 0 12rpx;
+}
+
+.el-position {
+  display: table;
+  max-width: 100%;
+  margin-bottom: 8rpx;
+  padding: 7rpx 11rpx;
+  border-radius: 8rpx;
+  background: #0084ba;
+  color: #ffffff;
+  font-size: 21rpx;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.el-lawyer-meta {
+  margin-top: 8rpx;
+  color: #0084ba;
+  font-size: 24rpx;
+  font-weight: 500;
+  line-height: 1.32;
+  word-break: break-word;
+}
+
+.el-lawyer-meta.contact {
+  color: #171717;
+  font-weight: 400;
+}
+
+.el-metrics-title {
+  margin-top: 32rpx;
+  color: #00558d;
+  font-size: 31rpx;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.el-metric-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58rpx;
+  font-size: 25rpx;
+  line-height: 1.3;
+}
+
+.el-metric-row.total {
+  margin-top: 6rpx;
+  font-weight: 700;
+}
+
+.el-metric-label {
+  display: flex;
+  align-items: center;
+}
+
+.el-merit-icon {
+  width: 44rpx;
+  height: 60rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.el-metric-value {
+  min-width: 78rpx;
+  box-sizing: border-box;
+  padding: 5rpx 14rpx;
+  border-radius: 8rpx;
+  background: #00558d;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.el-metric-value.unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44rpx;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.el-metric-value.unavailable image {
+  display: block;
+  width: 20rpx;
+  height: 8rpx;
+  flex: 0 0 20rpx;
+}
+
+.el-metric-value.testimonial {
+  border: 2rpx solid #99cee3;
+  background: #ffffff;
+  color: #00558d;
+}
+
+.el-testimonials-title {
+  margin-top: 28rpx;
+  color: #00558d;
+  font-size: 27rpx;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Offices: the website's office list card — logo (or watermark), name, location
+   and the same LegalOne Merits table the office profile prints. */
+.el-office {
+  display: flex;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid #99cee3;
+}
+
+.el-office-logo {
+  width: 160rpx;
+  height: 160rpx;
+  flex: 0 0 160rpx;
+  background: #eef4f8;
+}
+
+.el-office-body {
+  flex: 1;
+  min-width: 0;
+  padding-left: 24rpx;
+}
+
+.el-office-name {
+  color: #0084ba;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.el-office-location {
+  margin-top: 6rpx;
+  color: #2d2d2d;
+  font-size: 26rpx;
+}
+
+.el-office-merits {
+  margin-top: 14rpx;
+  padding: 16rpx 18rpx;
+  border: 2rpx solid #e2e6ea;
+  border-radius: 10rpx;
+}
+
+.el-office-merits-label {
+  margin-bottom: 8rpx;
+  color: #2d2d2d;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.el-office-merit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44rpx;
+  color: #2d2d2d;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.el-office-merit-row.total {
+  font-weight: 700;
+}
+
+.el-office-merit-name {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.el-merit-icon {
+  width: 26rpx;
+  height: 34rpx;
+  margin-right: 8rpx;
+  flex: 0 0 26rpx;
+}
+
+.el-office-merit-value {
+  font-weight: 700;
+}
+
+image.el-office-merit-value {
+  width: 26rpx;
+  height: 12rpx;
+}
+
+.el-disclaimer {
+  padding: 24rpx 0 0;
+  color: #636363;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+/* Client testimonials, as printed on the lawyer profile. */
+.el-quote {
+  color: #2d2d2d;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.el-author {
+  margin-top: 6rpx;
+  color: #0084ba;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.el-company {
+  color: #636363;
+  font-size: 24rpx;
+}
+
+.el-date {
+  margin-top: 2rpx;
+  color: #636363;
+  font-size: 24rpx;
+}
+
+.el-empty,
+.el-end,
+.el-loading {
+  padding: 32rpx 0;
+  color: #636363;
+  font-size: 26rpx;
+  text-align: center;
+}

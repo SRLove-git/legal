@@ -95,6 +95,7 @@
         <view class="linked-title">{{deal.title}}</view>
         <view class="linked-meta" wx:if="{{deal.completed || deal.jurisdictionText}}">{{deal.completed}}<text wx:if="{{deal.completed && deal.jurisdictionText}}"> · </text>{{deal.jurisdictionText}}</view>
       </view>
+      <view class="lawyer-more" wx:if="{{moreCases}}" bindtap="showMore" data-kind="cases">More</view>
     </view>
 
     <view class="lawyer-section" wx:if="{{item.careerPaths.length}}">
@@ -138,6 +139,7 @@
         <view class="linked-title">{{article.title}}</view>
         <view class="linked-meta italic" wx:if="{{article.publishedDate}}">{{article.publishedDate}}</view>
       </view>
+      <view class="lawyer-more" wx:if="{{moreArticles}}" bindtap="showMore" data-kind="articles">More</view>
     </view>
 
     <view class="lawyer-section" wx:if="{{testimonials.length}}">
@@ -148,6 +150,7 @@
         <view class="testimonial-company" wx:if="{{testimonial.company}}">{{testimonial.company}}</view>
         <view class="testimonial-date italic" wx:if="{{testimonial.date}}">{{testimonial.date}}</view>
       </view>
+      <view class="lawyer-more" wx:if="{{moreTestimonials}}" bindtap="showMore" data-kind="testimonials">More</view>
     </view>
 
     <view class="lawyer-section" wx:if="{{item.admissions.length}}">
