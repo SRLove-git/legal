@@ -80,12 +80,16 @@
       <block wx:for="{{item.bodyBlocks}}" wx:key="id" wx:for-item="block">
         <rich-text class="detail-rich" wx:if="{{block.type === 'html'}}" nodes="{{block.html}}"></rich-text>
         <view class="detail-inline-link-row" wx:elif="{{block.type === 'externalLink'}}">
-          <text class="{{block.prefixBold ? 'detail-inline-link-prefix-bold' : ''}}">{{block.prefix}}</text><text
-            class="detail-inline-link"
-            hover-class="detail-inline-link-hover"
-            bindtap="openExternalLink"
-            data-index="{{block.linkIndex}}"
-          >{{block.label}}</text><text>{{block.suffix}}</text>
+          <block wx:for="{{block.parts}}" wx:for-item="part" wx:key="id">
+            <text
+              wx:if="{{part.linkIndex >= 0}}"
+              class="detail-inline-link"
+              hover-class="detail-inline-link-hover"
+              bindtap="openExternalLink"
+              data-index="{{part.linkIndex}}"
+            >{{part.text}}</text>
+            <text wx:else class="{{part.bold ? 'detail-inline-link-prefix-bold' : ''}}">{{part.text}}</text>
+          </block>
         </view>
       </block>
     </block>
