@@ -92,14 +92,21 @@ Page({
     const memberId = auth.getMemberId();
     api.getMember(memberId).then(function (m) {
       const member = m || {};
-      const name = [member.salutation, member.firstName, member.lastName].map(text).filter(Boolean).join(' ');
+      const salutation = text(member.salutation);
+      const personName = [text(member.firstName), text(member.lastName)].filter(Boolean).join(' ');
+      const memberName = [salutation, personName].filter(Boolean).join(' ');
+      // The website writes the dashboard title as "Welcome, Ms. Kiris Mak"
+      // (salutation + full stop, then first and last name).
+      const greetingName = [salutation ? salutation.replace(/\.+$/, '') + '.' : '', personName]
+        .filter(Boolean)
+        .join(' ');
       self.setData({
         loading: false,
-        greeting: name ? 'Welcome, ' + name : 'Welcome',
+        greeting: greetingName ? 'Welcome, ' + greetingName : 'Welcome',
         incomplete: !auth.isProfileComplete(member),
         profile: {
-          show: !!name,
-          name: name,
+          show: !!memberName,
+          name: memberName,
           position: text(member.position),
           firm: text(member.firmName)
         }

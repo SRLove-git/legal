@@ -23,7 +23,16 @@ page {
   line-height: 56rpx;
   font-weight: 700;
   color: #2d2d2d;
-  margin: 4rpx 0 48rpx;
+  margin: 4rpx 0 20rpx;
+}
+
+/* The mini-program disclaimer used to sit in the fixed header next to the logo,
+   where it was unreadable; it now reads under the welcome line. */
+.md-platform-notice {
+  margin: 0 0 48rpx;
+  color: #636363;
+  font-size: 26rpx;
+  line-height: 1.5;
 }
 
 .md-notice {
@@ -148,26 +157,32 @@ page {
   margin-bottom: 20rpx;
 }
 
+/* Flex instead of an absolutely positioned label: a label that wraps to two
+   lines (e.g. "Verification number") used to overflow its fixed top offset and
+   collide with the next field's label; in flow it grows the row instead. */
 .md-cell {
-  position: relative;
+  display: flex;
+  align-items: flex-start;
   min-height: 1em;
-  padding: 22rpx 16rpx 22rpx 260rpx;
+  /* 12rpx + 248rpx label keeps the value column at the 260rpx offset the
+     absolutely positioned label used to produce. */
+  padding: 22rpx 16rpx 22rpx 12rpx;
+  box-sizing: border-box;
 }
 
 .md-cell-label {
-  position: absolute;
-  top: 22rpx;
-  left: 12rpx;
-  width: 240rpx;
+  flex: 0 0 248rpx;
+  box-sizing: border-box;
   padding-right: 20rpx;
   font-weight: 700;
   color: #2d2d2d;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .md-cell-value {
   display: block;
+  flex: 1 1 auto;
+  min-width: 0;
   color: #2d2d2d;
   word-break: break-word;
 }
