@@ -288,11 +288,19 @@ function normalizeDeal(d) {
 }
 
 function normalizeLawfirm(f) {
+  // The website prints the head office under the firm name ("Head office" +
+  // "City, Country"), linking to that office's profile.
+  const offices = (f && f.lawFirmOffices) || [];
+  const head = offices.filter(function (o) { return o && o.headOffice; })[0] || null;
   return {
     id: f.id,
     name: decodeEntities(f.name),
     nameLocal: decodeEntities(f.nameLocal),
     image: imageUrl(f.profileIcon, 'm'),
+    headOffice: head ? {
+      id: head.id || '',
+      location: [head.city, head.country].filter(Boolean).map(decodeEntities).join(', ')
+    } : null,
     numOfDeal: Number(f.numOfDeal) || 0,
     distinguished: Number(f.rank1Total) || 0,
     exemplary: Number(f.rank2Total) || 0,
@@ -368,7 +376,9 @@ function normalizeHonour(h) {
     articleId: h.articleId || '',
     name: decodeEntities(h.name) || lawyers.join(', '),
     awardName: decodeEntities(h.awardName),
-    date: h.publishDate ? monthYear(h.publishDate) : ''
+    date: h.publishDate ? monthYear(h.publishDate) : '',
+    // Only the list endpoint carries the award article's picture.
+    image: imageUrl(h.imageIcon, 'l')
   };
 }
 
@@ -406,58 +416,96 @@ function extractExternalArticleLinks(value) {
 }
 
 // A mini-program <rich-text> anchor looks like a link but does not provide a
-// dependable external-link tap event. Split paragraphs containing third-party
-// anchors into native text blocks so the link stays in its original position
-// and can call the page handler normally.
+// dependable external-link tap event. Rebuild every paragraph that holds a
+// third-party anchor as one native row of "parts": plain runs stay <text> and
+// each anchor becomes a tappable <text>, so a sentence keeps its wording and
+// position — including paragraphs that carry more than one link, which used to
+// drop out to the standalone card below.
 function buildArticleBodyBlocks(value, externalLinks) {
   const html = String(value || '');
   if (!html || !externalLinks || !externalLinks.length) return [];
   const blocks = [];
   const matched = {};
   const paragraphPattern = /<p\b[^>]*>[\s\S]*?<\/p>/gi;
+  const anchorPattern = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
   let cursor = 0;
   let paragraph;
 
+  // Word-pasted markup breaks a sentence into many styled spans; the browser
+  // collapses the whitespace between them, so do the same and drop the tags.
+  const runText = function (runHtml) {
+    return decodeEntities(String(runHtml)
+      .replace(/<br\s*\/?>/gi, ' ')
+      .replace(/<[^>]+>/g, ''))
+      .replace(/\s+/g, ' ');
+  };
+
   while ((paragraph = paragraphPattern.exec(html))) {
     const paragraphHtml = paragraph[0];
-    const anchorPattern = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
+    const inner = paragraphHtml.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>\s*$/i, '');
+    const cuts = [];
+    let last = 0;
     let anchor;
-    let linkIndex = -1;
-    let url = '';
 
-    while ((anchor = anchorPattern.exec(paragraphHtml))) {
+    anchorPattern.lastIndex = 0;
+    while ((anchor = anchorPattern.exec(inner))) {
       const hrefMatch = anchor[1].match(/\bhref\s*=\s*(["'])([^"']+)\1/i);
-      url = decodeEntities(hrefMatch && hrefMatch[2]).trim();
-      linkIndex = externalLinks.findIndex(function (link) { return link.url === url; });
-      if (linkIndex >= 0) break;
+      const url = decodeEntities(hrefMatch && hrefMatch[2]).trim();
+      const linkIndex = externalLinks.findIndex(function (link) { return link.url === url; });
+      if (linkIndex < 0) continue;
+      cuts.push({ linkIndex: -1, html: inner.slice(last, anchor.index) });
+      cuts.push({ linkIndex: linkIndex, html: '' });
+      last = anchor.index + anchor[0].length;
+      matched[linkIndex] = true;
     }
-    if (linkIndex < 0 || !anchor) continue;
+    if (!cuts.length) continue;
+    cuts.push({ linkIndex: -1, html: inner.slice(last) });
 
-    const before = paragraphHtml.slice(0, anchor.index);
-    const after = paragraphHtml.slice(anchor.index + anchor[0].length);
+    const parts = [];
+    cuts.forEach(function (cut) {
+      if (cut.linkIndex >= 0) {
+        parts.push({
+          id: 'link-' + cut.linkIndex,
+          linkIndex: cut.linkIndex,
+          text: externalLinks[cut.linkIndex].label
+        });
+        return;
+      }
+      const text = runText(cut.html);
+      if (!text) return;
+      parts.push({
+        id: 'run-' + parts.length,
+        linkIndex: -1,
+        text: text,
+        bold: /<(?:strong|b)\b/i.test(cut.html)
+      });
+    });
+
+    // Runs sit next to each other without the tag boundaries that carried a
+    // space, so collapse the seams and trim the ends of the sentence.
+    const compact = [];
+    parts.forEach(function (part) {
+      let text = part.text;
+      if (compact.length && /\s$/.test(compact[compact.length - 1].text)) text = text.replace(/^\s+/, '');
+      if (!text) return;
+      compact.push({ id: part.id, linkIndex: part.linkIndex, text: text, bold: !!part.bold });
+    });
+    if (!compact.length) continue;
+    compact[0].text = compact[0].text.replace(/^\s+/, '');
+    const tail = compact[compact.length - 1];
+    tail.text = tail.text.replace(/\s+$/, '');
+    if (!tail.text) compact.pop();
+    if (!compact.length) continue;
+
     const beforeHtml = html.slice(cursor, paragraph.index);
     const renderedBefore = richText.toRichHtml(beforeHtml);
     if (renderedBefore) blocks.push({ id: 'html-' + blocks.length, type: 'html', html: renderedBefore });
-
-    let prefix = stripHtml(before);
-    let suffix = stripHtml(after);
-    if (prefix) prefix += ' ';
-    if (suffix) suffix = ' ' + suffix;
-    blocks.push({
-      id: 'link-' + linkIndex,
-      type: 'externalLink',
-      prefix: prefix,
-      prefixBold: /<strong\b/i.test(before),
-      label: externalLinks[linkIndex].label,
-      suffix: suffix,
-      linkIndex: linkIndex
-    });
-    matched[linkIndex] = true;
+    blocks.push({ id: 'link-row-' + blocks.length, type: 'externalLink', parts: compact });
     cursor = paragraph.index + paragraphHtml.length;
   }
 
-  // Keep the existing standalone native-link card if any external anchor
-  // could not be positioned safely inside a complete paragraph.
+  // Keep the standalone native-link card if any external anchor could not be
+  // positioned safely inside a complete paragraph.
   if (Object.keys(matched).length !== externalLinks.length) return [];
   const renderedAfter = richText.toRichHtml(html.slice(cursor));
   if (renderedAfter) blocks.push({ id: 'html-' + blocks.length, type: 'html', html: renderedAfter });
@@ -873,6 +921,7 @@ const api = {
           id: o.id || '',
           refNo: o.refNo || '',
           name: decodeEntities(o.name),
+          image: imageUrl(o.profileIcon),
           city: decodeEntities(o.city) || decodeEntities(o.name),
           country: decodeEntities(o.country),
           updated: lastUpdated,
@@ -1030,6 +1079,14 @@ const api = {
   },
   getLawfirmHonours: function (id, opts) {
     return embedSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/honours', opts, normalizeHonour)
+      .then(function (rows) {
+        return rows.filter(function (row) { return row.articleId; });
+      });
+  },
+  // The website's honours list page ("More" on the profile) reads the same data
+  // through the query form: it paginates and carries each award's picture.
+  getLawfirmHonoursList: function (id, opts) {
+    return listSub('api/legal/lawfirms/' + encodeURIComponent(id) + '/honours/?orderby=latest', opts, normalizeHonour)
       .then(function (rows) {
         return rows.filter(function (row) { return row.articleId; });
       });
