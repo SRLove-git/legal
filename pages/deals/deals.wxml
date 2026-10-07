@@ -31,7 +31,7 @@
 
     <view class="deal-filter-group filter-dropdown-group">
       <view class="deal-filter-field filter-dropdown-field {{jurisdictions.length ? 'active is-active' : ''}} {{openGroups.jurisdictions ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="jurisdictions">
-        <text class="filter-dropdown-field-label">Jurisdiction{{jurisdictions.length ? ' (' + jurisdictions.length + ')' : ''}}</text><view class="filter-dropdown-chevron {{openGroups.jurisdictions ? 'is-open' : ''}}"></view>
+        <text class="filter-dropdown-field-label">{{jurisdictionLabel}}</text><view class="filter-dropdown-chevron {{openGroups.jurisdictions ? 'is-open' : ''}}"></view>
       </view>
       <view class="deal-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.jurisdictions}}">
         <scroll-view class="deal-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{jurisdictionOptions.length > 5 ? 360 : jurisdictionOptions.length * 68}}rpx;">
@@ -44,7 +44,7 @@
 
     <view class="deal-filter-group filter-dropdown-group">
       <view class="deal-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="areas">
-        <text class="filter-dropdown-field-label">Practice areas and industries{{areas.length ? ' (' + areas.length + ')' : ''}}</text><view class="filter-dropdown-chevron {{openGroups.areas ? 'is-open' : ''}}"></view>
+        <text class="filter-dropdown-field-label">{{areasLabel}}</text><view class="filter-dropdown-chevron {{openGroups.areas ? 'is-open' : ''}}"></view>
       </view>
       <view class="deal-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.areas}}">
         <scroll-view class="deal-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;">

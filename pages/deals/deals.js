@@ -2,6 +2,7 @@ const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
+const filterLabel = require('../../services/filter-label.js');
 
 const PER_PAGE = 12;
 const RANK_NUMBERS = { Distinguished: 1, Exemplary: 2, Remarkable: 3 };
@@ -37,6 +38,8 @@ Page({
     yearIndex: 0,
     jurisdictions: [],
     areas: [],
+    jurisdictionLabel: 'Jurisdiction',
+    areasLabel: 'Practice areas and industries',
     jurisdictionOptions: [],
     areaOptions: [],
     sortOptions: ['Sort', 'Value (USD) ↓', 'Value (USD) ↑'],
@@ -94,7 +97,11 @@ Page({
 
   onSelectOption(e) {
     const filter = e.currentTarget.dataset.filter;
-    const index = Number(e.currentTarget.dataset.index);
+    let index = Number(e.currentTarget.dataset.index);
+    // Picking the value that is already selected clears it again, the same as
+    // choosing the placeholder at the top of the list.
+    if (filter === 'year' && index === this.data.yearIndex) index = 0;
+    if (filter === 'sort' && index === this.data.sortIndex) index = 0;
     const patch = { openSelect: '' };
     if (filter === 'year') patch.yearIndex = index;
     if (filter === 'sort') patch.sortIndex = index;
@@ -133,6 +140,11 @@ Page({
         : this.data.areaOptions.map(function (item) { return item.value; }),
       values
     );
+    // Same field feedback as the website: one pick shows its name, more show "N selected".
+    patch[group === 'jurisdictions' ? 'jurisdictionLabel' : 'areasLabel'] = filterLabel.fieldLabel(
+      group === 'jurisdictions' ? 'Jurisdiction' : 'Practice areas and industries',
+      values
+    );
     this.setData(patch, () => this.updateFilterCount());
   },
 
@@ -154,6 +166,8 @@ Page({
       yearIndex: 0,
       jurisdictions: [],
       areas: [],
+      jurisdictionLabel: 'Jurisdiction',
+      areasLabel: 'Practice areas and industries',
       jurisdictionOptions: withChecked(this.data.jurisdictionOptions.map(function (item) { return item.value; }), []),
       areaOptions: withChecked(this.data.areaOptions.map(function (item) { return item.value; }), []),
       sortIndex: 0,

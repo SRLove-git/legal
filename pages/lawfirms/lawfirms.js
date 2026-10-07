@@ -2,6 +2,7 @@ const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
+const filterLabel = require('../../services/filter-label.js');
 
 // The website paginates the directory twelve firms at a time.
 const PER_PAGE = 12;
@@ -97,8 +98,12 @@ Page({
 
   onSelectOption(e) {
     const filter = e.currentTarget.dataset.filter;
-    const index = Number(e.currentTarget.dataset.index);
+    let index = Number(e.currentTarget.dataset.index);
     this.setData({ openSelect: '' });
+    // Picking the value that is already selected clears it again, the same as
+    // choosing the placeholder at the top of the list.
+    if (filter === 'country' && index === this.data.countryIndex) index = 0;
+    if (filter === 'sort' && index === this.data.sortIndex) index = 0;
     if (filter === 'country') this.onCountryChange({ detail: { value: index } });
     if (filter === 'sort') this.onSortChange({ detail: { value: index } });
   },
@@ -121,7 +126,8 @@ Page({
   },
 
   // Picking a country reloads the office list for that country (website
-  // countryAndCity codes); the firm list itself waits for Apply.
+  // countryAndCity codes); the firm list itself waits for Apply, and the panel
+  // stays where it is instead of opening the next dropdown by itself.
   onCountryChange(e) {
     const index = Number(e.detail.value);
     const country = index ? this.data.countryOptions[index] : '';
@@ -130,7 +136,7 @@ Page({
       countryIndex: index,
       offices: [],
       officesLabel: officesLabel(country),
-      openGroups: { offices: true, areas: this.data.openGroups.areas },
+      openGroups: { offices: false, areas: false },
       activeFilterCount: this.countFilters(index, [], this.data.areas, this.data.keyword, this.data.sortIndex)
     });
     const applyCities = function (cities) {
@@ -157,8 +163,13 @@ Page({
     patch[group] = values;
     patch[optionsKey] = withChecked(this.data[optionsKey].map(function (o) { return o.value; }), values);
     if (group === 'offices') {
+      // The website prints the picked office(s) in the field, or falls back to
+      // "Offices in <country>" once the last one is cleared.
+      const country = this.data.countryIndex ? this.data.countryOptions[this.data.countryIndex] : '';
+      patch.officesLabel = filterLabel.fieldLabel(officesLabel(country), values);
       patch.activeFilterCount = this.countFilters(this.data.countryIndex, values, this.data.areas, this.data.keyword, this.data.sortIndex);
     } else {
+      patch.areasLabel = filterLabel.fieldLabel('Practice areas and industries', values);
       patch.activeFilterCount = this.countFilters(this.data.countryIndex, this.data.offices, values, this.data.keyword, this.data.sortIndex);
     }
     this.setData(patch);
@@ -196,6 +207,7 @@ Page({
       areas: [],
       sortIndex: 0,
       officesLabel: officesLabel(''),
+      areasLabel: 'Practice areas and industries',
       officeOptions: withChecked(this.data.allCities, []),
       areaOptions: withChecked(this.data.areaOptions.map(function (o) { return o.value; }), []),
       openGroups: { offices: false, areas: false },

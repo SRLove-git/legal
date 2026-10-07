@@ -2,6 +2,7 @@ const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
+const filterLabel = require('../../services/filter-label.js');
 
 // The website's /article_list is grouped into named sections, four entries each
 // (it requests api/crm/articles with the same section names). "Interview" is served
@@ -156,6 +157,7 @@ Page({
     else countries.push(value);
     this.setData({
       countries: countries,
+      countriesLabel: filterLabel.fieldLabel('Countries and regions', countries),
       countryOptions: withChecked(this.data.countryOptions.map(function (o) { return o.value; }), countries),
       activeFilterCount: this.countFilters(countries, this.data.areas, this.data.keyword)
     });
@@ -169,6 +171,7 @@ Page({
     else areas.push(value);
     this.setData({
       areas: areas,
+      areasLabel: filterLabel.fieldLabel('Practice areas and industries', areas),
       areaOptions: withChecked(this.data.areaOptions.map(function (o) { return o.value; }), areas),
       activeFilterCount: this.countFilters(this.data.countries, areas, this.data.keyword)
     });
@@ -191,6 +194,8 @@ Page({
       countries: [],
       areas: [],
       keyword: '',
+      countriesLabel: 'Countries and regions',
+      areasLabel: 'Practice areas and industries',
       activeFilterCount: 0,
       countryOptions: withChecked(this.data.countryOptions.map(function (o) { return o.value; }), []),
       areaOptions: withChecked(this.data.areaOptions.map(function (o) { return o.value; }), []),

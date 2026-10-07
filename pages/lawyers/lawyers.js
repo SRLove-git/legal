@@ -164,8 +164,12 @@ Page({
     };
     const key = keyMap[filter];
     if (!key) return;
+    let index = Number(e.currentTarget.dataset.index);
+    // Picking the value that is already selected clears it again, the same as
+    // choosing the placeholder at the top of the list.
+    if (index === this.data[key]) index = 0;
     const update = {};
-    update[key] = Number(e.currentTarget.dataset.index);
+    update[key] = index;
     update.openSelect = '';
     this.setData(update, () => this.updateFilterCount());
   },
