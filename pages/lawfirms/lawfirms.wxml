@@ -72,6 +72,9 @@
         <view class="firm-row-name">{{item.name}}</view>
         <view class="firm-row-local-name" wx:if="{{item.nameLocal}}">{{item.nameLocal}}</view>
 
+        <!-- The website prints the head office's city/country under the name. -->
+        <view class="firm-row-location" wx:if="{{item.headOffice && item.headOffice.location}}">{{item.headOffice.location}}</view>
+
         <view class="firm-merits-title">LegalOne Merits</view>
         <view class="firm-merit-row merit-total">
           <text>Total deals/cases</text>

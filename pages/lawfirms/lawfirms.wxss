@@ -224,9 +224,11 @@
   background: #ffffff;
 }
 
+/* The website's firm card is one link: the English name and the Chinese local
+   name are both #0084BA and bold (.name / .nameLocal in the site's style.css). */
 .firm-row-name {
   width: 100%;
-  color: #2d2d2d;
+  color: #0084ba;
   font-size: 30rpx;
   font-weight: 700;
   line-height: 1.4;
@@ -237,7 +239,15 @@
   margin-top: 8rpx;
   color: #0084ba;
   font-size: 27rpx;
-  font-weight: 500;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* The firm's head office city/country, printed under the name. */
+.firm-row-location {
+  margin-top: 8rpx;
+  color: #2d2d2d;
+  font-size: 24rpx;
   line-height: 1.4;
 }
 
