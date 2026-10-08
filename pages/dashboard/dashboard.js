@@ -65,7 +65,7 @@ Page({
   behaviors: [safeArea],
   data: {
     loading: true,
-    greeting: '',
+    greeting: 'Welcome',
     incomplete: false,
     profile: { show: false, name: '', position: '', firm: '' },
     savedItems: [],
@@ -115,7 +115,9 @@ Page({
       self.loadActivity(memberId);
       self.loadUpcoming(memberId);
     }).catch(function () {
-      self.setData({ loading: false });
+      // The member request can fail (expired token, slow endpoint). Keep the
+      // dashboard heading instead of leaving the welcome line blank.
+      self.setData({ loading: false, greeting: 'Welcome' });
     });
   },
 

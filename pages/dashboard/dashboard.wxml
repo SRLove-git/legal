@@ -4,7 +4,7 @@
   <view class="md-body">
     <view class="md-loading" wx:if="{{loading}}">Loading dashboard...</view>
     <block wx:else>
-      <view class="md-welcome">{{greeting}}</view>
+      <view class="md-welcome">{{greeting || 'Welcome'}}</view>
       <view class="md-platform-notice">WeChat mini program only provides limited function. For full function, please log in our official platform.</view>
 
       <view class="md-notice" wx:if="{{incomplete}}" bindtap="goCompleteProfile">
