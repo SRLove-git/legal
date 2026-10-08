@@ -27,6 +27,19 @@
   padding-right: 0;
 }
 
+/* Honoured lawyers listed under an award: each one a link, as on the website. */
+.el-honour-lawyers {
+  margin-top: 6rpx;
+}
+
+.el-honour-lawyer {
+  display: block;
+  color: #0084ba;
+  font-size: 28rpx;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
 .el-testimonial {
   padding: 16rpx 0;
 }

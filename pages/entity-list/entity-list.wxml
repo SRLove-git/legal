@@ -61,8 +61,20 @@
       >
         <image class="entry-image" wx:if="{{row.image}}" src="{{row.image}}" mode="aspectFill" />
         <view class="entry-title">{{row.awardName}}</view>
-        <view class="entry-by" wx:if="{{row.name}}">{{row.name}}</view>
-        <view class="entry-date" wx:if="{{row.date}}">{{row.date}}</view>
+        <!-- The website lists every honoured lawyer under the award, each one a
+             link to that lawyer's profile, and prints no date. -->
+        <view class="el-honour-lawyers" wx:if="{{row.people.length}}">
+          <text
+            class="el-honour-lawyer"
+            wx:for="{{row.people}}"
+            wx:for-item="person"
+            wx:key="id"
+            catchtap="goRow"
+            data-kind="lawyer"
+            data-id="{{person.id}}"
+            data-title="{{person.name}}"
+          >{{person.name}}</text>
+        </view>
       </view>
 
       <!-- Lawyer / partner rows mirror the website's lawyer card: portrait,

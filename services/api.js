@@ -370,11 +370,17 @@ function normalizeTestimonial(t) {
 // The website prints a firm's honours as "<lawyer> - <award>" linking to the
 // award write-up. The endpoint returns one row per lawyer/award pair.
 function normalizeHonour(h) {
-  const lawyers = (h.lawyers || []).map(function (l) { return decodeEntities(l && l.name); }).filter(Boolean);
+  // The list endpoint answers one row per award with every honoured lawyer; the
+  // website links each of them to their profile.
+  const people = (h.lawyers || []).map(function (l) {
+    return { id: (l && l.id) || '', name: decodeEntities(l && l.name) };
+  }).filter(function (l) { return l.name; });
+  const lawyers = people.map(function (l) { return l.name; });
   return {
     id: h.articleId || '',
     articleId: h.articleId || '',
     name: decodeEntities(h.name) || lawyers.join(', '),
+    people: people,
     awardName: decodeEntities(h.awardName),
     date: h.publishDate ? monthYear(h.publishDate) : '',
     // Only the list endpoint carries the award article's picture.
