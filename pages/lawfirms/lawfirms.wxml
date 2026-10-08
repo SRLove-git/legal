@@ -1,5 +1,5 @@
 <site-header />
-<view class="subpage lawfirms-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage lawfirms-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);" bindtap="closeDropdowns">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
@@ -14,18 +14,18 @@
 
   <view class="firm-filter-panel" wx:if="{{filtersOpen}}">
     <view class="firm-filter-picker filter-dropdown-group">
-      <view class="firm-filter-field filter-dropdown-field {{countryIndex ? 'active is-active' : ''}} {{openSelect === 'country' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="country"><text class="filter-dropdown-field-label">{{countryOptions[countryIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'country' ? 'is-open' : ''}}"></view></view>
-      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'country'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{countryOptions.length > 5 ? 360 : countryOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === countryIndex ? 'is-selected' : ''}}" wx:for="{{countryOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="country" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+      <view class="firm-filter-field filter-dropdown-field {{countryIndex ? 'active is-active' : ''}} {{openSelect === 'country' ? 'is-open' : ''}}" catchtap="toggleSelect" data-filter="country"><text class="filter-dropdown-field-label">{{countryOptions[countryIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'country' ? 'is-open' : ''}}"></view></view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'country'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{countryOptions.length > 5 ? 360 : countryOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === countryIndex ? 'is-selected' : ''}}" wx:for="{{countryOptions}}" wx:key="*this" catchtap="onSelectOption" data-filter="country" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
     </view>
 
     <view class="firm-filter-group filter-dropdown-group">
-      <view class="firm-filter-field filter-dropdown-field {{offices.length ? 'active is-active' : ''}} {{openGroups.offices ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="offices">
+      <view class="firm-filter-field filter-dropdown-field {{offices.length ? 'active is-active' : ''}} {{openGroups.offices ? 'is-open' : ''}}" catchtap="toggleGroup" data-group="offices">
         <text class="filter-dropdown-field-label">{{officesLabel}}</text>
         <view class="filter-dropdown-chevron {{openGroups.offices ? 'is-open' : ''}}"></view>
       </view>
       <view class="firm-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.offices}}">
         <scroll-view class="firm-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{officeOptions.length > 5 ? 360 : officeOptions.length * 68}}rpx;">
-          <view class="firm-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{officeOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleMultiOption" data-group="offices" data-value="{{option.value}}">
+          <view class="firm-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{officeOptions}}" wx:for-item="option" wx:key="value" catchtap="toggleMultiOption" data-group="offices" data-value="{{option.value}}">
             <text class="firm-filter-option-text filter-dropdown-option-text">{{option.value}}</text>
           </view>
         </scroll-view>
@@ -33,13 +33,13 @@
     </view>
 
     <view class="firm-filter-group filter-dropdown-group">
-      <view class="firm-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="areas">
+      <view class="firm-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" catchtap="toggleGroup" data-group="areas">
         <text class="filter-dropdown-field-label">{{areasLabel}}</text>
         <view class="filter-dropdown-chevron {{openGroups.areas ? 'is-open' : ''}}"></view>
       </view>
       <view class="firm-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.areas}}">
         <scroll-view class="firm-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;">
-          <view class="firm-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleMultiOption" data-group="areas" data-value="{{option.value}}">
+          <view class="firm-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" catchtap="toggleMultiOption" data-group="areas" data-value="{{option.value}}">
             <text class="firm-filter-option-text filter-dropdown-option-text">{{option.value}}</text>
           </view>
         </scroll-view>
@@ -52,8 +52,8 @@
     </view>
 
     <view class="firm-filter-picker filter-dropdown-group">
-      <view class="firm-filter-field filter-dropdown-field {{sortIndex ? 'active is-active' : ''}} {{openSelect === 'sort' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="sort"><text class="filter-dropdown-field-label">{{sortOptions[sortIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'sort' ? 'is-open' : ''}}"></view></view>
-      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'sort'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{sortOptions.length > 5 ? 360 : sortOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === sortIndex ? 'is-selected' : ''}}" wx:for="{{sortOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="sort" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+      <view class="firm-filter-field filter-dropdown-field {{sortIndex ? 'active is-active' : ''}} {{openSelect === 'sort' ? 'is-open' : ''}}" catchtap="toggleSelect" data-filter="sort"><text class="filter-dropdown-field-label">{{sortOptions[sortIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'sort' ? 'is-open' : ''}}"></view></view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'sort'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{sortOptions.length > 5 ? 360 : sortOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === sortIndex ? 'is-selected' : ''}}" wx:for="{{sortOptions}}" wx:key="*this" catchtap="onSelectOption" data-filter="sort" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
     </view>
 
     <view class="firm-filter-actions">

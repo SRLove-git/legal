@@ -126,6 +126,12 @@ Page({
     }).catch(function () {});
   },
 
+  // Tapping anywhere outside a dropdown closes the one that is open.
+  closeDropdowns() {
+    if (!this.data.openGroups.countries && !this.data.openGroups.areas) return;
+    this.setData({ openGroups: { countries: false, areas: false } });
+  },
+
   toggleFilters() {
     const filtersOpen = !this.data.filtersOpen;
     this.setData({

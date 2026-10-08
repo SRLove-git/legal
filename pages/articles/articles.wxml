@@ -1,5 +1,5 @@
 <site-header />
-<view class="subpage articles-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage articles-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);" bindtap="closeDropdowns">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
@@ -14,13 +14,13 @@
 
   <view class="article-filter-panel" wx:if="{{filtersOpen}}">
     <view class="article-filter-group filter-dropdown-group">
-      <view class="article-filter-field filter-dropdown-field {{countries.length ? 'active is-active' : ''}} {{openGroups.countries ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="countries">
+      <view class="article-filter-field filter-dropdown-field {{countries.length ? 'active is-active' : ''}} {{openGroups.countries ? 'is-open' : ''}}" catchtap="toggleGroup" data-group="countries">
         <text class="filter-dropdown-field-label">{{countriesLabel}}</text>
         <view class="filter-dropdown-chevron {{openGroups.countries ? 'is-open' : ''}}"></view>
       </view>
       <view class="article-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.countries}}">
         <scroll-view class="article-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{countryOptions.length > 5 ? 360 : countryOptions.length * 68}}rpx;">
-          <view class="article-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleCountryOption" data-value="{{option.value}}">
+          <view class="article-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{countryOptions}}" wx:for-item="option" wx:key="value" catchtap="toggleCountryOption" data-value="{{option.value}}">
             <text class="article-filter-option-text filter-dropdown-option-text">{{option.value}}</text>
           </view>
         </scroll-view>
@@ -28,13 +28,13 @@
     </view>
 
     <view class="article-filter-group filter-dropdown-group">
-      <view class="article-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="areas">
+      <view class="article-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" catchtap="toggleGroup" data-group="areas">
         <text class="filter-dropdown-field-label">{{areasLabel}}</text>
         <view class="filter-dropdown-chevron {{openGroups.areas ? 'is-open' : ''}}"></view>
       </view>
       <view class="article-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.areas}}">
         <scroll-view class="article-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;">
-          <view class="article-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleAreaOption" data-value="{{option.value}}">
+          <view class="article-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" catchtap="toggleAreaOption" data-value="{{option.value}}">
             <text class="article-filter-option-text filter-dropdown-option-text">{{option.value}}</text>
           </view>
         </scroll-view>

@@ -78,6 +78,12 @@ Page({
     wx.navigateTo({ url: '/pages/dashboard/dashboard' });
   },
 
+  // Tapping anywhere outside a dropdown closes the one that is open.
+  closeDropdowns() {
+    if (!this.data.openSelect && !this.data.openGroups.jurisdictions && !this.data.openGroups.areas) return;
+    this.setData({ openSelect: '', openGroups: { jurisdictions: false, areas: false } });
+  },
+
   toggleFilters() {
     const filtersOpen = !this.data.filtersOpen;
     this.setData({

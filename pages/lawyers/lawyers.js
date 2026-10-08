@@ -139,6 +139,12 @@ Page({
     }).catch(function () {});
   },
 
+  // Tapping anywhere outside a dropdown closes the one that is open.
+  closeDropdowns() {
+    if (!this.data.openSelect) return;
+    this.setData({ openSelect: '' });
+  },
+
   toggleFilters() {
     const filtersOpen = !this.data.filtersOpen;
     this.setData({ filtersOpen: filtersOpen, openSelect: filtersOpen ? this.data.openSelect : '' });

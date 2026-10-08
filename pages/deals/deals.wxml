@@ -1,5 +1,5 @@
 <site-header />
-<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
+<view class="subpage" style="padding-top:calc(88rpx + {{statusBarHeight}}px);" bindtap="closeDropdowns">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />
     <text class="breadcrumb-sep">></text>
@@ -25,17 +25,17 @@
 
   <view class="deal-filter-panel" wx:if="{{filtersOpen}}">
     <view class="deal-filter-picker filter-dropdown-group">
-      <view class="deal-filter-field filter-dropdown-field {{yearIndex ? 'active is-active' : ''}} {{openSelect === 'year' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="year"><text class="filter-dropdown-field-label">{{years[yearIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'year' ? 'is-open' : ''}}"></view></view>
-      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'year'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{years.length > 5 ? 360 : years.length * 68}}rpx;"><view class="filter-dropdown-option {{index === yearIndex ? 'is-selected' : ''}}" wx:for="{{years}}" wx:key="*this" bindtap="onSelectOption" data-filter="year" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+      <view class="deal-filter-field filter-dropdown-field {{yearIndex ? 'active is-active' : ''}} {{openSelect === 'year' ? 'is-open' : ''}}" catchtap="toggleSelect" data-filter="year"><text class="filter-dropdown-field-label">{{years[yearIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'year' ? 'is-open' : ''}}"></view></view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'year'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{years.length > 5 ? 360 : years.length * 68}}rpx;"><view class="filter-dropdown-option {{index === yearIndex ? 'is-selected' : ''}}" wx:for="{{years}}" wx:key="*this" catchtap="onSelectOption" data-filter="year" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
     </view>
 
     <view class="deal-filter-group filter-dropdown-group">
-      <view class="deal-filter-field filter-dropdown-field {{jurisdictions.length ? 'active is-active' : ''}} {{openGroups.jurisdictions ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="jurisdictions">
+      <view class="deal-filter-field filter-dropdown-field {{jurisdictions.length ? 'active is-active' : ''}} {{openGroups.jurisdictions ? 'is-open' : ''}}" catchtap="toggleGroup" data-group="jurisdictions">
         <text class="filter-dropdown-field-label">{{jurisdictionLabel}}</text><view class="filter-dropdown-chevron {{openGroups.jurisdictions ? 'is-open' : ''}}"></view>
       </view>
       <view class="deal-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.jurisdictions}}">
         <scroll-view class="deal-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{jurisdictionOptions.length > 5 ? 360 : jurisdictionOptions.length * 68}}rpx;">
-          <view class="deal-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{jurisdictionOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleMultiOption" data-group="jurisdictions" data-value="{{option.value}}">
+          <view class="deal-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{jurisdictionOptions}}" wx:for-item="option" wx:key="value" catchtap="toggleMultiOption" data-group="jurisdictions" data-value="{{option.value}}">
             <text class="filter-dropdown-option-text">{{option.value}}</text>
           </view>
         </scroll-view>
@@ -43,12 +43,12 @@
     </view>
 
     <view class="deal-filter-group filter-dropdown-group">
-      <view class="deal-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" bindtap="toggleGroup" data-group="areas">
+      <view class="deal-filter-field filter-dropdown-field {{areas.length ? 'active is-active' : ''}} {{openGroups.areas ? 'is-open' : ''}}" catchtap="toggleGroup" data-group="areas">
         <text class="filter-dropdown-field-label">{{areasLabel}}</text><view class="filter-dropdown-chevron {{openGroups.areas ? 'is-open' : ''}}"></view>
       </view>
       <view class="deal-filter-options-frame filter-dropdown-popup" wx:if="{{openGroups.areas}}">
         <scroll-view class="deal-filter-options filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{areaOptions.length > 5 ? 360 : areaOptions.length * 68}}rpx;">
-          <view class="deal-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" bindtap="toggleMultiOption" data-group="areas" data-value="{{option.value}}">
+          <view class="deal-filter-option filter-dropdown-option {{option.checked ? 'is-selected' : ''}}" wx:for="{{areaOptions}}" wx:for-item="option" wx:key="value" catchtap="toggleMultiOption" data-group="areas" data-value="{{option.value}}">
             <text class="filter-dropdown-option-text">{{option.value}}</text>
           </view>
         </scroll-view>
@@ -56,8 +56,8 @@
     </view>
 
     <view class="deal-filter-picker filter-dropdown-group">
-      <view class="deal-filter-field filter-dropdown-field {{sortIndex ? 'active is-active' : ''}} {{openSelect === 'sort' ? 'is-open' : ''}}" bindtap="toggleSelect" data-filter="sort"><text class="filter-dropdown-field-label">{{sortOptions[sortIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'sort' ? 'is-open' : ''}}"></view></view>
-      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'sort'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{sortOptions.length > 5 ? 360 : sortOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === sortIndex ? 'is-selected' : ''}}" wx:for="{{sortOptions}}" wx:key="*this" bindtap="onSelectOption" data-filter="sort" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
+      <view class="deal-filter-field filter-dropdown-field {{sortIndex ? 'active is-active' : ''}} {{openSelect === 'sort' ? 'is-open' : ''}}" catchtap="toggleSelect" data-filter="sort"><text class="filter-dropdown-field-label">{{sortOptions[sortIndex]}}</text><view class="filter-dropdown-chevron {{openSelect === 'sort' ? 'is-open' : ''}}"></view></view>
+      <view class="filter-dropdown-popup" wx:if="{{openSelect === 'sort'}}"><scroll-view class="filter-dropdown-scroll" scroll-y="true" enhanced="true" show-scrollbar="false" style="height: {{sortOptions.length > 5 ? 360 : sortOptions.length * 68}}rpx;"><view class="filter-dropdown-option {{index === sortIndex ? 'is-selected' : ''}}" wx:for="{{sortOptions}}" wx:key="*this" catchtap="onSelectOption" data-filter="sort" data-index="{{index}}"><text class="filter-dropdown-option-text">{{item}}</text></view></scroll-view></view>
     </view>
 
     <view class="deal-filter-actions">

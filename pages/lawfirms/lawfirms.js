@@ -79,6 +79,12 @@ Page({
     }).catch(function () {});
   },
 
+  // Tapping anywhere outside a dropdown closes the one that is open.
+  closeDropdowns() {
+    if (!this.data.openSelect && !this.data.openGroups.offices && !this.data.openGroups.areas) return;
+    this.setData({ openSelect: '', openGroups: { offices: false, areas: false } });
+  },
+
   toggleFilters() {
     const filtersOpen = !this.data.filtersOpen;
     this.setData({
