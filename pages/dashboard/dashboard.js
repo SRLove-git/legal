@@ -66,6 +66,7 @@ Page({
   data: {
     loading: true,
     greeting: 'Welcome',
+    profileError: '',
     incomplete: false,
     profile: { show: false, name: '', position: '', firm: '' },
     savedItems: [],
@@ -102,6 +103,7 @@ Page({
         .join(' ');
       self.setData({
         loading: false,
+        profileError: '',
         greeting: greetingName ? 'Welcome, ' + greetingName : 'Welcome',
         incomplete: !auth.isProfileComplete(member),
         profile: {
@@ -114,10 +116,27 @@ Page({
       self.loadSavedItems(memberId);
       self.loadActivity(memberId);
       self.loadUpcoming(memberId);
-    }).catch(function () {
-      // The member request can fail (expired token, slow endpoint). Keep the
-      // dashboard heading instead of leaving the welcome line blank.
-      self.setData({ loading: false, greeting: 'Welcome' });
+    }).catch(function (err) {
+      const description = (err && (err.description || err.message)) || '';
+      // The member endpoint answers 401/403 once the stored session expires;
+      // ask the reader to log in again instead of showing an empty dashboard.
+      if (err && (err.statusCode === 401 || err.statusCode === 403 || err.code === -401)) {
+        auth.clearSession();
+        self.setData({
+          loading: false,
+          greeting: 'Welcome',
+          profileError: 'Your session has expired. Please log in again.'
+        });
+        wx.showToast({ title: 'Please log in again', icon: 'none' });
+        setTimeout(function () { wx.redirectTo({ url: '/pages/login/login' }); }, 900);
+        return;
+      }
+      // Any other failure still keeps the heading, and says why it is empty.
+      self.setData({
+        loading: false,
+        greeting: 'Welcome',
+        profileError: description || 'Could not load your member details.'
+      });
     });
   },
 

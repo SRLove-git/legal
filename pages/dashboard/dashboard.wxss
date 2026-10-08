@@ -35,6 +35,14 @@ page {
   line-height: 1.5;
 }
 
+/* Why the member details are missing (expired session, endpoint error). */
+.md-load-error {
+  margin: 0 0 12rpx;
+  color: #c0392b;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
 .md-notice {
   margin-bottom: 64rpx;
   padding: 50rpx;

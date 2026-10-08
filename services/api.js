@@ -1220,7 +1220,13 @@ const api = {
     return post('api/crm/member/logout/', { data: JSON.stringify(memberId), auth: true });
   },
   getMember: function (memberId) {
-    return get('api/crm/member/' + encodeURIComponent(memberId), { auth: true });
+    return get('api/crm/member/' + encodeURIComponent(memberId), { auth: true })
+      .then(function (r) {
+        // The endpoint answers with the member object; the website reads it as a
+        // one-item collection, so tolerate a list as well.
+        const row = Array.isArray(r) ? r[0] : r;
+        return row || null;
+      });
   },
 
   // Phase 2 — registration (Annex B §3)
