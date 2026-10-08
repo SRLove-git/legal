@@ -1,0 +1,15 @@
+/* Shared "Learn more" / "More" call-to-action.
+   Homepage panels and the profile detail pages both use this full-width pill,
+   so the button keeps one definition here instead of a copy per page. */
+.more-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: #339dc8;
+  color: #ffffff;
+  font-size: 25rpx;
+  font-weight: 600;
+  border-radius: 40rpx;
+  padding: 12rpx 40rpx;
+  margin: 26rpx 0 12rpx;
+}

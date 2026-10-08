@@ -1,3 +1,5 @@
+@import "../../styles/more-link.wxss";
+
 .page {
   padding-top: calc(88rpx + 54px);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -180,18 +182,7 @@
   margin-top: 4rpx;
 }
 
-.more-link {
-  display: block;
-  width: 100%;
-  text-align: center;
-  background: #339dc8;
-  color: #ffffff;
-  font-size: 25rpx;
-  font-weight: 600;
-  border-radius: 40rpx;
-  padding: 12rpx 40rpx;
-  margin: 26rpx 0 12rpx;
-}
+/* The "Learn more" / "More" buttons come from styles/more-link.wxss. */
 
 /* Latest / Highlights */
 .row-border {
