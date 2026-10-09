@@ -55,6 +55,35 @@
    `https://heyzine.com`（LegalOne Pulse 官网翻页书，需完成微信业务域名校验）
 4. 本地开发可在 DevTools「详情 → 本地设置」勾选「不校验合法域名」，或保持 `project.config.json` 中 `urlCheck: false`。
 
+## 会员 H5 的官网导航栏（需要官网配合）
+
+小程序用 `<web-view>` 打开会员 E-form（例如调查问卷 `/member_survey/<id>`）时，页面底部会带上官网移动端的会员导航栏和页脚。
+这两块来自官网自己的样式，小程序侧去不掉：
+
+- `<web-view>` 会自动铺满页面并覆盖其他组件，`cover-view` 可覆盖的原生组件只有 map / video / canvas / camera / live-player / live-pusher，**不包含 web-view**；
+- 官网也没有无导航栏的独立问卷页（路由里 `forms/:formType/:formId` 只对 `deal-submission` 生效）。
+
+所以在"表单不改、只要去掉导航栏"的前提下，只能由官网按"当前是否在小程序 web-view 中"隐藏这两块。微信会把 web-view 的 UA
+标记为 `miniProgram`（微信 7.0.0+），页面内也可用 `window.__wxjs_environment === 'miniprogram'` 判断。官网共享 JS 加：
+
+```js
+if (window.__wxjs_environment === 'miniprogram' || /miniProgram/i.test(navigator.userAgent)) {
+  document.documentElement.classList.add('in-miniprogram');
+}
+```
+
+样式加（`92px` 与官网给底部导航预留的高度一致，避免露出空白）：
+
+```css
+.in-miniprogram .memberpage .member-dashboard-sidebar { display: none; }
+.in-miniprogram .memberpage .member-dashboard-body,
+.in-miniprogram .memberpage .footer { padding-bottom: 0; margin-bottom: 0; }
+```
+
+浏览器访问官网不受影响，表单本身零改动。另需注意：会员 H5 的登录态取自官网自己写的
+`sessionStorage['X-ACCESS-TOKEN']` + `localStorage['memberId']`（并经 `POST /api/crm/member/isValidToken/` 校验，失败会跳到 `./sign_in`），
+小程序的 token 存在 wx storage，两者不互通——所以 web-view 里的会员页面还需要一次官网登录态。
+
 ## 说明
 
 - 详情正文通过 `stripHtml` 转纯文本渲染（小程序无 innerHTML），登录/注册外的会员、验证、支付、问卷等 Phase 2 范围暂未实现。
