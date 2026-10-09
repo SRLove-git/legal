@@ -271,7 +271,9 @@ Page({
   // Same flow as pages/form-download: create the submission, then open the H5 E-form.
   applyAward(e) {
     const d = e.currentTarget.dataset;
-    const subType = [d.type, (d.jurisdiction || '').toLowerCase().replace(/ /g, '-')].filter(Boolean).join('-');
+    // The H5 folder is named <type>-<jurisdiction>; services/api.js owns that rule
+    // because the URL 404s when the two halves are not joined the website's way.
+    const subType = api.awardFormSubType(d);
     api.getMember(auth.getMemberId()).then(function (m) {
       return api.createSubmission({
         awardName: d.name || '',

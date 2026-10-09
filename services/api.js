@@ -643,6 +643,17 @@ function formUrl(host, formType, formSubType, id) {
   return base + '/form/deal-submission/index.html?id=' + encodeURIComponent(id);
 }
 
+// The award E-form folder is named <type>-<jurisdiction>, for example
+// "stellar-accolade-southeast-asia". The website builds the same string for both
+// the submission's formSubType and its form URL, and the folder only exists when
+// the two halves are both present — joining unconditionally would ask for
+// /form/award-submission//index.html, which the site answers with a 404.
+function awardFormSubType(form) {
+  const type = (form && form.type) || '';
+  const jurisdiction = ((form && form.jurisdiction) || '').toLowerCase().replace(/ /g, '-');
+  return [type, jurisdiction].filter(Boolean).join('-');
+}
+
 const api = {
   BASE: BASE,
   CDN: CDN,
@@ -1351,6 +1362,7 @@ const api = {
   savedItemTypeLabel: savedItemTypeLabel,
   awardStatus: awardStatus,
   formUrl: formUrl,
+  awardFormSubType: awardFormSubType,
   // Phase 2 — member email/password rules (Annex B §3)
   passwordValid: function (pw) {
     return typeof pw === 'string' && pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw);

@@ -36,10 +36,12 @@ Page({
   openEform(e) {
     const f = e.currentTarget.dataset;
     const self = this;
-    const member = this._member || {};
+    // The H5 form lives in a folder named after the formSubType, so the same value
+    // has to be used for the submission and for its URL. Reading it off the dataset
+    // (f.subtype, which does not exist) produced /award-submission//index.html.
+    const subType = api.awardFormSubType(f);
     api.getMember(auth.getMemberId()).then(function (m) {
       self._member = m || {};
-      const subType = [f.type, (f.jurisdiction || '').toLowerCase().replace(/ /g, '-')].filter(Boolean).join('-');
       return api.createSubmission({
         awardName: f.name || '',
         clientRemark: '',
@@ -53,7 +55,7 @@ Page({
     }).then(function (res) {
       const id = res && res.id;
       if (!id) throw new Error('No submission id');
-      h5.open(api.formUrl(config.h5Host, 'award-submission', f.subtype || '', id), f.name || 'Award application');
+      h5.open(api.formUrl(config.h5Host, 'award-submission', subType, id), f.name || 'Award application');
     }).catch(function (err) {
       wx.showModal({
         title: 'Award application',

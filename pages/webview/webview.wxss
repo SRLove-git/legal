@@ -15,6 +15,13 @@
   line-height: 1.6;
 }
 
+.wv-reason {
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: #a94442;
+  line-height: 1.5;
+}
+
 .wv-url {
   margin-top: 28rpx;
   font-size: 24rpx;
