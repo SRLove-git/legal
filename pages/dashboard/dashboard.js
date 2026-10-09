@@ -2,6 +2,7 @@ const safeArea = require('../../services/safe-area.js');
 const api = require('../../services/api.js');
 const auth = require('../../services/auth.js');
 const h5 = require('../../services/h5.js');
+const documents = require('../../services/document.js');
 const config = require('../../config.js');
 
 // The website dashboard previews at most 3 rows per card, then adds "More >>".
@@ -263,24 +264,9 @@ Page({
     wx.navigateTo({ url: '/pages/form-download/form-download' });
   },
   downloadAwardPdf(e) {
-    const path = e.currentTarget.dataset.path;
-    if (!path) return;
-    const url = /^https?:\/\//i.test(path) ? path : api.CDN + String(path).replace(/^\/+/, '');
-    wx.downloadFile({
-      url: url,
-      success: function (res) {
-        if (res.statusCode !== 200) {
-          wx.showToast({ title: 'Download failed', icon: 'none' });
-          return;
-        }
-        wx.openDocument({
-          filePath: res.tempFilePath,
-          showMenu: true,
-          fail: function () { wx.showToast({ title: 'Cannot open PDF', icon: 'none' }); }
-        });
-      },
-      fail: function () { wx.showToast({ title: 'Download failed', icon: 'none' }); }
-    });
+    // The form's pdfForm is a CDN blob key, so the download and the explicit
+    // document type both live in services/document.js.
+    documents.open(e.currentTarget.dataset.path, 'Award application form');
   },
   // Same flow as pages/form-download: create the submission, then open the H5 E-form.
   applyAward(e) {

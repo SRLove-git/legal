@@ -179,6 +179,27 @@ function imageUrl(relative, size) {
   return CDN + path;
 }
 
+// Escape the characters that are legal in a blob name but not in a URL, leaving
+// any existing %XX escapes untouched. The website lets the browser do this
+// implicitly (href="bloburl + pdfForm"); downloadFile needs a usable URL.
+function encodeUrlPath(url) {
+  return String(url).replace(/[\s"<>{}|\\^`]/g, function (ch) {
+    const hex = ch.charCodeAt(0).toString(16).toUpperCase();
+    return '%' + (hex.length < 2 ? '0' + hex : hex);
+  });
+}
+
+// The award application forms are stored as blob keys in the same CDN container as
+// the images: the website links "Download" as window.bloburl + form.pdfForm, so the
+// same prefix has to be used here (not the website host).
+function documentUrl(relative) {
+  if (!relative) return '';
+  const raw = String(relative).trim();
+  if (!raw) return '';
+  if (/^https?:\/\//i.test(raw)) return encodeUrlPath(raw);
+  return encodeUrlPath(CDN + raw.replace(/^\/+/, ''));
+}
+
 function monthYear(iso) {
   if (!iso) return '';
   const d = new Date(iso);
@@ -626,6 +647,7 @@ const api = {
   BASE: BASE,
   CDN: CDN,
   imageUrl: imageUrl,
+  documentUrl: documentUrl,
   decodeEntities: decodeEntities,
   stripHtml: stripHtml,
   dayMonthYear: dayMonthYear,

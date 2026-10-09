@@ -3,6 +3,7 @@ const breadcrumb = require('../../services/breadcrumb.js');
 const api = require('../../services/api.js');
 const auth = require('../../services/auth.js');
 const h5 = require('../../services/h5.js');
+const documents = require('../../services/document.js');
 const config = require('../../config.js');
 
 Page({
@@ -26,26 +27,10 @@ Page({
       self.setData({ loading: false, error: (err && (err.description || err.message)) || 'Could not load forms.' });
     });
   },
-  // Schedule 2 §3.7 — PDF via downloadFile + openDocument
+  // Schedule 2 §3.7 — PDF via downloadFile + openDocument. The form's pdfForm is a
+  // CDN blob key, so the URL and the document type come from services/document.js.
   downloadPdf(e) {
-    const path = e.currentTarget.dataset.path;
-    if (!path) return;
-    const url = /^https?:\/\//i.test(path) ? path : (config.h5Host || '').replace(/\/+$/, '') + '/' + path.replace(/^\/+/, '');
-    wx.downloadFile({
-      url: url,
-      success: function (res) {
-        if (res.statusCode !== 200) {
-          wx.showToast({ title: 'Download failed', icon: 'none' });
-          return;
-        }
-        wx.openDocument({
-          filePath: res.tempFilePath,
-          showMenu: true,
-          fail: function () { wx.showToast({ title: 'Cannot open PDF', icon: 'none' }); }
-        });
-      },
-      fail: function () { wx.showToast({ title: 'Download failed', icon: 'none' }); }
-    });
+    documents.open(e.currentTarget.dataset.path, 'Award application form');
   },
   // Schedule 2 §3.8 — Create via API, then open the existing mobile H5 E-form.
   openEform(e) {
