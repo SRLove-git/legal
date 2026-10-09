@@ -54,6 +54,11 @@
    `https://www.legaloneglobal.com`
    `https://heyzine.com`（LegalOne Pulse 官网翻页书，需完成微信业务域名校验）
 4. 本地开发可在 DevTools「详情 → 本地设置」勾选「不校验合法域名」，或保持 `project.config.json` 中 `urlCheck: false`。
+   **注意**：这个勾选只对模拟器有效，真机上「业务域名」照样校验。日志/页面里出现
+   `web-view load failed due to not in domain list` 就是第 3 条还没配好；配置时需要把微信给的校验文件放到
+   `https://www.legaloneglobal.com/` 根目录，且每 3 个月要重新校验一次。
+   另外，**个人类型的小程序官方就不支持 web-view**（`<web-view>` 文档：「个人类型的小程序暂不支持使用」），
+   这种情况小程序内无法打开任何会员 H5 页面，只能用兜底页的「Copy link」在浏览器里打开。
 
 ## 会员 H5 的官网导航栏（需要官网配合）
 
