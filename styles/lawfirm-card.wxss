@@ -1,0 +1,123 @@
+/* The law firm / office card: logo band on top, then the name, the location and
+   the LegalOne Merits table. The law firm directory and the office list opened
+   from a firm profile's "Offices" More button render the same card. */
+.firm-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-bottom: 28rpx;
+  padding: 0 0 24rpx;
+  border-bottom: 1rpx solid #eeeeee;
+  background: #ffffff;
+}
+
+.firm-row-logo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 210rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx 28rpx;
+  background: #ffffff;
+  border-radius: 8rpx;
+  box-sizing: border-box;
+}
+
+.firm-row-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+}
+
+/* The website's firm card is one link: the English name and the Chinese local
+   name are both #0084BA and bold (.name / .nameLocal in the site's style.css). */
+.firm-row-name {
+  width: 100%;
+  color: #0084ba;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.firm-row-local-name {
+  margin-top: 8rpx;
+  color: #0084ba;
+  font-size: 27rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* The firm's head office city/country, printed under the name. */
+.firm-row-location {
+  margin-top: 8rpx;
+  color: #2d2d2d;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.firm-merits-title {
+  margin-top: 42rpx;
+  color: #00558d;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.firm-merit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58rpx;
+  color: #2d2d2d;
+  font-size: 25rpx;
+  line-height: 1.3;
+}
+
+.firm-merit-row.merit-total {
+  margin-top: 6rpx;
+}
+
+.firm-merit-label {
+  display: flex;
+  align-items: center;
+}
+
+.firm-merit-icon {
+  width: 44rpx;
+  height: 60rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.firm-merit-value {
+  min-width: 78rpx;
+  box-sizing: border-box;
+  padding: 5rpx 14rpx;
+  border-radius: 8rpx;
+  background: #00558d;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.firm-merit-value.merit-unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44rpx;
+  padding: 0;
+  overflow: hidden;
+}
+
+.firm-merit-value.merit-unavailable image {
+  display: block;
+  width: 10rpx;
+  height: 4rpx;
+  flex: 0 0 10rpx;
+}
