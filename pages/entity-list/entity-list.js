@@ -92,7 +92,9 @@ Page({
     page: 1,
     hasMore: false,
     loading: true,
-    hyphenIcon: SITE + '/images/hyphen.JPG'
+    hyphenIcon: SITE + '/images/hyphen.JPG',
+    // Offices without a logo show the website's watermark, as the site does.
+    watermarkIcon: SITE + '/images/Logo-watermark.s.png'
   },
   onLoad(options) {
     const type = decodeURIComponent(options.type || '');

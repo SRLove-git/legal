@@ -1,9 +1,16 @@
+@import "../../styles/lawfirm-card.wxss";
+
 /* Firm / office / lawyer list pages opened from a profile "More" button. They
    reuse the profile embeds' row styling so the reader stays inside the mini
    program (same header, same rows) instead of handing over to the website. */
+/* The page frame stays free of side padding so the blue breadcrumb runs edge to
+   edge, the way it does on every .subpage; .el-body carries the reading gutter. */
 .el-page {
-  padding: 0 36rpx 60rpx;
   background: #ffffff;
+}
+
+.el-body {
+  padding: 0 36rpx 60rpx;
 }
 
 .el-head {
@@ -208,21 +215,23 @@
   text-align: center;
 }
 
+/* hyphen.JPG is a white dash, so the blue badge behind it has to stay — with a
+   transparent background the "-" disappeared entirely. Matches the lawyer
+   directory card (pages/lawyers) and the shared law firm card. */
 .el-metric-value.unavailable {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 44rpx;
   padding: 0;
-  background: transparent;
   overflow: hidden;
 }
 
 .el-metric-value.unavailable image {
   display: block;
-  width: 20rpx;
-  height: 8rpx;
-  flex: 0 0 20rpx;
+  width: 10rpx;
+  height: 4rpx;
+  flex: 0 0 10rpx;
 }
 
 .el-metric-value.testimonial {
@@ -241,91 +250,6 @@
 
 .italic {
   font-style: italic;
-}
-
-/* Offices: the website's office list card — logo (or watermark), name, location
-   and the same LegalOne Merits table the office profile prints. */
-.el-office {
-  display: flex;
-  padding: 24rpx 0;
-  border-bottom: 2rpx solid #99cee3;
-}
-
-.el-office-logo {
-  width: 160rpx;
-  height: 160rpx;
-  flex: 0 0 160rpx;
-  background: #eef4f8;
-}
-
-.el-office-body {
-  flex: 1;
-  min-width: 0;
-  padding-left: 24rpx;
-}
-
-.el-office-name {
-  color: #0084ba;
-  font-size: 30rpx;
-  font-weight: 700;
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.el-office-location {
-  margin-top: 6rpx;
-  color: #2d2d2d;
-  font-size: 26rpx;
-}
-
-.el-office-merits {
-  margin-top: 14rpx;
-  padding: 16rpx 18rpx;
-  border: 2rpx solid #e2e6ea;
-  border-radius: 10rpx;
-}
-
-.el-office-merits-label {
-  margin-bottom: 8rpx;
-  color: #2d2d2d;
-  font-size: 24rpx;
-  font-weight: 700;
-}
-
-.el-office-merit-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44rpx;
-  color: #2d2d2d;
-  font-size: 24rpx;
-  line-height: 1.4;
-}
-
-.el-office-merit-row.total {
-  font-weight: 700;
-}
-
-.el-office-merit-name {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-
-.el-merit-icon {
-  width: 26rpx;
-  height: 34rpx;
-  margin-right: 8rpx;
-  flex: 0 0 26rpx;
-}
-
-.el-office-merit-value {
-  font-weight: 700;
-}
-
-image.el-office-merit-value {
-  width: 26rpx;
-  height: 12rpx;
 }
 
 .el-disclaimer {
