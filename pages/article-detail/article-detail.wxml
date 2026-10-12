@@ -62,19 +62,16 @@
     <template is="content-actions" data="{{saved: saved, saving: saving}}" />
     <image class="detail-image" src="{{item.image}}" mode="widthFix" wx:if="{{item.image}}" />
     <view class="detail-external-links" wx:if="{{item.externalLinks && item.externalLinks.length && !(item.bodyBlocks && item.bodyBlocks.length)}}">
-      <view class="detail-external-links-title">Open in mini program</view>
       <view
         class="detail-external-link"
         hover-class="detail-external-link-hover"
         wx:for="{{item.externalLinks}}"
         wx:key="url"
         wx:for-index="linkIndex"
+        wx:for-item="link"
         bindtap="openExternalLink"
         data-index="{{linkIndex}}"
-      >
-        <text>{{item.label}}</text>
-        <text class="detail-external-link-arrow">→</text>
-      </view>
+      >{{link.label}}</view>
     </view>
     <block wx:if="{{item.bodyBlocks && item.bodyBlocks.length}}">
       <block wx:for="{{item.bodyBlocks}}" wx:key="id" wx:for-item="block">

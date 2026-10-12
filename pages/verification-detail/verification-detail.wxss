@@ -1,30 +1,62 @@
+/* The website's verification page at phone width — the site switches to this
+   layout below 600px (body.mobile600), which is what a mini program renders.
+   Every value below is taken from the site's own rules, converted at 2rpx per
+   px:
+     .verification-certificate         max-width 800px, centred
+     .verification-certificate-image   width 200px, margin 15px 0
+     .verification-certificate-outer   #f2f2f2, 5px radius, margin-top 20px,
+                                       padding 0 on mobile
+     -outer-desc                       mobile padding 30px 20px 0 / 0 20px
+     .verification-certificate-middle  linear-gradient(to bottom right,
+                                       #00558D, #0095DB), radius 0 on mobile
+     .verification-verified-info       margin 20px 10px, padding 30px 20px 10px
+     .verification-verified-info-line  margin-bottom 10px
+     -line-info                        padding-bottom 15px
+     -line-left                        bold, #ECECEC
+     -line-right                       width 95%, margin 10px 0 20px
+     .verification-info-description    padding-bottom 20px
+     .verification-info-line-left      bold, width 280px
+     .verification-info-line-right     width 95%, margin 10px 0 20px
+     .verification-info-line           margin-bottom 10px
+     .more-half-line-height            line-height 1.5
+     .verification-disclaimer          margin-top 30px, padding 0 20px 30px,
+                                       Helvetica 14px / 1.2                  */
 .verification-page {
   min-height: 100vh;
   box-sizing: border-box;
-  background: #f4f6f7;
-  color: #303030;
+  background: #ffffff;
+  color: #555555;
 }
 
 .certificate {
   width: 100%;
-  margin: 34rpx 0 70rpx;
-  padding: 48rpx 34rpx 38rpx;
-  box-sizing: border-box;
-  border-top: 2rpx solid #d6dfe3;
-  border-bottom: 2rpx solid #d6dfe3;
-  background: #ffffff;
+  max-width: 1600rpx;
+  margin: 0 auto;
+  /* The credential block is width:100% plus side margins on the site, which
+     overflows the gradient panel by 10px; the site hides that with body
+     overflow-x. Only empty padding overflows, so clipping it is invisible. */
+  overflow-x: hidden;
 }
 
+/* The LegalOne VERIFIED badge sits on the page background, above the sheet. */
 .certificate-icon {
   display: block;
-  width: 250rpx;
-  margin: 0 0 42rpx;
+  width: 400rpx;
+  margin: 30rpx 0;
+}
+
+.certificate-sheet {
+  margin-top: 40rpx;
+  background-color: #f2f2f2;
+  border-radius: 10rpx;
+  color: #555555;
 }
 
 .certificate-copy {
-  font-size: 27rpx;
-  line-height: 1.65;
-  text-align: justify;
+  padding: 60rpx 40rpx 0;
+  font-family: "Noto Serif", "Times New Roman", serif;
+  font-size: 34rpx;
+  line-height: 1.5;
 }
 
 .emphasis {
@@ -37,80 +69,78 @@
   padding-left: 0.3em;
 }
 
+.credential-panel {
+  background-image: linear-gradient(to bottom right, #00558d, #0095db);
+}
+
 .credential-card {
-  margin: 38rpx -12rpx;
-  padding: 30rpx 26rpx 18rpx;
-  border: 3rpx solid #0084ba;
-  background: #f7fcfe;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 40rpx 20rpx;
+  padding: 60rpx 40rpx 20rpx;
+  color: #ececec;
+  font-family: "Noto Serif", "Times New Roman", serif;
+  font-size: 34rpx;
+  line-height: 1.2;
 }
 
 .credential-intro {
-  margin-bottom: 22rpx;
-  color: #00558d;
-  font-size: 27rpx;
-  font-weight: 600;
-  line-height: 1.5;
+  margin-bottom: 20rpx;
+  padding-bottom: 30rpx;
+  color: #ececec;
 }
 
 .credential-row {
-  display: flex;
-  align-items: flex-start;
-  column-gap: 12rpx;
-  padding: 16rpx 0;
-  border-top: 1rpx solid #c9e4ef;
-  font-size: 25rpx;
-  line-height: 1.5;
+  width: 100%;
+  margin-bottom: 20rpx;
 }
 
 .credential-label {
-  width: 210rpx;
-  flex: 0 0 210rpx;
-  color: #555555;
+  display: block;
+  color: #ececec;
+  font-weight: 700;
 }
 
 .credential-value {
-  flex: 1;
-  min-width: 0;
-  color: #171717;
-  font-weight: 600;
+  display: block;
+  width: 95%;
+  margin: 20rpx 0 40rpx;
+  color: #ececec;
   word-break: break-word;
 }
 
 .confirmation-copy {
-  margin-top: 34rpx;
+  padding: 0 40rpx 40rpx;
 }
 
 .verification-dates {
-  display: flex;
-  align-items: flex-start;
-  column-gap: 12rpx;
-  margin-top: 28rpx;
-  padding: 24rpx;
-  background: #eef7fa;
-  font-size: 25rpx;
-  line-height: 1.65;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 20rpx;
+  padding: 0 40rpx;
+  font-family: "Noto Serif", "Times New Roman", serif;
+  font-size: 34rpx;
+  line-height: 1.5;
 }
 
 .verification-title {
-  width: 220rpx;
-  flex: 0 0 220rpx;
-  color: #171717;
+  width: 560rpx;
+  color: #555555;
   font-weight: 700;
 }
 
 .date-list {
-  flex: 1;
-  min-width: 0;
+  width: 95%;
+  margin: 20rpx 0 40rpx;
 }
 
 .disclaimer {
-  margin-top: 38rpx;
-  padding-top: 28rpx;
-  border-top: 1rpx solid #b9b9b9;
-  color: #777777;
-  font-size: 20rpx;
-  line-height: 1.55;
-  text-align: justify;
+  margin-top: 60rpx;
+  padding: 0 40rpx 60rpx;
+  color: #555555;
+  font-family: "Helvetica Neue", arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.2;
 }
 
 .verification-loading,

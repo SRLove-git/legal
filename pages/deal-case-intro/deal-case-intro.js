@@ -1,6 +1,7 @@
 const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
 const content = require('../../data/deal-case-intro.js');
+const h5 = require('../../services/h5.js');
 
 Page({
   behaviors: [safeArea, breadcrumb],
@@ -83,6 +84,8 @@ Page({
   },
 
   startSubmission() {
-    wx.navigateTo({ url: '/pages/dashboard/dashboard' });
+    // Same destination as the website's "Submit deal/case" button, which links
+    // to /forms/deal-submission (public entry, no login required).
+    h5.open('/forms/deal-submission', 'Deal submission');
   }
 });

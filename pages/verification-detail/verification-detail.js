@@ -22,6 +22,9 @@ function normalizeVerification(item) {
     licenceNumber: item.registrationId || '',
     category: category || '',
     issuedBy: item.licenseCertIssuedBy || '',
+    // The website prints a "Law firm:" row between Category and Licence
+    // issued by, and only when the record carries a firm.
+    lawFirm: item.lawFirmName || '',
     issueDate: formatDate(item.issueDate),
     expiryDate: formatDate(item.expiry)
   };

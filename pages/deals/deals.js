@@ -3,6 +3,7 @@ const fb = require('../../services/fallback.js');
 const safeArea = require('../../services/safe-area.js');
 const breadcrumb = require('../../services/breadcrumb.js');
 const filterLabel = require('../../services/filter-label.js');
+const h5 = require('../../services/h5.js');
 
 const PER_PAGE = 12;
 const RANK_NUMBERS = { Distinguished: 1, Exemplary: 2, Remarkable: 3 };
@@ -75,7 +76,11 @@ Page({
   },
 
   startSubmission() {
-    wx.navigateTo({ url: '/pages/dashboard/dashboard' });
+    // The website's "Submit deal/case" button points at /forms/deal-submission
+    // (the public entry that asks for the deal name, law firm and business
+    // email and then mails a link to the form). It used to drop the reader on
+    // the member dashboard, which asked for a login instead.
+    h5.open('/forms/deal-submission', 'Deal submission');
   },
 
   // Tapping anywhere outside a dropdown closes the one that is open.

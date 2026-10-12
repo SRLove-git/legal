@@ -953,6 +953,20 @@ const api = {
         norm.awards = [];
         norm.awardsHtml = richText.toRichHtml(f.awards);
       }
+      // LegalOne's own awards for the firm ("LegalOne awards" on the website,
+      // between the practice list and the honours list). The API keeps them in
+      // legalOneAwards — a different field from the client-supplied awards
+      // above — so the section used to render empty on the mini program.
+      norm.legalOneAwards = (f.legalOneAwards || []).map(function (award) {
+        return {
+          id: (award && award.id) || '',
+          articleId: (award && award.articleId) || '',
+          name: decodeEntities(award && award.name),
+          year: decodeEntities(award && award.year)
+        };
+      }).filter(function (award) {
+        return award.name;
+      });
       // Offices carry their own practice lists on the website (city + areas).
       norm.offices = (f.lawFirmOffices || []).map(function (o) {
         const lastUpdated = o.lastUpdated && o.lastUpdated.indexOf('0001-') !== 0 ? monthYear(o.lastUpdated) : '';

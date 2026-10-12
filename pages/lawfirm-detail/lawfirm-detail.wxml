@@ -147,6 +147,14 @@
       <view class="firm-plain-item dot" wx:for="{{item.industries}}" wx:for-item="area" wx:key="*this">{{area}}</view>
     </view>
 
+    <view class="firm-section" wx:if="{{item.legalOneAwards.length}}">
+      <view class="firm-section-title">LegalOne awards</view>
+      <view class="firm-linked-item dot" wx:for="{{item.legalOneAwards}}" wx:for-item="award" wx:key="id" bindtap="goArticle" data-id="{{award.articleId}}" data-title="{{award.name}}">
+        <view class="linked-title">{{award.name}}</view>
+        <view class="linked-meta" wx:if="{{award.year}}">{{award.year}}</view>
+      </view>
+    </view>
+
     <view class="firm-section" wx:if="{{honours.length}}">
       <view class="firm-section-title">Lawyers' honours list</view>
       <view class="firm-linked-item dot" wx:for="{{honours}}" wx:for-item="honour" wx:key="articleId" bindtap="goArticle" data-id="{{honour.articleId}}" data-title="{{honour.awardName}}">

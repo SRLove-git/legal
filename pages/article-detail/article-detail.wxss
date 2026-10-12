@@ -72,39 +72,27 @@
   white-space: pre-wrap;
 }
 
+/* Article web links that cannot be placed back inside the body text. They now
+   read as ordinary hyperlinks (blue, underlined, one per line) instead of the
+   bordered "Open in mini program" rows the client asked to remove. */
 .detail-external-links {
-  margin-top: 34rpx;
-  margin-bottom: 34rpx;
-}
-
-.detail-external-links-title {
-  margin-bottom: 16rpx;
-  color: #303030;
-  font-size: 28rpx;
-  font-weight: 700;
+  margin: 0 0 48rpx;
+  font-size: 32rpx;
+  line-height: 1.5;
 }
 
 .detail-external-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  padding: 22rpx 26rpx;
-  border: 2rpx solid #0084ba;
-  border-radius: 12rpx;
   color: #0084ba;
-  font-size: 29rpx;
-  line-height: 1.4;
+  text-decoration: underline;
   word-break: break-word;
+}
+
+.detail-external-link + .detail-external-link {
+  margin-top: 10rpx;
 }
 
 .detail-external-link-hover {
   opacity: 0.72;
-}
-
-.detail-external-link-arrow {
-  flex: none;
-  font-size: 34rpx;
 }
 
 .detail-inline-link-row {

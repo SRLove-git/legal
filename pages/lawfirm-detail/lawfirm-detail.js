@@ -51,6 +51,7 @@ function completeDetail(item) {
     officesProvidedByClientHtml: '',
     awards: [],
     awardsHtml: '',
+    legalOneAwards: [],
     video: '',
     videoPoster: '',
     videoCaption: '',
