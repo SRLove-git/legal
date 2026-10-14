@@ -247,7 +247,7 @@ feedback_rows = [
     ("6", "6. verified page style",
      "验证页严格按官网重做：verified 徽标移到白底（不再压在灰底上）、灰卡与 #00558D→#0095DB 渐变面板的底色与间距逐项对齐官网手机版式，并补上缺失的 Law firm 一行"),
     ("7", "律所档案少了 Head office",
-     "按官网 displayHeadOffice 的逻辑补上 Head office 一行（城市 / 国家，链接到该办公室），无标记的律所不显示该行；计数区块改为官网的两行四格"),
+     "按官网 displayHeadOffice 的逻辑补上 Head office 一行（城市 / 国家，链接到该办公室），无标记的律所不显示该行；计数区块的排布与配色（蓝标题、加粗数值、竖线与首行分隔线）一并对齐官网"),
 ]
 add_table(doc, ["序号", "客户反馈", "处理结果"], feedback_rows, [Cm(1.1), Cm(5.3), Cm(9.0)], first_column_centered=True)
 
@@ -349,7 +349,7 @@ add_bullet(doc, "接口层在 office 列表上保留 headOffice 标记，并输�
                 "仅当存在被标记的办公室时才有值，与官网的判断完全一致。")
 add_bullet(doc, "律所档案的计数区块改为官网的两列两行：Head office（如“Beijing, China”）与 Offices 一行，"
                 "Partners 与 Lawyers 一行；点击 Head office 进入该办公室档案页（复用原有的 goOffice 跳转）。")
-add_bullet(doc, "计数区块的竖线与下划线改为两行一致（此前只有第一行有），四格排布与官网一致。")
+add_bullet(doc, "计数区块的版式一并对齐官网 .lawfirm-info：格子宽 45%、列间距 3px、行间距 30px；标题为官网链接蓝 #0084BA、字号 19.008px、加粗、下方 5px；数值 14.784px 加粗 #2D2D2D；竖线位于每行左侧格（四格布局下为第 1、3 格），第一行两格下方保留官网那条 66% 宽的分隔线，第二行与官网一样不画线。")
 add_bullet(doc, "线上实测：Grandway headOffice 输出“Beijing, China”（办公室 id 与官网链接一致）；"
                 "无标记的律所（Davis Polk、One Asia Lawyers）不显示该行，与官网一致。")
 
@@ -387,7 +387,7 @@ add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，�
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")
 add_bullet(doc, "验证页：抽查若干条验证记录，确认 verified 徽标位于白色页面上（不在灰色证书卡内）、灰色证书卡与蓝色渐变面板的底色和间距与官网一致，Law firm 一行显示正常。")
-add_bullet(doc, "律所档案：抽查 Grandway Law Offices，确认计数区块第一格为 Head office（Beijing, China）并可进入该办公室档案页；再抽查一家没有 headOffice 标记的律所，确认该行不出现。")
+add_bullet(doc, "律所档案：抽查 Grandway Law Offices，确认 Head office（Beijing, China）为计数区第一格、标题为官网链接蓝、竖线与首行分隔线位置正确，并可进入该办公室档案页；再抽查一家没有 headOffice 标记的律所，确认该行不出现。")
 
 add_heading(doc, "当前状态", 1)
 add_body(

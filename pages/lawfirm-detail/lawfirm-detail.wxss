@@ -190,29 +190,38 @@
   background: #f2f2f2;
 }
 
+/* Law-firm profile counters, exactly as the website's .lawfirm-info renders
+   them at phone width: a centred two-by-two grid of 45% cells with a 3px gap,
+   a blue bold heading (19.008px, #0084BA = the site's link blue) over a bold
+   value (14.784px / 1.2), the vertical rule on the left cell of each row and a
+   66%-wide rule under the two cells of the first row. Values are the site's
+   computed styles at 375px, at 2rpx per px. */
 .firm-info {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 24rpx 0 0;
+  column-gap: 6rpx;
+  margin: 30rpx 0 0;
 }
 
 .firm-info-row {
   position: relative;
   width: 45%;
-  margin-bottom: 40rpx;
-  padding-bottom: 22rpx;
+  margin-bottom: 60rpx;
   text-align: center;
 }
 
-/* The profile counters are two per row (Head office | Offices, then
-   Partners | Lawyers), so the vertical rule sits between the two cells of
-   each row and every cell keeps its own rule underneath. */
 .firm-info-row:nth-child(odd) {
   border-right: 2rpx solid #99cee3;
 }
 
-.firm-info-row::after {
+.firm-info-row:nth-child(1),
+.firm-info-row:nth-child(2) {
+  padding-bottom: 26rpx;
+}
+
+.firm-info-row:nth-child(1)::after,
+.firm-info-row:nth-child(2)::after {
   content: "";
   position: absolute;
   left: 17%;
@@ -221,21 +230,28 @@
   border-bottom: 2rpx solid #99cee3;
 }
 
+/* The last row's own margin would double the gap before the Merits card; the
+   website's block height stops at the cells. */
+.firm-info-row:nth-child(3),
+.firm-info-row:nth-child(4) {
+  margin-bottom: 0;
+}
+
 .firm-info-row-hover {
   opacity: 0.7;
 }
 
 .firm-info-heading {
-  color: #171717;
-  font-size: 34rpx;
+  margin-bottom: 10rpx;
+  color: #0084ba;
+  font-size: 38rpx;
   font-weight: 700;
   line-height: 1;
 }
 
 .firm-info-detail {
-  margin-top: 10rpx;
   color: #2d2d2d;
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 700;
   line-height: 1.2;
 }
