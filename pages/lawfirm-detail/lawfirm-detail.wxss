@@ -201,26 +201,28 @@
   position: relative;
   width: 45%;
   margin-bottom: 40rpx;
+  padding-bottom: 22rpx;
   text-align: center;
 }
 
-.firm-info-row:nth-child(1) {
+/* The profile counters are two per row (Head office | Offices, then
+   Partners | Lawyers), so the vertical rule sits between the two cells of
+   each row and every cell keeps its own rule underneath. */
+.firm-info-row:nth-child(odd) {
   border-right: 2rpx solid #99cee3;
 }
 
-.firm-info-row:nth-child(1),
-.firm-info-row:nth-child(2) {
-  padding-bottom: 22rpx;
-}
-
-.firm-info-row:nth-child(1)::after,
-.firm-info-row:nth-child(2)::after {
+.firm-info-row::after {
   content: "";
   position: absolute;
   left: 17%;
   bottom: 0;
   width: 66%;
   border-bottom: 2rpx solid #99cee3;
+}
+
+.firm-info-row-hover {
+  opacity: 0.7;
 }
 
 .firm-info-heading {

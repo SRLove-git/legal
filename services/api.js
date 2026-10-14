@@ -887,6 +887,8 @@ const api = {
           image: imageUrl(o.profileIcon),
           city: decodeEntities(o.city) || decodeEntities(o.name),
           country: decodeEntities(o.country),
+          // The website's displayHeadOffice helper keys off this flag.
+          headOffice: !!o.headOffice,
           updated: lastUpdated,
           numOfDeal: Number(o.numOfDeal) || 0,
           distinguished: Number(o.rank1Total) || 0,
@@ -895,6 +897,15 @@ const api = {
           industries: (o.industries || []).map(function (x) { return decodeEntities(x && x.area); }).filter(Boolean)
         };
       });
+      // "Head office" row above the profile counters, linked to that office.
+      // The website prints it only when an office carries headOffice: true.
+      const headOffice = norm.offices.filter(function (o) { return o.headOffice; })[0];
+      norm.headOffice = headOffice ? {
+        id: headOffice.id,
+        name: headOffice.name,
+        city: headOffice.city,
+        location: [headOffice.city, headOffice.country].filter(Boolean).join(', ')
+      } : null;
       norm.honours = (f.lawyerHonoursList || []).map(function (h) {
         return {
           articleId: h.articleId || '',

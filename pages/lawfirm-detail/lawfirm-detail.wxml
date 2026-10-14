@@ -76,6 +76,20 @@
     </swiper>
 
     <view class="firm-info" wx:if="{{item.numOfOffice || item.numOfPartner || item.numOfLawyer}}">
+      <!-- The website's displayHeadOffice helper: the firm's head office and
+           its city, linked to that office's profile. -->
+      <view
+        class="firm-info-row"
+        wx:if="{{headOffice}}"
+        hover-class="firm-info-row-hover"
+        bindtap="goOffice"
+        data-id="{{headOffice.id}}"
+        data-name="{{headOffice.name}}"
+        data-city="{{headOffice.city}}"
+      >
+        <view class="firm-info-heading">Head office</view>
+        <view class="firm-info-detail">{{headOffice.location}}</view>
+      </view>
       <view class="firm-info-row">
         <view class="firm-info-heading">Offices</view>
         <view class="firm-info-detail">{{item.numOfOffice ? item.numOfOffice : '-'}}</view>

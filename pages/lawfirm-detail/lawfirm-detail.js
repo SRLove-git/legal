@@ -52,6 +52,7 @@ function completeDetail(item) {
     awards: [],
     awardsHtml: '',
     legalOneAwards: [],
+    headOffice: null,
     video: '',
     videoPoster: '',
     videoCaption: '',
@@ -150,6 +151,8 @@ Page({
     // The website prints "More" once a section holds five rows or more.
     data.offices = detail.offices.slice(0, EMBED_MAX);
     data.moreOffices = detail.offices.length >= EMBED_MAX;
+    // "Head office" is the first cell of the profile counter block.
+    data.headOffice = detail.headOffice || null;
     // The honours endpoint is the website's source; the profile payload keeps a
     // copy so the section still renders when that request fails.
     data.honours = detail.honours.slice(0, EMBED_MAX);

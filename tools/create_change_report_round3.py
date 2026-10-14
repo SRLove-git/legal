@@ -246,6 +246,8 @@ feedback_rows = [
      "Submit deal/case 改为打开官网的 /forms/deal-submission（与官网按钮一致），不再跳转到需要登录的会员中心"),
     ("6", "6. verified page style",
      "验证页严格按官网重做：verified 徽标移到白底（不再压在灰底上）、灰卡与 #00558D→#0095DB 渐变面板的底色与间距逐项对齐官网手机版式，并补上缺失的 Law firm 一行"),
+    ("7", "律所档案少了 Head office",
+     "按官网 displayHeadOffice 的逻辑补上 Head office 一行（城市 / 国家，链接到该办公室），无标记的律所不显示该行；计数区块改为官网的两行四格"),
 ]
 add_table(doc, ["序号", "客户反馈", "处理结果"], feedback_rows, [Cm(1.1), Cm(5.3), Cm(9.0)], first_column_centered=True)
 
@@ -335,12 +337,28 @@ add_table(doc, ["项目", "之前", "现在"], verify_rows, [Cm(2.2), Cm(4.6), C
 add_bullet(doc, "线上实测（参考截图中的 v-1788488697394）：Law firm 显示为 Guantao Law Firm，与官网截图一致。")
 add_bullet(doc, "已用与小程序完全相同的一套数值在 WebKit 中复刻该页，并与官网 375 / 390px 的渲染结果并排比对：徽标位置、灰色证书卡、蓝色渐变面板与免责声明的排布一致。")
 
+add_heading(doc, "7. 律所档案补上 Head office", 2)
+add_body(
+    doc,
+    "客户指出律所档案（Grandway Law Offices）少了官网的 Head office 一行。核对官网模板后确认："
+    "官网用 displayHeadOffice 助手取 lawFirmOffices 中 headOffice 为 true 的办公室，"
+    "输出“Head office”标题、城市与国家，并链接到该办公室的档案页；没有任何办公室标记时该行不显示"
+    "（例如 Davis Polk、One Asia Lawyers）。小程序此前只渲染了 Offices / Partners / Lawyers 三个计数。",
+)
+add_bullet(doc, "接口层在 office 列表上保留 headOffice 标记，并输出 headOffice（id、name、city、location）；"
+                "仅当存在被标记的办公室时才有值，与官网的判断完全一致。")
+add_bullet(doc, "律所档案的计数区块改为官网的两列两行：Head office（如“Beijing, China”）与 Offices 一行，"
+                "Partners 与 Lawyers 一行；点击 Head office 进入该办公室档案页（复用原有的 goOffice 跳转）。")
+add_bullet(doc, "计数区块的竖线与下划线改为两行一致（此前只有第一行有），四格排布与官网一致。")
+add_bullet(doc, "线上实测：Grandway headOffice 输出“Beijing, China”（办公室 id 与官网链接一致）；"
+                "无标记的律所（Davis Polk、One Asia Lawyers）不显示该行，与官网一致。")
+
 add_heading(doc, "关键文件", 1)
 file_rows = [
     ("公告列表", "pages/announcements/announcements.wxml\npages/announcements/announcements.js", "删除搜索框；公告改为前端每页 12 条"),
     ("文章详情", "services/article-body.js\nservices/inline-images.js\npages/article-detail/article-detail.js\npages/article-detail/article-detail.wxml\npages/article-detail/article-detail.wxss", "正文按官网改为原生块渲染，链接内嵌；base64 正文图片落到本地文件"),
     ("web-view 兜底页", "pages/webview/webview.js\npages/webview/webview.wxml\npages/webview/webview.wxss", "不再显示技术报错"),
-    ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml", "新增 legalOneAwards 字段与 LegalOne awards 区块"),
+    ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml\npages/lawfirm-detail/lawfirm-detail.wxss", "新增 legalOneAwards 区块与 Head office 行（计数区块改为两行四格）"),
     ("交易提交入口", "pages/deals/deals.js\npages/deal-case-intro/deal-case-intro.js", "打开官网 deal submission 表单"),
     ("验证页", "pages/verification-detail/verification-detail.js\npages/verification-detail/verification-detail.wxml\npages/verification-detail/verification-detail.wxss", "严格按官网重做版式（徽标、灰卡、渐变面板）与 Law firm 行"),
 ]
@@ -353,6 +371,7 @@ validation_rows = [
     ("律所奖项字段", "通过", "以线上接口核对 JunHe：legalOneAwards 3 条，字段与跳转文章 id 完整"),
     ("文章正文转换", "通过", "以 36 篇线上文章核对：全部转为原生块；4 篇奖项长名单仍走 rich-text；示例报道生成 10 个块（含 3 条列表项、2 张图片、5 个正文链接）"),
     ("页面数据体积", "通过", "示例报道（CMS 正文 1.4 MB）的页面 data 由约 1.4 MB 降到约 7 KB，两张 base64 图片写入本地文件后再引用"),
+    ("律所 Head office", "通过", "线上核对 Grandway：headOffice 输出 Beijing, China 且办公室 id 与官网链接一致；抽查 100 家律所，仅 1 家有计数但无 headOffice 标记，小程序与官网一样不显示该行"),
     ("验证页字段", "通过", "以截图中的 v-1788488697394 运行页面逻辑，Law firm 输出 Guantao Law Firm"),
     ("验证页版式", "通过", "在 WebKit 中以 375 / 390px 渲染官网验证页读取计算样式，再用同一套数值复刻小程序页面并排比对，徽标位置、灰卡与渐变面板一致"),
     ("提交入口", "通过", "两处按钮均生成 /pages/webview/webview?url=https%3A%2F%2Fwww.legaloneglobal.com%2Fforms%2Fdeal-submission"),
@@ -368,6 +387,7 @@ add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，�
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")
 add_bullet(doc, "验证页：抽查若干条验证记录，确认 verified 徽标位于白色页面上（不在灰色证书卡内）、灰色证书卡与蓝色渐变面板的底色和间距与官网一致，Law firm 一行显示正常。")
+add_bullet(doc, "律所档案：抽查 Grandway Law Offices，确认计数区块第一格为 Head office（Beijing, China）并可进入该办公室档案页；再抽查一家没有 headOffice 标记的律所，确认该行不出现。")
 
 add_heading(doc, "当前状态", 1)
 add_body(
