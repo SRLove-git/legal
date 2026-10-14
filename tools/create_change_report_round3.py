@@ -237,7 +237,7 @@ feedback_rows = [
     ("1", "公告列表搜索框：可以删除？无法使用",
      "已删除搜索框。核对接口后确认该搜索不可能生效（接口忽略 search 参数）；删除后列表仍按每页 12 条分页加载"),
     ("2", "文章详情：之前提过的问题依然存在，请检查并移除成普通 hyperlink",
-     "已移除带边框与箭头的卡片样式和“Open in mini program”标题，改为普通超链接（链接蓝、加下划线、每行一条）"),
+     "已按官网重做：正文改为原生块渲染（段落 / 列表 / 正文图片 / 居中的 - END -），正文里的链接回到句子中且不带下划线；原来标题下的链接清单仅作为兜底保留"),
     ("3", "出现了不该显示给用家的 error msg",
      "web-view 兜底页不再显示 web-view load failed due to not in domain list 等技术信息，改为一句用户可读的说明；原始报错只写入 console 供支持与测试排查"),
     ("4", "左为官网资料展示，右为微信小程序，微信小程序少显示了必要资料",
@@ -264,15 +264,24 @@ add_bullet(doc, "接口会一次性返回全部 100 条公告，因此公告列�
                 "页面上原有的 Learn more 按钮永远不会出现。")
 add_bullet(doc, "线上实测：进入公告页显示 12 条并可继续加载，点击 Learn more 后增加到 24 条。")
 
-add_heading(doc, "2. 文章详情的外部链接改为普通超链接", 2)
+add_heading(doc, "2. 文章详情：正文按官网渲染，链接回到正文里", 2)
 add_body(
     doc,
-    "文章正文里的第三方链接（CFI.co、翻页杂志等）在小程序里无法内嵌渲染，此前会退化成带蓝色边框、"
-    "右侧箭头的卡片列表，并带一个“Open in mini program”的标题。本次按反馈把这一块还原为普通超链接。",
+    "文章正文此前整段交给 <rich-text> 渲染，而这篇报道的 CMS 正文有 1.4 MB（内嵌两张 base64 图片），"
+    "远超 setData 的 1 MB 限制，正文实际渲染不出来；正文里的第三方链接因此退化成标题下方的链接清单。"
+    "本次把正文改成原生块渲染：段落、列表、正文图片与居中的“- END -”都按官网结构逐块显示，"
+    "链接回到它原本所在的句子里，与官网一致。",
 )
-add_bullet(doc, "删除卡片边框、圆角、内边距、右侧箭头以及“Open in mini program”标题。")
-add_bullet(doc, "链接使用官网链接蓝 #0084BA 并加下划线，字号与正文一致（32rpx），每行一条，符合普通超链接的观感。")
-add_bullet(doc, "点击行为不变，仍在小程序内打开或提示复制链接（第三方域名无法加入业务域名）。")
+add_bullet(doc, "新增 services/article-body.js：把 CMS HTML 解析成原生块（段落 / 列表 / 图片），段落内保留粗体、"
+                "斜体与链接（链接按 URL 匹配回 externalLinks，点击行为不变）。")
+add_bullet(doc, "段落样式取自官网：Helvetica 16.896px / 行距 20.2752px、颜色 #2D2D2D、段间距 25.34px、字距 0.6px；"
+                "列表文字缩进 22.17px；链接为官网链接蓝 #0084BA 且不加下划线（官网本来就不带下划线）。")
+add_bullet(doc, "正文里的 base64 图片由新的 services/inline-images.js 写入小程序本地用户目录，再用 <image> 显示，"
+                "并按 CMS 标注的尺寸（100×100）与官网一样并排显示；该报道的页面 data 由约 1.4 MB 降到约 7 KB。")
+add_bullet(doc, "只有正文无法安全转换的内容（联赛表格、翻页书、<picture>）与奖项长名单仍走原来的 rich-text 路径，"
+                "保证 Deals of the Year、Elite 100 等页面不受影响。")
+add_bullet(doc, "顺带对齐官网的细节：标签在左、编号在右（官网 .list-label 与 .reference 的排布），标题 29.568px、行距 1.0。")
+add_bullet(doc, "链接点击后的行为不变：同域页面在小程序内打开，第三方域名提示复制链接到浏览器。")
 
 add_heading(doc, "3. web-view 兜底页不再显示技术报错", 2)
 add_body(
@@ -329,7 +338,7 @@ add_bullet(doc, "已用与小程序完全相同的一套数值在 WebKit 中复�
 add_heading(doc, "关键文件", 1)
 file_rows = [
     ("公告列表", "pages/announcements/announcements.wxml\npages/announcements/announcements.js", "删除搜索框；公告改为前端每页 12 条"),
-    ("文章详情", "pages/article-detail/article-detail.wxml\npages/article-detail/article-detail.wxss", "外部链接改为普通超链接"),
+    ("文章详情", "services/article-body.js\nservices/inline-images.js\npages/article-detail/article-detail.js\npages/article-detail/article-detail.wxml\npages/article-detail/article-detail.wxss", "正文按官网改为原生块渲染，链接内嵌；base64 正文图片落到本地文件"),
     ("web-view 兜底页", "pages/webview/webview.js\npages/webview/webview.wxml\npages/webview/webview.wxss", "不再显示技术报错"),
     ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml", "新增 legalOneAwards 字段与 LegalOne awards 区块"),
     ("交易提交入口", "pages/deals/deals.js\npages/deal-case-intro/deal-case-intro.js", "打开官网 deal submission 表单"),
@@ -342,6 +351,8 @@ validation_rows = [
     ("JavaScript 语法", "通过", "services/api.js 与涉及的 6 个页面脚本均通过 node --check"),
     ("公告列表", "通过", "以线上接口运行页面逻辑：首页 12 条、hasMore 为真，点击 Learn more 后增加到 24 条；搜索框已移除"),
     ("律所奖项字段", "通过", "以线上接口核对 JunHe：legalOneAwards 3 条，字段与跳转文章 id 完整"),
+    ("文章正文转换", "通过", "以 36 篇线上文章核对：全部转为原生块；4 篇奖项长名单仍走 rich-text；示例报道生成 10 个块（含 3 条列表项、2 张图片、5 个正文链接）"),
+    ("页面数据体积", "通过", "示例报道（CMS 正文 1.4 MB）的页面 data 由约 1.4 MB 降到约 7 KB，两张 base64 图片写入本地文件后再引用"),
     ("验证页字段", "通过", "以截图中的 v-1788488697394 运行页面逻辑，Law firm 输出 Guantao Law Firm"),
     ("验证页版式", "通过", "在 WebKit 中以 375 / 390px 渲染官网验证页读取计算样式，再用同一套数值复刻小程序页面并排比对，徽标位置、灰卡与渐变面板一致"),
     ("提交入口", "通过", "两处按钮均生成 /pages/webview/webview?url=https%3A%2F%2Fwww.legaloneglobal.com%2Fforms%2Fdeal-submission"),
@@ -352,7 +363,7 @@ add_table(doc, ["检查项", "状态", "说明"], validation_rows, [Cm(3.0), Cm(
 
 add_heading(doc, "上线前检查", 1)
 add_bullet(doc, "公告列表：确认搜索框已不再出现，列表首屏 12 条、Learn more 可继续加载，加载完毕后显示 No more results。")
-add_bullet(doc, "文章详情：确认第三方链接显示为蓝色下划线超链接，点击后可打开或提示复制链接。")
+add_bullet(doc, "文章详情：确认正文段落、列表与正文图片正常显示，链接位于句子中、为官网链接蓝且不带下划线，点击后可打开或提示复制链接；页面底部为居中的“- END -”。")
 add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，确认页面上只出现用户可读说明，没有技术报错。")
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")

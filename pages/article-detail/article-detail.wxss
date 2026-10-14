@@ -5,15 +5,17 @@
 }
 
 .detail-labels {
+  display: flex;
+  align-items: center;
   margin-bottom: 15rpx;
 }
 
 .detail-reference {
   display: inline-block;
-  color: #303030;
-  font-size: 24rpx;
-  padding: 6rpx 12rpx 6rpx 0;
-  margin-right: 12rpx;
+  margin-left: auto;
+  color: #2d2d2d;
+  font-size: 27rpx;
+  padding: 6rpx 0;
 }
 
 .detail-label {
@@ -34,16 +36,16 @@
 }
 
 .detail-title {
-  font-size: 57rpx;
+  font-size: 59rpx;
   font-weight: 700;
   color: #2d2d2d;
-  line-height: 1.05;
-  margin: 19rpx 0 15rpx;
+  line-height: 1;
+  margin: 20rpx 0;
 }
 
 .detail-meta {
   margin: 6rpx 0 38rpx;
-  font-size: 22rpx;
+  font-size: 27rpx;
   color: #2d2d2d;
 }
 
@@ -72,18 +74,100 @@
   white-space: pre-wrap;
 }
 
-/* Article web links that cannot be placed back inside the body text. They now
-   read as ordinary hyperlinks (blue, underlined, one per line) instead of the
-   bordered "Open in mini program" rows the client asked to remove. */
+/* Article body rebuilt from the CMS HTML (services/article-body.js) so it reads
+   like the website: Helvetica 16.896px / 20.2752px, #2D2D2D, 25.34px between
+   paragraphs, a disc list indented 22.17px and links in #0084BA without an
+   underline. Values are the site's computed styles at phone width, at 2rpx per
+   px. */
+.article-body {
+  color: #2d2d2d;
+}
+
+.article-p {
+  margin: 0 0 50rpx;
+  font-size: 34rpx;
+  line-height: 1.2;
+  letter-spacing: 1.2rpx;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.article-p.is-center {
+  text-align: center;
+}
+
+/* The website indents list text by 22.17px and draws the disc in front of it,
+   so the marker lives in this fixed-width slot instead of a real list. */
+.article-list {
+  margin: 0 0 30rpx;
+}
+
+.article-li {
+  display: flex;
+  align-items: flex-start;
+  font-size: 34rpx;
+  line-height: 1.2;
+  letter-spacing: 1.2rpx;
+}
+
+.article-li-mark {
+  flex: none;
+  width: 46rpx;
+}
+
+.article-li-text {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.article-image {
+  display: block;
+  width: 100%;
+  margin: 0 0 50rpx;
+}
+
+/* Pictures the CMS sizes (the inline award badges) keep that size and sit next
+   to each other, as the website's floated images do. */
+.article-image.is-sized {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 16rpx 30rpx 0;
+}
+
+.article-link {
+  color: #0084ba;
+  word-break: break-word;
+}
+
+.article-link.is-bold {
+  font-weight: 700;
+}
+
+.article-link-hover {
+  opacity: 0.72;
+}
+
+.article-strong {
+  font-weight: 700;
+}
+
+.article-em {
+  font-style: italic;
+}
+
+/* Fallback list for articles whose body could not be rebuilt: the same plain
+   hyperlinks, without the underline the website does not use. */
 .detail-external-links {
   margin: 0 0 48rpx;
-  font-size: 32rpx;
-  line-height: 1.5;
+  font-size: 34rpx;
+  line-height: 1.2;
+  letter-spacing: 1.2rpx;
 }
 
 .detail-external-link {
   color: #0084ba;
-  text-decoration: underline;
   word-break: break-word;
 }
 
@@ -92,27 +176,6 @@
 }
 
 .detail-external-link-hover {
-  opacity: 0.72;
-}
-
-.detail-inline-link-row {
-  margin: 0 0 48rpx;
-  color: #303030;
-  font-size: 32rpx;
-  line-height: 1.5;
-  text-align: left;
-}
-
-.detail-inline-link-prefix-bold {
-  font-weight: 700;
-}
-
-.detail-inline-link {
-  color: #0084ba;
-  word-break: break-word;
-}
-
-.detail-inline-link-hover {
   opacity: 0.72;
 }
 

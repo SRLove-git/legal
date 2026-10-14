@@ -4,6 +4,7 @@ const api = require('../../services/api.js');
 const fb = require('../../services/fallback.js');
 const contentActions = require('../../services/content-actions.js');
 const h5 = require('../../services/h5.js');
+const inlineImages = require('../../services/inline-images.js');
 
 // The website shows "Awards" in the crumb for award write-ups and "Articles" for
 // everything else; it decides this from the article's section.
@@ -37,6 +38,12 @@ Page({
     };
     if (id) {
       api.getArticleDetail(id).then(function (item) {
+        // Body pictures arrive as base64 data URIs; hand them to the page as
+        // local files, because Page.data cannot carry megabytes of base64.
+        return (item ? inlineImages.materialize(item.bodyBlocks) : Promise.resolve()).then(function () {
+          return item;
+        });
+      }).then(function (item) {
         self.setData(Object.assign({ item: item || null }, crumbFor(item)));
         if (item) self.configureContentActions('article', item.id || id,
           '/articles/' + encodeURIComponent(item.id || id), 'article');

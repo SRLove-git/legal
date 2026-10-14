@@ -1,4 +1,18 @@
 <import src="../../templates/content-actions.wxml" />
+<template name="article-runs">
+  <block wx:for="{{parts}}" wx:for-item="part" wx:key="id">
+    <text
+      wx:if="{{part.linkIndex >= 0}}"
+      class="article-link {{part.bold ? 'is-bold' : ''}}"
+      hover-class="article-link-hover"
+      bindtap="openExternalLink"
+      data-index="{{part.linkIndex}}"
+    >{{part.text}}</text>
+    <text wx:elif="{{part.bold}}" class="article-strong">{{part.text}}</text>
+    <text wx:elif="{{part.italic}}" class="article-em">{{part.text}}</text>
+    <text wx:else>{{part.text}}</text>
+  </block>
+</template>
 <template name="award-block">
   <rich-text class="award-rich" wx:if="{{block.type === 'html' && block.html}}" nodes="{{block.html}}"></rich-text>
   <view class="award-winner" wx:elif="{{block.type === 'winner'}}">
@@ -49,8 +63,8 @@
   </view>
   <view class="detail">
     <view class="detail-labels" wx:if="{{item.refNo || item.labels.length}}">
-      <text class="detail-reference" wx:if="{{item.refNo}}">{{item.refNo}}</text>
       <text class="detail-label" wx:for="{{item.labels}}" wx:key="*this">{{item}}</text>
+      <text class="detail-reference" wx:if="{{item.refNo}}">{{item.refNo}}</text>
     </view>
     <view class="detail-title">{{item.title}}</view>
     <view class="detail-meta">
@@ -73,23 +87,26 @@
         data-index="{{linkIndex}}"
       >{{link.label}}</view>
     </view>
-    <block wx:if="{{item.bodyBlocks && item.bodyBlocks.length}}">
+    <view class="article-body" wx:if="{{item.bodyBlocks && item.bodyBlocks.length}}">
       <block wx:for="{{item.bodyBlocks}}" wx:key="id" wx:for-item="block">
-        <rich-text class="detail-rich" wx:if="{{block.type === 'html'}}" nodes="{{block.html}}"></rich-text>
-        <view class="detail-inline-link-row" wx:elif="{{block.type === 'externalLink'}}">
-          <block wx:for="{{block.parts}}" wx:for-item="part" wx:key="id">
-            <text
-              wx:if="{{part.linkIndex >= 0}}"
-              class="detail-inline-link"
-              hover-class="detail-inline-link-hover"
-              bindtap="openExternalLink"
-              data-index="{{part.linkIndex}}"
-            >{{part.text}}</text>
-            <text wx:else class="{{part.bold ? 'detail-inline-link-prefix-bold' : ''}}">{{part.text}}</text>
-          </block>
+        <view class="article-p {{block.align === 'center' ? 'is-center' : ''}}" wx:if="{{block.type === 'paragraph'}}">
+          <template is="article-runs" data="{{parts: block.parts}}" />
         </view>
+        <view class="article-list" wx:elif="{{block.type === 'list'}}">
+          <view class="article-li" wx:for="{{block.items}}" wx:for-item="listItem" wx:key="id">
+            <text class="article-li-mark">{{block.ordered ? '' : '•'}}</text>
+            <view class="article-li-text"><template is="article-runs" data="{{parts: listItem.parts}}" /></view>
+          </view>
+        </view>
+        <image
+          wx:elif="{{block.type === 'image' && block.src}}"
+          class="article-image {{block.width ? 'is-sized' : ''}}"
+          style="{{block.width ? 'width:' + block.width * 2 + 'rpx;height:' + block.height * 2 + 'rpx;' : ''}}"
+          src="{{block.src}}"
+          mode="{{block.width ? 'aspectFit' : 'widthFix'}}"
+        />
       </block>
-    </block>
+    </view>
     <rich-text class="detail-rich" wx:elif="{{item.bodyHtml}}" nodes="{{item.bodyHtml}}"></rich-text>
     <view class="detail-body" wx:elif="{{item.body}}">{{item.body}}</view>
 
