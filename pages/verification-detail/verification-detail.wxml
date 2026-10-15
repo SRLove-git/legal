@@ -59,4 +59,5 @@
     </view>
   </view>
 </view>
-<site-footer />
+<!-- The website's verification page ends with the disclaimer: it carries no
+     site footer, so neither does this page. -->

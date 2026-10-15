@@ -9,7 +9,16 @@
 // Award write-ups keep the <rich-text> path in services/rich-text.js because
 // their league tables and winner cards depend on it, so api.js only calls this
 // converter for plain articles.
+const richText = require('./rich-text.js');
+
 const ORIGIN = 'https://www.legaloneglobal.com';
+
+// Width of the article column in CSS pixels. The website renders every body
+// picture as a normal <img>, so the browser caps it at the column width
+// (max-width:100%) while keeping its aspect ratio; a 500px infographic is 337px
+// wide on a phone. Pictures that already fit keep the CMS's own pixel size, the
+// way the inline 100px award badges do.
+const COLUMN_WIDTH_PX = 339;
 
 const ENTITIES = {
   amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
@@ -46,10 +55,10 @@ function attribute(attributes, name) {
 }
 
 function absolute(url) {
-  const value = String(url || '').trim();
-  if (!value) return '';
-  if (/^(?:https?:|data:)/i.test(value)) return value;
-  return value.charAt(0) === '/' ? ORIGIN + value : ORIGIN + '/' + value.replace(/^\.\//, '');
+  // Shares the CMS URL rules with <rich-text>: the legacy Azure Blob host is
+  // rewritten to the CDN the mini program is allowed to download from, and
+  // paths containing spaces or ampersands are escaped.
+  return richText.toAbsoluteAssetUrl(String(url || '').trim());
 }
 
 // Text runs keep their formatting so the page can render plain, bold, italic
@@ -142,13 +151,14 @@ function imageBlock(attributes) {
   if (!src) return null;
   const width = parseInt(attribute(attributes, 'width'), 10);
   const height = parseInt(attribute(attributes, 'height'), 10);
+  // Only pictures that fit the column keep their declared size; anything wider
+  // fills the column with its own aspect ratio, like the browser does.
+  const sized = width > 0 && width <= COLUMN_WIDTH_PX;
   return {
     type: 'image',
     src: src,
-    // The CMS keeps the picture's pixel size on the tag; the website renders
-    // those inline badges at exactly that size.
-    width: width > 0 ? width : 0,
-    height: height > 0 ? height : 0
+    width: sized ? width : 0,
+    height: sized ? height : 0
   };
 }
 

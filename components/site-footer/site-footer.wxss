@@ -1,4 +1,8 @@
 .footer {
+  /* The page is a flex column (app.wxss): this keeps the footer at the bottom
+     of the screen while a page's content is still loading, instead of letting
+     it sit directly under the header. */
+  margin-top: auto;
   background: #00558d;
   padding: 50rpx 0 40rpx;
   border-radius: 20rpx 20rpx 0 0;

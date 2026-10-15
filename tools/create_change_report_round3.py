@@ -248,6 +248,10 @@ feedback_rows = [
      "验证页严格按官网重做：verified 徽标移到白底（不再压在灰底上）、灰卡与 #00558D→#0095DB 渐变面板的底色与间距逐项对齐官网手机版式，并补上缺失的 Law firm 一行"),
     ("7", "律所档案少了 Head office",
      "按官网 displayHeadOffice 的逻辑补上 Head office 一行（城市 / 国家，链接到该办公室），无标记的律所不显示该行；计数区块的排布与配色（蓝标题、加粗数值、竖线与首行分隔线）一并对齐官网"),
+    ("8", "跳转时经常先出现只有页脚的页面",
+     "page 改为撑满一屏的纵向 flex 容器、页脚 margin-top:auto：加载期间页脚固定在屏幕底部，而不是顶到页头下面；与官网短页面（/sign_in）的页脚定位一致"),
+    ("9", "文章正文图片被裁切",
+     "正文图片与浏览器一样按栏宽封顶：超过栏宽的信息图等比缩放到栏宽，小于栏宽的徽章 / 分隔条保留原尺寸；旧 Blob 域图片地址改写为官网 CDN"),
 ]
 add_table(doc, ["序号", "客户反馈", "处理结果"], feedback_rows, [Cm(1.1), Cm(5.3), Cm(9.0)], first_column_centered=True)
 
@@ -353,10 +357,38 @@ add_bullet(doc, "计数区块的版式一并对齐官网 .lawfirm-info：格子�
 add_bullet(doc, "线上实测：Grandway headOffice 输出“Beijing, China”（办公室 id 与官网链接一致）；"
                 "无标记的律所（Davis Polk、One Asia Lawyers）不显示该行，与官网一致。")
 
+add_heading(doc, "8. 跳转时先出现的“只有页脚”的页面", 2)
+add_body(
+    doc,
+    "客户反馈：点击跳转时经常先出现一个只有页脚的页面。原因是数据页在等接口返回时，页面里只有页头与页脚"
+    "（正文是 wx:if，数据没到就不渲染），块级布局下页脚会直接贴在页头下面，看起来就是一整块页脚加下方空白。",
+)
+add_bullet(doc, "app.wxss 让 page 成为撑满一屏的纵向 flex 容器，页脚加上 margin-top:auto：数据未到时页脚固定在屏幕底部，"
+                "内容到达后自然把页脚推到正文之后，任何页面都不会再让页脚顶到页头下面。")
+add_bullet(doc, "这与官网一致：实测官网短页面（/sign_in）的页面高度等于视口高度、页脚贴在视口底部，"
+                "即官网本身就是把页脚固定在底部的。")
+add_bullet(doc, "另外核对发现官网的验证详情页没有页脚（实测该页没有 ISO / ISSN / 页脚元素，正文以免责声明结束），"
+                "小程序验证页也去掉了页脚，与该页保持一致。")
+
+add_heading(doc, "9. 文章正文图片被右侧裁切", 2)
+add_body(
+    doc,
+    "客户反馈：正文里的图有问题（Humanoid robotics 一文的信息图右侧被切掉）。原因是 CMS 在图片标签上标了像素尺寸"
+    "（两张信息图为 width/height=500），小程序按标注尺寸固定渲染成 1000rpx（约 520px），超过屏宽后被裁切；"
+    "官网把正文图片当普通 <img> 处理，浏览器按 max-width:100% 缩放到栏宽——实测 500px 的图在官网渲染为 337.5px 的正方形。",
+)
+add_bullet(doc, "正文图片改为与浏览器一致：不超过栏宽（339px）的图片保留 CMS 标注尺寸（例如 100×100 的奖项徽章、291×36 的分隔条），"
+                "超过栏宽的图片按栏宽等比显示（width:100% + widthFix），不再裁切。")
+add_bullet(doc, "CMS 中指向旧 Blob 域（storelegaloneprod.blob.core.windows.net）的图片地址改为官网 CDN，"
+                "与 rich-text 共用同一套 URL 规则，否则小程序侧无法下载该图。")
+add_bullet(doc, "线上核对 Humanoid robotics 一文：27 个正文块，两张信息图改为整栏宽显示，291×36 分隔条保留原尺寸，"
+                "base64 图片仍写入本地文件后再引用，页面 data 约 15 KB。")
+
 add_heading(doc, "关键文件", 1)
 file_rows = [
     ("公告列表", "pages/announcements/announcements.wxml\npages/announcements/announcements.js", "删除搜索框；公告改为前端每页 12 条"),
     ("文章详情", "services/article-body.js\nservices/inline-images.js\npages/article-detail/article-detail.js\npages/article-detail/article-detail.wxml\npages/article-detail/article-detail.wxss", "正文按官网改为原生块渲染，链接内嵌；base64 正文图片落到本地文件"),
+    ("页面框架与页脚", "app.wxss\ncomponents/site-footer/site-footer.wxss", "page 改为撑满一屏的 flex 列，页脚固定在底部"),
     ("web-view 兜底页", "pages/webview/webview.js\npages/webview/webview.wxml\npages/webview/webview.wxss", "不再显示技术报错"),
     ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml\npages/lawfirm-detail/lawfirm-detail.wxss", "新增 legalOneAwards 区块与 Head office 行（计数区块改为两行四格）"),
     ("交易提交入口", "pages/deals/deals.js\npages/deal-case-intro/deal-case-intro.js", "打开官网 deal submission 表单"),
@@ -371,6 +403,8 @@ validation_rows = [
     ("律所奖项字段", "通过", "以线上接口核对 JunHe：legalOneAwards 3 条，字段与跳转文章 id 完整"),
     ("文章正文转换", "通过", "以 36 篇线上文章核对：全部转为原生块；4 篇奖项长名单仍走 rich-text；示例报道生成 10 个块（含 3 条列表项、2 张图片、5 个正文链接）"),
     ("页面数据体积", "通过", "示例报道（CMS 正文 1.4 MB）的页面 data 由约 1.4 MB 降到约 7 KB，两张 base64 图片写入本地文件后再引用"),
+    ("页脚定位", "通过", "以 375×812 复刻空内容页确认页脚位于视口底部；并核对官网 /sign_in 同为页脚贴底（页面高度=视口高度）"),
+    ("文章图片尺寸", "通过", "线上核对 Humanoid robotics 一文：500px 信息图改为整栏宽，291×36 分隔条保留原尺寸，旧 Blob 地址改写为 CDN"),
     ("律所 Head office", "通过", "线上核对 Grandway：headOffice 输出 Beijing, China 且办公室 id 与官网链接一致；抽查 100 家律所，仅 1 家有计数但无 headOffice 标记，小程序与官网一样不显示该行"),
     ("验证页字段", "通过", "以截图中的 v-1788488697394 运行页面逻辑，Law firm 输出 Guantao Law Firm"),
     ("验证页版式", "通过", "在 WebKit 中以 375 / 390px 渲染官网验证页读取计算样式，再用同一套数值复刻小程序页面并排比对，徽标位置、灰卡与渐变面板一致"),
@@ -387,6 +421,8 @@ add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，�
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")
 add_bullet(doc, "验证页：抽查若干条验证记录，确认 verified 徽标位于白色页面上（不在灰色证书卡内）、灰色证书卡与蓝色渐变面板的底色和间距与官网一致，Law firm 一行显示正常。")
+add_bullet(doc, "页面跳转：从列表进入任一详情页，确认加载过程中页脚位于屏幕底部，不会出现“整页只有页脚”的画面。")
+add_bullet(doc, "文章详情：确认正文中的信息图完整显示、未被右侧裁切，奖项徽章等小图保持原尺寸。")
 add_bullet(doc, "律所档案：抽查 Grandway Law Offices，确认 Head office（Beijing, China）为计数区第一格、标题为官网链接蓝、竖线与首行分隔线位置正确，并可进入该办公室档案页；再抽查一家没有 headOffice 标记的律所，确认该行不出现。")
 
 add_heading(doc, "当前状态", 1)

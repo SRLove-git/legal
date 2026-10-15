@@ -1,4 +1,11 @@
 page {
+  /* Every screen is a column that fills the viewport. Data-driven pages render
+     only their header and the shared footer until their payload arrives, and
+     as plain blocks that let the footer slide up under the header; as flex
+     items the footer's auto top margin keeps it pinned to the bottom. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background: #ffffff;
   color: #2d2d2d;
   /* Matches the website stack: Helvetica Neue for Latin, then CJK heiti fallbacks. */
