@@ -12,6 +12,7 @@
     <view class="search-icon" bindtap="onSearch"></view>
   </view>
   <view class="list">
+    <view class="list-loading" wx:if="{{loading && !items.length}}">Loading...</view>
     <view class="list-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
       <view class="entry-labels" wx:if="{{item.labels.length}}">
         <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>

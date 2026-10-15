@@ -1,6 +1,6 @@
 <site-header />
 <view class="verification-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
-  <view class="verification-loading" wx:if="{{loading}}">Loading...</view>
+  <view class="verification-loading page-loading" wx:if="{{loading}}">Loading...</view>
   <view class="verification-error" wx:elif="{{error}}">{{error}}</view>
 
   <view class="certificate" wx:elif="{{verification}}">

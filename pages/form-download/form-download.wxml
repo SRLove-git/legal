@@ -7,7 +7,7 @@
   </view>
   <view class="form">
     <view class="form-title">Form download</view>
-    <view wx:if="{{loading}}" class="form-hint">Loading…</view>
+    <view wx:if="{{loading}}" class="form-hint page-loading">Loading…</view>
     <view wx:elif="{{error}}" class="form-error">{{error}}</view>
     <block wx:else>
       <view class="fd-group" wx:for="{{groups}}" wx:for-item="g" wx:key="jurisdiction">

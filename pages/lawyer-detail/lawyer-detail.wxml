@@ -8,7 +8,7 @@
     <text class="breadcrumb-current">{{item.name}}</text>
   </view>
 
-  <view class="profile-loading" wx:if="{{loading}}">Loading...</view>
+  <view class="profile-loading page-loading" wx:if="{{loading}}">Loading...</view>
   <view class="lawyer-detail" wx:if="{{item}}">
     <view class="lawyer-meta">
       <text class="lawyer-updated" wx:if="{{item.updated}}">Last updated: {{item.updated}}</text>

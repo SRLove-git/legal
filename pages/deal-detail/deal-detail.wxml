@@ -1,5 +1,7 @@
 <import src="../../templates/content-actions.wxml" />
 <site-header />
+<view class="page-loading" wx:if="{{loading}}">Loading...</view>
+<view class="page-state" wx:elif="{{unavailable}}">This deal/case is unavailable right now. Please try again later.</view>
 <view class="subpage" wx:if="{{item}}" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="breadcrumb">
     <image class="breadcrumb-icon" src="https://www.legaloneglobal.com/images/court-icon-4@2x.png" bindtap="goHome" />

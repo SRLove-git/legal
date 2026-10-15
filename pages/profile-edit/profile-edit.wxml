@@ -8,7 +8,7 @@
 
   <view class="form">
     <view class="form-title">{{mode === 'complete' ? 'Complete your profile' : 'Update profile'}}</view>
-    <view wx:if="{{loading}}" class="form-hint">Loading…</view>
+    <view wx:if="{{loading}}" class="form-hint page-loading">Loading…</view>
 
     <block wx:else>
       <view class="form-field">

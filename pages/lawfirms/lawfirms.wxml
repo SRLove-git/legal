@@ -65,6 +65,7 @@
   <view class="list-body">
     <view class="list-heading"><view class="list-heading-dot"></view>Recently updated profiles</view>
     <view class="list">
+      <view class="list-loading" wx:if="{{loading && !items.length}}">Loading...</view>
       <view class="firm-row" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-name="{{item.name}}">
         <view class="firm-row-logo-box">
           <image class="firm-row-logo" src="{{item.image}}" mode="aspectFit" />

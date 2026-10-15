@@ -7,7 +7,7 @@
   </view>
   <view class="form">
     <view class="form-title">Change sector</view>
-    <view wx:if="{{loading}}" class="form-hint">Loading…</view>
+    <view wx:if="{{loading}}" class="form-hint page-loading">Loading…</view>
     <block wx:else>
       <view class="form-hint">Current sector: {{current || 'Not set'}}</view>
       <view class="form-error" wx:if="{{blocked}}">You can change sector once every 30 days. Next allowed: {{nextAllowed}}.</view>

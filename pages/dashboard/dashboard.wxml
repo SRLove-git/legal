@@ -2,7 +2,7 @@
 
 <view class="md-page" style="padding-top:calc(88rpx + {{statusBarHeight}}px);">
   <view class="md-body">
-    <view class="md-loading" wx:if="{{loading}}">Loading dashboard...</view>
+    <view class="md-loading page-loading" wx:if="{{loading}}">Loading dashboard...</view>
     <block wx:else>
       <view class="md-welcome">{{greeting || 'Welcome'}}</view>
       <view class="md-load-error" wx:if="{{profileError}}">{{profileError}}</view>

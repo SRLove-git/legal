@@ -8,7 +8,7 @@
     <text class="breadcrumb-current">{{item.name}}</text>
   </view>
 
-  <view class="profile-loading" wx:if="{{loading}}">Loading...</view>
+  <view class="profile-loading page-loading" wx:if="{{loading}}">Loading...</view>
 
   <view class="lawfirm-detail" wx:if="{{item}}">
     <view class="firm-ref" wx:if="{{item.refNo}}">Ref.: {{item.refNo}}</view>

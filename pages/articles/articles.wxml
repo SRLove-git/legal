@@ -56,6 +56,7 @@
     <block wx:if="{{filtered}}">
       <view class="list-heading" wx:if="{{heading}}"><view class="list-heading-dot"></view>{{heading}}</view>
       <view class="list">
+        <view class="list-loading" wx:if="{{loading && !results.length}}">Loading...</view>
         <view class="list-entry" wx:for="{{results}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-title="{{item.title}}">
           <view class="entry-labels" wx:if="{{item.labels.length}}">
             <text class="entry-label" wx:for="{{item.labels}}" wx:for-item="lb" wx:key="*this">{{lb}}</text>

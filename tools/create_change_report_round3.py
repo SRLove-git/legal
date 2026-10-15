@@ -252,6 +252,9 @@ feedback_rows = [
      "page 改为撑满一屏的纵向 flex 容器、页脚 margin-top:auto：加载期间页脚固定在屏幕底部，而不是顶到页头下面；与官网短页面（/sign_in）的页脚定位一致"),
     ("9", "文章正文图片被裁切",
      "正文图片与浏览器一样按栏宽封顶：超过栏宽的信息图等比缩放到栏宽，小于栏宽的徽章 / 分隔条保留原尺寸；旧 Blob 域图片地址改写为官网 CDN"),
+    ("10", "数据页需要加载中占位",
+     "共用 .page-loading（撑满一屏、居中 Loading...，页脚落在首屏外）套用到 12 个已有 Loading 文案的页面；"
+     "6 个列表页增加首屏加载行；文章与交易详情页补上 loading / unavailable 状态"),
 ]
 add_table(doc, ["序号", "客户反馈", "处理结果"], feedback_rows, [Cm(1.1), Cm(5.3), Cm(9.0)], first_column_centered=True)
 
@@ -370,6 +373,20 @@ add_bullet(doc, "这与官网一致：实测官网短页面（/sign_in）的页�
 add_bullet(doc, "另外核对发现官网的验证详情页没有页脚（实测该页没有 ISO / ISSN / 页脚元素，正文以免责声明结束），"
                 "小程序验证页也去掉了页脚，与该页保持一致。")
 
+add_heading(doc, "8.1 数据页的“加载中”占位", 2)
+add_body(
+    doc,
+    "按贵方要求，数据页在等待接口期间显示加载中占位，而不是空白页面。",
+)
+add_bullet(doc, "新增共用样式 .page-loading：撑满一屏、垂直居中显示 Loading...，页脚因此落在首屏之外；"
+                "已有 Loading 文案的 12 个页面（账号、公告详情、切换 sector、仪表盘、表单下载、律所档案、办公室、律师档案、"
+                "资料编辑、验证页等）直接套用该样式。")
+add_bullet(doc, "列表页（公告 / 文章 / 奖项 / 交易 / 律所 / 亮点）新增首屏加载行 .list-loading，"
+                "在首批结果返回前于列表区域显示 Loading...，不会再出现空白列表。")
+add_bullet(doc, "文章详情与交易详情此前没有任何加载状态，本次补上 loading / unavailable 两种状态："
+                "加载中显示 Loading...，取不到数据时显示“暂时无法显示”，不再是不明所以的空白页。")
+add_bullet(doc, "以 375×812 复刻确认：加载期间只显示页头与居中的 Loading...，页脚被推到首屏之外；数据到达后恢复正常布局。")
+
 add_heading(doc, "9. 文章正文图片被右侧裁切", 2)
 add_body(
     doc,
@@ -389,6 +406,7 @@ file_rows = [
     ("公告列表", "pages/announcements/announcements.wxml\npages/announcements/announcements.js", "删除搜索框；公告改为前端每页 12 条"),
     ("文章详情", "services/article-body.js\nservices/inline-images.js\npages/article-detail/article-detail.js\npages/article-detail/article-detail.wxml\npages/article-detail/article-detail.wxss", "正文按官网改为原生块渲染，链接内嵌；base64 正文图片落到本地文件"),
     ("页面框架与页脚", "app.wxss\ncomponents/site-footer/site-footer.wxss", "page 改为撑满一屏的 flex 列，页脚固定在底部"),
+    ("加载中占位", "app.wxss\npages/*/*.wxml（数据页）", "共用 .page-loading / .list-loading，详情页补 loading / unavailable 状态"),
     ("web-view 兜底页", "pages/webview/webview.js\npages/webview/webview.wxml\npages/webview/webview.wxss", "不再显示技术报错"),
     ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml\npages/lawfirm-detail/lawfirm-detail.wxss", "新增 legalOneAwards 区块与 Head office 行（计数区块改为两行四格）"),
     ("交易提交入口", "pages/deals/deals.js\npages/deal-case-intro/deal-case-intro.js", "打开官网 deal submission 表单"),
@@ -403,6 +421,7 @@ validation_rows = [
     ("律所奖项字段", "通过", "以线上接口核对 JunHe：legalOneAwards 3 条，字段与跳转文章 id 完整"),
     ("文章正文转换", "通过", "以 36 篇线上文章核对：全部转为原生块；4 篇奖项长名单仍走 rich-text；示例报道生成 10 个块（含 3 条列表项、2 张图片、5 个正文链接）"),
     ("页面数据体积", "通过", "示例报道（CMS 正文 1.4 MB）的页面 data 由约 1.4 MB 降到约 7 KB，两张 base64 图片写入本地文件后再引用"),
+    ("加载中占位", "通过", "以 375×812 复刻确认加载期间仅显示页头与居中的 Loading...，页脚位于首屏之外；文章 / 交易详情页实测 loading→内容与 unavailable 两条分支"),
     ("页脚定位", "通过", "以 375×812 复刻空内容页确认页脚位于视口底部；并核对官网 /sign_in 同为页脚贴底（页面高度=视口高度）"),
     ("文章图片尺寸", "通过", "线上核对 Humanoid robotics 一文：500px 信息图改为整栏宽，291×36 分隔条保留原尺寸，旧 Blob 地址改写为 CDN"),
     ("律所 Head office", "通过", "线上核对 Grandway：headOffice 输出 Beijing, China 且办公室 id 与官网链接一致；抽查 100 家律所，仅 1 家有计数但无 headOffice 标记，小程序与官网一样不显示该行"),
@@ -421,7 +440,7 @@ add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，�
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")
 add_bullet(doc, "验证页：抽查若干条验证记录，确认 verified 徽标位于白色页面上（不在灰色证书卡内）、灰色证书卡与蓝色渐变面板的底色和间距与官网一致，Law firm 一行显示正常。")
-add_bullet(doc, "页面跳转：从列表进入任一详情页，确认加载过程中页脚位于屏幕底部，不会出现“整页只有页脚”的画面。")
+add_bullet(doc, "页面跳转：从列表进入任一详情页，确认先看到居中的 Loading...、页脚不在首屏内，加载完成后正常显示内容。")
 add_bullet(doc, "文章详情：确认正文中的信息图完整显示、未被右侧裁切，奖项徽章等小图保持原尺寸。")
 add_bullet(doc, "律所档案：抽查 Grandway Law Offices，确认 Head office（Beijing, China）为计数区第一格、标题为官网链接蓝、竖线与首行分隔线位置正确，并可进入该办公室档案页；再抽查一家没有 headOffice 标记的律所，确认该行不出现。")
 

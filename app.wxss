@@ -44,6 +44,39 @@ button::after {
   padding-right: 36rpx;
 }
 
+/* Shown by the data-driven pages while their payload is on the way. It fills
+   the viewport, so the shared footer stays below the fold and the reader sees
+   the loading label instead of an empty page. The doubled class outranks each
+   page's own loading rule, which only sets colours and padding. */
+.page-loading.page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0 40rpx;
+  color: #777777;
+  font-size: 27rpx;
+  text-align: center;
+}
+
+/* "Nothing here" / error line for a page whose data never arrived. */
+.page-state {
+  padding: 200rpx 40rpx 0;
+  color: #777777;
+  font-size: 27rpx;
+  text-align: center;
+}
+
+/* In-list placeholder for the list pages; keeps the list area from looking
+   empty before the first page of results lands. */
+.list-loading {
+  padding: 40rpx 0;
+  color: #777777;
+  font-size: 27rpx;
+  text-align: center;
+}
+
 .link-blue {
   color: #0084ba;
 }

@@ -6,7 +6,7 @@ const contentActions = require('../../services/content-actions.js');
 
 Page({
   behaviors: [safeArea, breadcrumb, contentActions],
-  data: { item: null, related: [], insights: [] },
+  data: { item: null, related: [], insights: [], loading: true, unavailable: false },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
     const title = decodeURIComponent(options.title || '');
@@ -25,13 +25,13 @@ Page({
         item.others = item.others || [];
         item.briefs = item.briefs || [];
       }
-      self.setData({ item: item || null });
+      self.setData({ item: item || null, loading: false, unavailable: !item });
       if (item) self.configureContentActions('deal', item.id || id,
         '/deal/' + encodeURIComponent(item.id || id), 'deal/case');
     };
     if (id) {
       api.getDealDetail(id).then(function (item) {
-        self.setData({ item: item || null });
+        self.setData({ item: item || null, loading: false, unavailable: !item });
         if (item) self.configureContentActions('deal', item.id || id,
           '/deal/' + encodeURIComponent(item.id || id), 'deal/case');
         // The website closes the page with "Expert insights" (the deal's related

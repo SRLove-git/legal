@@ -19,7 +19,7 @@ function crumbFor(item) {
 
 Page({
   behaviors: [safeArea, breadcrumb, contentActions],
-  data: { item: null, promoted: [], related: [], crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles', relatedHeading: 'Related articles' },
+  data: { item: null, promoted: [], related: [], loading: true, unavailable: false, crumbLabel: 'Articles', crumbUrl: '/pages/articles/articles', relatedHeading: 'Related articles' },
   onLoad(options) {
     const id = decodeURIComponent(options.id || '');
     const title = decodeURIComponent(options.title || '');
@@ -32,7 +32,7 @@ Page({
       if (item) {
         item.body = 'This article is published by the LegalOne Editorial Team. The full piece is available on the LegalOne Global website.';
       }
-      self.setData(Object.assign({ item: item || null }, crumbFor(item)));
+      self.setData(Object.assign({ item: item || null, loading: false, unavailable: !item }, crumbFor(item)));
       if (item) self.configureContentActions('article', item.id || id,
         '/articles/' + encodeURIComponent(item.id || id), 'article');
     };
@@ -44,7 +44,7 @@ Page({
           return item;
         });
       }).then(function (item) {
-        self.setData(Object.assign({ item: item || null }, crumbFor(item)));
+        self.setData(Object.assign({ item: item || null, loading: false, unavailable: !item }, crumbFor(item)));
         if (item) self.configureContentActions('article', item.id || id,
           '/articles/' + encodeURIComponent(item.id || id), 'article');
         const relatedRequest = item && item.section === 'Awards' ? api.getRelatedAwards(id) : api.getRelatedArticles(id);

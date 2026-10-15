@@ -7,7 +7,7 @@
   </view>
   <view class="account">
     <view class="account-title">Account Settings</view>
-    <view wx:if="{{loading}}" class="account-loading">Loading…</view>
+    <view wx:if="{{loading}}" class="account-loading page-loading">Loading…</view>
     <block wx:else>
       <view class="account-row" wx:if="{{member.salutation || member.firstName || member.lastName}}">
         <text class="account-label">Name</text>

@@ -8,6 +8,7 @@
   <view class="list-body">
   <view class="list-heading"><view class="list-heading-dot"></view>Announcements</view>
   <view class="list">
+    <view class="list-loading" wx:if="{{loading && !items.length}}">Loading...</view>
     <view class="list-entry announcement-entry" wx:for="{{items}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}" data-url="{{item.url}}" data-headline="{{item.headline}}">
       <view class="entry-labels" wx:if="{{item.type}}">
         <text class="entry-label">{{item.type}}</text>
