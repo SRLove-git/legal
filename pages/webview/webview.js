@@ -11,15 +11,35 @@ function logFailure(message) {
   }
 }
 
+// The website's member pages bounce to their sign-in form with a *relative*
+// redirect (`location.replace("./sign_in")`), so from /member_survey/<id> they
+// land on /member_survey/sign_in — which their own router matches as another
+// member page, whose guard redirects again. Every hop is a real document load,
+// so the mini program's web-view flashes white forever. These member pages need
+// the website's own login (which the mini program cannot hand over), so after a
+// few loads in a row we stop the loop and offer the link for a browser instead.
+const LOOP_WINDOW_MS = 8000;
+const LOOP_LOADS = 3;
+
 Page({
   behaviors: [safeArea],
-  data: { url: '', title: '', failed: false },
+  data: { url: '', title: '', failed: false, loop: false },
   onLoad(options) {
     const url = decodeURIComponent(options.url || '');
-    this.setData({ url: url, title: decodeURIComponent(options.title || '') });
+    this.setData({ url: url, title: decodeURIComponent(options.title || ''), loop: false });
     wx.setNavigationBarTitle({ title: this.data.title || 'LegalOne' });
-    // A blocked 业务域名 can leave the web-view blank without firing an error,
-    // so fall back to the copy-link panel unless the page reports a load.
+    this.startWatch();
+  },
+  onUnload() {
+    if (this.timer) clearTimeout(this.timer);
+  },
+  // A blocked 业务域名 can leave the web-view blank without firing an error,
+  // so fall back to the copy-link panel unless the page reports a load.
+  startWatch() {
+    this.loaded = false;
+    this.loads = 0;
+    this.firstLoadAt = 0;
+    if (this.timer) clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       if (!this.loaded) {
         logFailure('timeout: ' + this.data.url);
@@ -27,12 +47,16 @@ Page({
       }
     }, 12000);
   },
-  onUnload() {
-    if (this.timer) clearTimeout(this.timer);
-  },
   onLoaded() {
+    const now = Date.now();
     this.loaded = true;
     if (this.timer) clearTimeout(this.timer);
+    if (!this.firstLoadAt) this.firstLoadAt = now;
+    this.loads = (this.loads || 0) + 1;
+    if (this.loads >= LOOP_LOADS && now - this.firstLoadAt <= LOOP_WINDOW_MS) {
+      logFailure('reload loop: ' + this.loads + ' loads of ' + this.data.url);
+      this.setData({ failed: true, loop: true });
+    }
   },
   onError(e) {
     // web-view failed (usually an unconfigured 业务域名) — fall back to copy-link.
@@ -44,14 +68,7 @@ Page({
     h5.copy(this.data.url);
   },
   retry() {
-    this.loaded = false;
-    this.setData({ failed: false });
-    if (this.timer) clearTimeout(this.timer);
-    this.timer = setTimeout(() => {
-      if (!this.loaded) {
-        logFailure('timeout: ' + this.data.url);
-        this.setData({ failed: true });
-      }
-    }, 12000);
+    this.setData({ failed: false, loop: false });
+    this.startWatch();
   }
 });

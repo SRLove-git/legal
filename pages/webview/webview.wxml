@@ -1,7 +1,8 @@
 <web-view wx:if="{{url && !failed}}" src="{{url}}" bindload="onLoaded" binderror="onError"></web-view>
 <view class="wv-fallback" wx:if="{{!url || failed}}">
   <view class="wv-title">{{title || 'LegalOne'}}</view>
-  <view class="wv-note">This page cannot be opened inside the mini program. Copy the link and open it in your browser.</view>
+  <view class="wv-note" wx:if="{{loop}}">This page keeps reloading inside the mini program: it needs your LegalOne website login. Copy the link and open it in your browser.</view>
+  <view class="wv-note" wx:else>This page cannot be opened inside the mini program. Copy the link and open it in your browser.</view>
   <view class="wv-url" wx:if="{{url}}">{{url}}</view>
   <view class="wv-btn" wx:if="{{url}}" bindtap="copy">Copy link</view>
   <view class="wv-btn ghost" wx:if="{{url}}" bindtap="retry">Retry</view>

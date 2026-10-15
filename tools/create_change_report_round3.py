@@ -250,11 +250,14 @@ feedback_rows = [
      "按官网 displayHeadOffice 的逻辑补上 Head office 一行（城市 / 国家，链接到该办公室），无标记的律所不显示该行；计数区块的排布与配色（蓝标题、加粗数值、竖线与首行分隔线）一并对齐官网"),
     ("8", "跳转时经常先出现只有页脚的页面",
      "page 改为撑满一屏的纵向 flex 容器、页脚 margin-top:auto：加载期间页脚固定在屏幕底部，而不是顶到页头下面；与官网短页面（/sign_in）的页脚定位一致"),
-    ("9", "文章正文图片被裁切",
-     "正文图片与浏览器一样按栏宽封顶：超过栏宽的信息图等比缩放到栏宽，小于栏宽的徽章 / 分隔条保留原尺寸；旧 Blob 域图片地址改写为官网 CDN"),
-    ("10", "数据页需要加载中占位",
+    ("8.1", "数据页需要加载中占位",
      "共用 .page-loading（撑满一屏、居中 Loading...，页脚落在首屏外）套用到 12 个已有 Loading 文案的页面；"
      "6 个列表页增加首屏加载行；文章与交易详情页补上 loading / unavailable 状态"),
+    ("9", "文章正文图片被裁切",
+     "正文图片与浏览器一样按栏宽封顶：超过栏宽的信息图等比缩放到栏宽，小于栏宽的徽章 / 分隔条保留原尺寸；旧 Blob 域图片地址改写为官网 CDN"),
+    ("10", "点击 E-form 后页面一直闪",
+     "定位为官网会员页的相对地址跳转循环；小程序侧加装防循环保护（8 秒内 3 次重载即停并给出提示与 Copy link）；"
+     "并给出官网侧一行修法建议"),
 ]
 add_table(doc, ["序号", "客户反馈", "处理结果"], feedback_rows, [Cm(1.1), Cm(5.3), Cm(9.0)], first_column_centered=True)
 
@@ -401,12 +404,31 @@ add_bullet(doc, "CMS 中指向旧 Blob 域（storelegaloneprod.blob.core.windows
 add_bullet(doc, "线上核对 Humanoid robotics 一文：27 个正文块，两张信息图改为整栏宽显示，291×36 分隔条保留原尺寸，"
                 "base64 图片仍写入本地文件后再引用，页面 data 约 15 KB。")
 
+add_heading(doc, "10. 点击 E-form 后页面一直闪", 2)
+add_body(
+    doc,
+    "客户反馈：在会员中心 Upcoming schedule 里点击 Survey 的 E-form 后，打开的页面一直闪烁。"
+    "定位后确认是官网会员页自身的跳转循环：官网的会员权限校验在失败时执行 "
+    "window.location.replace(\"./sign_in\")，这是一个相对地址——从 /member_survey/<id> 出发会跳到 "
+    "/member_survey/sign_in，而官网路由表里 member_survey/:id 又会把它当成另一个会员页（id 变成 sign_in），"
+    "于是再次触发校验、再次 replace 到同一地址，形成整页反复重载，web-view 就一直白屏闪烁。",
+)
+add_bullet(doc, "小程序侧加装防循环保护：web-view 在 8 秒内连续加载 3 次即判定为自我重载循环，"
+                "立刻移除 web-view 并显示兜底面板，闪烁停止。")
+add_bullet(doc, "兜底文案针对该情况给出提示：This page keeps reloading inside the mini program: it needs your "
+                "LegalOne website login. Copy the link and open it in your browser.，并提供 Copy link 与 Retry。")
+add_bullet(doc, "正常的多次跳转（例如一次登录跳转后停住）不会触发：只有 8 秒内 3 次以上才判定；Retry 会清零计数重新尝试。")
+add_bullet(doc, "根治需要官网配合改一行：把会员校验失败时的 window.location.replace(\"./sign_in\") 改成绝对地址 "
+                "\"/sign_in\"，循环即消失；如需在小程序内直接使用会员 E-form，还需要官网支持从 URL 接收小程序的登录态"
+                "（官网会员页目前只读自己的 sessionStorage / localStorage）。")
+
 add_heading(doc, "关键文件", 1)
 file_rows = [
     ("公告列表", "pages/announcements/announcements.wxml\npages/announcements/announcements.js", "删除搜索框；公告改为前端每页 12 条"),
     ("文章详情", "services/article-body.js\nservices/inline-images.js\npages/article-detail/article-detail.js\npages/article-detail/article-detail.wxml\npages/article-detail/article-detail.wxss", "正文按官网改为原生块渲染，链接内嵌；base64 正文图片落到本地文件"),
     ("页面框架与页脚", "app.wxss\ncomponents/site-footer/site-footer.wxss", "page 改为撑满一屏的 flex 列，页脚固定在底部"),
     ("加载中占位", "app.wxss\npages/*/*.wxml（数据页）", "共用 .page-loading / .list-loading，详情页补 loading / unavailable 状态"),
+    ("web-view 防循环", "pages/webview/webview.js\npages/webview/webview.wxml", "8 秒内 3 次重载即判定循环，停止 web-view 并给出登录提示"),
     ("web-view 兜底页", "pages/webview/webview.js\npages/webview/webview.wxml\npages/webview/webview.wxss", "不再显示技术报错"),
     ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml\npages/lawfirm-detail/lawfirm-detail.wxss", "新增 legalOneAwards 区块与 Head office 行（计数区块改为两行四格）"),
     ("交易提交入口", "pages/deals/deals.js\npages/deal-case-intro/deal-case-intro.js", "打开官网 deal submission 表单"),
@@ -421,6 +443,8 @@ validation_rows = [
     ("律所奖项字段", "通过", "以线上接口核对 JunHe：legalOneAwards 3 条，字段与跳转文章 id 完整"),
     ("文章正文转换", "通过", "以 36 篇线上文章核对：全部转为原生块；4 篇奖项长名单仍走 rich-text；示例报道生成 10 个块（含 3 条列表项、2 张图片、5 个正文链接）"),
     ("页面数据体积", "通过", "示例报道（CMS 正文 1.4 MB）的页面 data 由约 1.4 MB 降到约 7 KB，两张 base64 图片写入本地文件后再引用"),
+    ("web-view 防循环", "通过", "在 WebKit 中复现官网会员页的跳转链（/member_survey/1 → /member_survey/sign_in，相对地址导致路由回环）；"
+        "单元验证 8 秒内 3 次重载触发兜底、分散加载不触发、Retry 清零"),
     ("加载中占位", "通过", "以 375×812 复刻确认加载期间仅显示页头与居中的 Loading...，页脚位于首屏之外；文章 / 交易详情页实测 loading→内容与 unavailable 两条分支"),
     ("页脚定位", "通过", "以 375×812 复刻空内容页确认页脚位于视口底部；并核对官网 /sign_in 同为页脚贴底（页面高度=视口高度）"),
     ("文章图片尺寸", "通过", "线上核对 Humanoid robotics 一文：500px 信息图改为整栏宽，291×36 分隔条保留原尺寸，旧 Blob 地址改写为 CDN"),
@@ -440,6 +464,7 @@ add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，�
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")
 add_bullet(doc, "验证页：抽查若干条验证记录，确认 verified 徽标位于白色页面上（不在灰色证书卡内）、灰色证书卡与蓝色渐变面板的底色和间距与官网一致，Law firm 一行显示正常。")
+add_bullet(doc, "会员 E-form：在会员中心点击 Survey 的 E-form，确认最多闪一两次后停止并显示提示与 Copy link，不再持续闪烁。"),
 add_bullet(doc, "页面跳转：从列表进入任一详情页，确认先看到居中的 Loading...、页脚不在首屏内，加载完成后正常显示内容。")
 add_bullet(doc, "文章详情：确认正文中的信息图完整显示、未被右侧裁切，奖项徽章等小图保持原尺寸。")
 add_bullet(doc, "律所档案：抽查 Grandway Law Offices，确认 Head office（Beijing, China）为计数区第一格、标题为官网链接蓝、竖线与首行分隔线位置正确，并可进入该办公室档案页；再抽查一家没有 headOffice 标记的律所，确认该行不出现。")
