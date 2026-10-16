@@ -456,7 +456,7 @@ add_body(
 )
 add_bullet(doc, "正文解析器改为忽略所有不认识的标签：只保留段落、列表、图片以及粗体/斜体/链接等行内语义，"
                 "其余包装标签（div、section、o:p 等）连同属性一起丢弃。")
-add_bullet(doc, "线上抽查 400 篇正文：0 篇再出现标签或样式泄漏；该文现在解析为 6 段干净正文，页面 data 约 10 KB。")
+add_bullet(doc, "全站核查：文章接口共 208 篇，其中 206 篇走原生正文解析（另 2 篇为表格/图片类，按原 rich-text 渲染）。逐篇用修复前后的解析结果对比，修复前有 6 篇会把标签当正文显示、修复后为 0 篇。这 6 篇分别是：Sullivan & Cromwell strengthens its M&A practice、LegalOne is honoured as “Best ESG Data Provider” at the WatersTechnology Asia Awards 2026、Former Allen & Gledhill partner joins RPC to lead India desk、The impact of USA trade tariffs on businesses、BIP Asia Forum and Entrepreneur Day Returns in December、RCEP special - Indonesia。")
 
 add_heading(doc, "关键文件", 1)
 file_rows = [
