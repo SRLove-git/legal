@@ -80,7 +80,10 @@ function parseRuns(html, links) {
     runs.push({ text: text, bold: bold > 0, italic: italic > 0, linkIndex: linkIndex });
   };
 
-  const pattern = /<(span|strong|b|em|i|a)\b([^>]*)>|<\/(span|strong|b|em|i|a)\s*>|<br\s*\/?>|([^<]+)/gi;
+  // The last alternative swallows any other tag: Word-pasted bodies wrap their
+  // paragraphs in <div class="OutlineElement…"> and similar markup, which must
+  // be dropped rather than served to the reader as text.
+  const pattern = /<(span|strong|b|em|i|a)\b([^>]*)>|<\/(span|strong|b|em|i|a)\s*>|<br\s*\/?>|<\/?[a-z][^>]*>|([^<]+)/gi;
   let match;
   while ((match = pattern.exec(html))) {
     if (match[3]) {
@@ -113,6 +116,8 @@ function parseRuns(html, links) {
       push(BREAK);
       continue;
     }
+    // Any other tag (block wrappers, lists' markers, …) contributes no text.
+    if (/^</.test(match[0])) continue;
     push(decode(match[4]));
   }
 

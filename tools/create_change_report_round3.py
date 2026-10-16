@@ -261,6 +261,8 @@ feedback_rows = [
     ("11", "奖项卡片文字跑到图片外面",
      "获奖人卡片在 awardContent 与文章正文两种存放位置改为复用同一套解析与卡片模板；卡片字段分行显示；"
      "旧模板的 ../../ 相对路径归一化，Click for profile 可正确跳转"),
+    ("12", "文章正文显示成 HTML 源码",
+     "正文解析器改为忽略所有不认识的包装标签（Word 粘贴的 div / p 包装不再泄漏为文字）；抽查 400 篇正文无泄漏"),
 ]
 add_table(doc, ["序号", "客户反馈", "处理结果"], feedback_rows, [Cm(1.1), Cm(5.3), Cm(9.0)], first_column_centered=True)
 
@@ -444,6 +446,18 @@ add_bullet(doc, "顺带修复旧模板的相对路径：卡片里的 ../../image
 add_bullet(doc, "线上核对：该文 15 张卡片全部解析成功；抽查 86 篇奖项文章，82 篇卡片全部走统一模板、0 篇残留原始卡片标记，"
                 "其余 4 篇是不含卡片的联赛表格类文章（仍按原有 rich-text 渲染）。")
 
+add_heading(doc, "12. 文章正文显示成 HTML 源码", 2)
+add_body(
+    doc,
+    "客户反馈：Sullivan & Cromwell 一文正文里直接显示出了 HTML 源码（div class=\"OutlineElement …\" 以及 "
+    "style=\"-webkit-user-drag…\" 之类）。原因是这篇正文是从 Word 粘贴的，段落外面套着多层 "
+    "<div class=\"OutlineElement\">、<p class=\"Paragraph\"> 这类包装标签；正文解析器只认识段落/列表/图片等少数标签，"
+    "遇到不认识的包装标签时把标签内容当成了普通文字，于是属性内容被当成正文显示了出来。",
+)
+add_bullet(doc, "正文解析器改为忽略所有不认识的标签：只保留段落、列表、图片以及粗体/斜体/链接等行内语义，"
+                "其余包装标签（div、section、o:p 等）连同属性一起丢弃。")
+add_bullet(doc, "线上抽查 400 篇正文：0 篇再出现标签或样式泄漏；该文现在解析为 6 段干净正文，页面 data 约 10 KB。")
+
 add_heading(doc, "关键文件", 1)
 file_rows = [
     ("公告列表", "pages/announcements/announcements.wxml\npages/announcements/announcements.js", "删除搜索框；公告改为前端每页 12 条"),
@@ -452,6 +466,7 @@ file_rows = [
     ("加载中占位", "app.wxss\npages/*/*.wxml（数据页）", "共用 .page-loading / .list-loading，详情页补 loading / unavailable 状态"),
     ("web-view 防循环", "pages/webview/webview.js\npages/webview/webview.wxml", "8 秒内 3 次重载即判定循环，停止 web-view 并给出登录提示"),
     ("奖项卡片复用", "services/api.js\nservices/award-content.js\nservices/rich-text.js", "正文里的获奖人卡片复用奖项解析与卡片模板；../../ 相对路径归一化"),
+    ("正文标签处理", "services/article-body.js", "忽略不认识的包装标签，Word 粘贴的正文不再显示源码"),
     ("web-view 兜底页", "pages/webview/webview.js\npages/webview/webview.wxml\npages/webview/webview.wxss", "不再显示技术报错"),
     ("律所档案", "services/api.js\npages/lawfirm-detail/lawfirm-detail.js\npages/lawfirm-detail/lawfirm-detail.wxml\npages/lawfirm-detail/lawfirm-detail.wxss", "新增 legalOneAwards 区块与 Head office 行（计数区块改为两行四格）"),
     ("交易提交入口", "pages/deals/deals.js\npages/deal-case-intro/deal-case-intro.js", "打开官网 deal submission 表单"),
@@ -466,6 +481,7 @@ validation_rows = [
     ("律所奖项字段", "通过", "以线上接口核对 JunHe：legalOneAwards 3 条，字段与跳转文章 id 完整"),
     ("文章正文转换", "通过", "以 36 篇线上文章核对：全部转为原生块；4 篇奖项长名单仍走 rich-text；示例报道生成 10 个块（含 3 条列表项、2 张图片、5 个正文链接）"),
     ("页面数据体积", "通过", "示例报道（CMS 正文 1.4 MB）的页面 data 由约 1.4 MB 降到约 7 KB，两张 base64 图片写入本地文件后再引用"),
+    ("正文标签处理", "通过", "线上抽查 400 篇正文：0 篇出现标签/样式泄漏；示例文解析为 6 段干净正文，页面 data 约 10 KB"),
     ("奖项卡片复用", "通过", "抽查 86 篇线上奖项文章：82 篇卡片全部走统一模板、无原始卡片标记残留；示例文 15 张卡片解析完整，"
         "律所/城市/联系方式分行，profile 链接与图片路径归一化"),
     ("web-view 防循环", "通过", "在 WebKit 中复现官网会员页的跳转链（/member_survey/1 → /member_survey/sign_in，相对地址导致路由回环）；"
@@ -489,6 +505,7 @@ add_bullet(doc, "web-view：在业务域名未配置或页面无法打开时，�
 add_bullet(doc, "律所档案：抽查带 LegalOne awards 的律所（如 JunHe、King & Wood），确认区块位置在执业领域与荣誉榜之间，链接可进入文章。")
 add_bullet(doc, "交易提交：从 Deals/Cases 与 Deal/Case Introduction 两处点击 Submit deal/case，确认打开官网 /forms/deal-submission 表单。")
 add_bullet(doc, "验证页：抽查若干条验证记录，确认 verified 徽标位于白色页面上（不在灰色证书卡内）、灰色证书卡与蓝色渐变面板的底色和间距与官网一致，Law firm 一行显示正常。")
+add_bullet(doc, "文章详情：打开 Sullivan & Cromwell 这类正文，确认只显示正常段落，不再出现 div / style 等源码。"),
 add_bullet(doc, "奖项文章：打开较早的奖项（如 Blue Ribbon 2024 系列），确认卡片文字压在底图上、律所与城市分行、Click for profile 可进入律师档案。"),
 add_bullet(doc, "会员 E-form：在会员中心点击 Survey 的 E-form，确认最多闪一两次后停止并显示提示与 Copy link，不再持续闪烁。"),
 add_bullet(doc, "页面跳转：从列表进入任一详情页，确认先看到居中的 Loading...、页脚不在首屏内，加载完成后正常显示内容。")
