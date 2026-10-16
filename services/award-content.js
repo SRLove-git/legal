@@ -114,7 +114,9 @@ function parseWinner(chunk) {
   const items = parseItems(chunk);
   const profileBlock = firstMatch(chunk, /<(?:div|span) class="view-profile[^"]*"[^>]*>([\s\S]*?)<\/(?:div|span)>/i);
   const href = firstMatch(chunk, /<a[^>]+href="([^"]+)"[^>]*>/i);
-  const profile = href.match(/^\/?profile\/(lawyers|lawfirms)\/(.+)$/i);
+  // Older templates write "../../profile/lawyers/<id>", current ones
+  // "/profile/lawyers/<id>"; both point at the same profile page.
+  const profile = href.match(/(?:\.\.\/)*\/?profile\/(lawyers|lawfirms)\/([^"?#]+)$/i);
   const bio = firstMatch(chunk, /class="stellarAccoladeContent[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
   const bioText = toText(bio);
   const photo = richText.toAbsoluteAssetUrl(parseWinnerPhoto(chunk));

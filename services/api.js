@@ -776,20 +776,33 @@ const api = {
       delete norm.raw;
       const articleContent = o.content || o.descript;
       norm.externalLinks = extractExternalArticleLinks(articleContent);
-      // Award write-ups carry their "LIST OF WINNERS" block in awardContent and
-      // are laid out by <rich-text> (league tables, winner cards). Plain
-      // articles are rebuilt as native blocks so their body paragraphs and the
-      // links inside them render the way the website shows them.
-      norm.award = awardContent.parseAwardContent(o.awardContent);
-      norm.bodyBlocks = norm.award ? [] : articleBody.toBlocks(articleContent, norm.externalLinks);
-      // Do not keep a duplicate copy of the body in Page.data once it has been
-      // split into renderable blocks: the raw CMS payload runs to megabytes.
-      if (norm.bodyBlocks.length) {
+      // Winner cards are the same thing whether the CMS keeps them in the
+      // separate awardContent field or straight in the article body — 78 of the
+      // 172 award write-ups checked use the body. Both therefore go through the
+      // one award parser, whose blocks the award template already draws (card
+      // artwork with the details on top). Rendering a body that holds cards as
+      // ordinary paragraphs instead spills the details below the artwork and
+      // runs "Firm" into "City".
+      const cardsInBody = /<div class="[^"]*sa-lawyer(?![-\w])/.test(articleContent);
+      norm.award = awardContent.parseAwardContent(cardsInBody ? articleContent : o.awardContent);
+      if (cardsInBody) {
+        // The award parser owns the whole body: its lead/after blocks carry the
+        // text that surrounds the cards, so nothing else may render the body.
+        norm.bodyBlocks = [];
         norm.bodyHtml = '';
         norm.body = '';
       } else {
-        norm.bodyHtml = richText.toRichHtml(articleContent);
-        norm.body = norm.bodyHtml ? '' : stripHtml(articleContent);
+        norm.bodyBlocks = norm.award ? [] : articleBody.toBlocks(articleContent, norm.externalLinks);
+        // Do not keep a duplicate copy of the body in Page.data once it has
+        // been split into renderable blocks: the raw CMS payload runs to
+        // megabytes.
+        if (norm.bodyBlocks.length) {
+          norm.bodyHtml = '';
+          norm.body = '';
+        } else {
+          norm.bodyHtml = richText.toRichHtml(articleContent);
+          norm.body = norm.bodyHtml ? '' : stripHtml(articleContent);
+        }
       }
       return norm;
     });

@@ -78,6 +78,10 @@ function normalizeAssetUrl(value) {
     .replace(/&#0*38;/gi, '&')
     .replace(/&#x0*26;/gi, '&')
     .replace(LEGACY_BLOB, CDN)
+    // Older award templates write website assets relative to their own page
+    // ("../../images/BlueRibbon/…/ViewProfile.png"). The mini program resolves
+    // paths against the site root, so drop the leading "../" hops first.
+    .replace(/^(?:\.\.\/)+/, '')
     // Stellar Team templates mix website-relative /images URLs with direct
     // Blob URLs. Both sets exist in the public CDN container, so keep every
     // card and member portrait on the mini program's single image domain.
